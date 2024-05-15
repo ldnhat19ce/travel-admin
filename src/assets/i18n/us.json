@@ -1,0 +1,20 @@
+{
+    "lbl.header.001": "Home",
+    "lbl.header.002": "Language",
+    "lbl.header.003": "Booking",
+    "lbl.header.004": "Firework",
+    "lbl.header.005": "About",
+    "lbl.header.006": "Services",
+    "lbl.header.007": "Packages",
+    "lbl.header.008": "Contact",
+    "lbl.booking.firework.001": "Online Booking",
+    "lbl.booking.firework.002": "Home",
+    "lbl.booking.firework.003": "Booking",
+    "lbl.booking.firework.004": "Firework",
+    "lbl.login.001": "Sign in to your account",
+    "lbl.login.002": "Remember me",
+    "lbl.login.003": "Login",
+    "lbl.login.004": "Password",
+    "msg.login.001": "Email must not be null",
+    "msg.login.002": "Password must not be null"
+}

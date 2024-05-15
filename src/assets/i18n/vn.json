@@ -1,0 +1,20 @@
+{
+    "lbl.header.001": "Trang chủ",
+    "lbl.header.002": "Ngôn ngữ",
+    "lbl.header.003": "Đặt vé",
+    "lbl.header.004": "Pháo hoa",
+    "lbl.header.005": "Giới thiệu",
+    "lbl.header.006": "Dịch vụ",
+    "lbl.header.007": "Gói",
+    "lbl.header.008": "Liên hệ",
+    "lbl.booking.firework.001": "Đặt Vé Online",
+    "lbl.booking.firework.002": "Trang chủ",
+    "lbl.booking.firework.003": "Đặt vé",
+    "lbl.booking.firework.004": "Pháo hoa",
+    "lbl.login.001": "Đăng nhập trang quản lý",
+    "lbl.login.002": "Lưu đăng nhập",
+    "lbl.login.003": "Đăng nhập",
+    "lbl.login.004": "Mật khẩu",
+    "msg.login.001": "Email không được để trống",
+    "msg.login.002": "Mật khẩu không được để trống"
+}

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://travel.imix.id.vn/sitemap.xml
