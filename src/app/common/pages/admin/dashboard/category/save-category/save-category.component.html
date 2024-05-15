@@ -1,0 +1,61 @@
+<div class="row g-3">
+    <div class="col-12 col-lg-6">
+        <form class="row g-3" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+            <div class="col-12">
+                <label for="name" class="form-label">Tên</label>
+                <input type="text" id="name" class="form-control" formControlName="name">
+            </div>
+            <div class="col-12">
+                <label for="nameEng" class="form-label">Tên Tiếng anh</label>
+                <input type="text" id="nameEng" class="form-control" formControlName="nameEng">
+            </div>
+            <div class="col-12">
+                <label for="level" class="form-label">Cấp bậc</label>
+                <input type="number" id="level" value="0" class="form-control" formControlName="level">
+            </div>
+            <div class="col-12">
+                <label for="sort" class="form-label">Sắp xếp</label>
+                <input type="number" id="sort" value="0" class="form-control" formControlName="sort">
+            </div>
+            <div class="col-12">
+                <label for="type" class="form-label">Loại</label>
+                <select id="type" class="form-select" #select (change)="onChangeType(select.value)">
+                    <option value="BOOKING" selected>Booking</option>
+                    <option value="BLOG">Blog</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <label for="type" class="form-label">Url</label>
+                <input type="text" id="type" class="form-control" formControlName="url">
+            </div>
+            <div class="col-12">
+                <label for="parentId" class="form-label">Thể loại cha</label>
+                <select id="parentId" class="form-select" #select (change)="onChangeParentId(select.value)">
+                    <option value="default" selected>Chọn thể loại cha</option>
+                    @if (categories.length > 0) {
+                        @for (item of categories; track item.id) {
+                            <option [value]="item.id">{{ item | transformCategory }}</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-12 text-center">
+                <button class="btn btn-primary" type="submit">Lưu thông tin</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 col-lg-6">
+        <table class="table table-bordered">
+            <tr>
+                <th class="text-center text-nowrap">Id</th>
+                <th class="text-center text-nowrap">Parent Id</th>
+                <th class="text-center text-nowrap">Name</th>
+                <th class="text-center text-nowrap">Name eng</th>
+                <th class="text-center text-nowrap">Level</th>
+                <th class="text-center text-nowrap">Sort</th>
+                <th class="text-center text-nowrap">Type</th>
+                <th class="text-center text-nowrap">Url</th>
+            </tr>
+        </table>
+    </div>
+</div>

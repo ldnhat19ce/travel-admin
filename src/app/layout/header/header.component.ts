@@ -1,11 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LocalStorageService } from '../../common/services/local-storage.service';
 import { CommonConstant } from '../../common/utils/constant/common.constant';
-import { BookingService } from '../../common/services/booking.service';
-import { Booking } from '../../common/model/booking.model';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Response } from '../../common/model/response.model';
-import { Error } from '../../common/model/error.model';
 import { LanguageUtil } from '../../common/utils/language.util';
 import { AuthenticationService } from '../../common/services/auth/authentication.service';
 
