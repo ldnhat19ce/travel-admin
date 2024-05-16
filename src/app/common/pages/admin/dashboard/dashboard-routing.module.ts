@@ -9,6 +9,11 @@ const routes: Routes = [
         import('./category/category.module').then(
             (module) => module.CategoryModule
         ),
+    canActivate: [authGuard], },
+    { path: 'post', loadChildren: () =>
+        import('./post/post.module').then(
+            (module) => module.PostModule
+        ),
     canActivate: [authGuard], }
 ];
 
