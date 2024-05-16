@@ -1,61 +1,116 @@
 <div class="row g-3">
-    <div class="col-12 col-lg-6">
-        <form class="row g-3" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+    <div class="col-12">
+        <form class="row g-3" [formGroup]="categoryForm">
             <div class="col-12">
                 <label for="name" class="form-label">Tên</label>
-                <input type="text" id="name" class="form-control" formControlName="name">
+                <input type="text" id="name" class="form-control" formControlName="name"
+                    [ngClass]="{'is-invalid': submitted && f['name'].errors }">
+                @if (submitted && f['name'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['name'].errors['required']) {
+                    <div>Vui lòng nhập tên</div>
+                    }
+                </div>
+                }
             </div>
             <div class="col-12">
                 <label for="nameEng" class="form-label">Tên Tiếng anh</label>
-                <input type="text" id="nameEng" class="form-control" formControlName="nameEng">
+                <input type="text" id="nameEng" class="form-control" formControlName="nameEng" [ngClass]="{'is-invalid': submitted && f['nameEng'].errors }">
+                @if (submitted && f['nameEng'].errors) {
+                    <div class="invalid-feedback">
+                        @if (f['nameEng'].errors['required']) {
+                        <div>Vui lòng nhập tên tiếng anh</div>
+                        }
+                    </div>
+                    }
             </div>
             <div class="col-12">
                 <label for="level" class="form-label">Cấp bậc</label>
-                <input type="number" id="level" value="0" class="form-control" formControlName="level">
+                <input type="number" id="level" value="0" class="form-control" formControlName="level" min="0">
             </div>
             <div class="col-12">
                 <label for="sort" class="form-label">Sắp xếp</label>
-                <input type="number" id="sort" value="0" class="form-control" formControlName="sort">
+                <input type="number" id="sort" value="0" class="form-control" formControlName="sort" min="0">
             </div>
             <div class="col-12">
                 <label for="type" class="form-label">Loại</label>
                 <select id="type" class="form-select" #select (change)="onChangeType(select.value)">
-                    <option value="BOOKING" selected>Booking</option>
-                    <option value="BLOG">Blog</option>
+                    <option value="BOOKING" [selected]="typeSelected === 'BOOKING'">Booking</option>
+                    <option value="BLOG" [selected]="typeSelected === 'BLOG'">Blog</option>
                 </select>
             </div>
             <div class="col-12">
-                <label for="type" class="form-label">Url</label>
-                <input type="text" id="type" class="form-control" formControlName="url">
+                <label for="url" class="form-label">Url</label>
+                <input type="text" id="url" class="form-control" formControlName="url" [ngClass]="{'is-invalid': submitted && f['url'].errors }">
+                @if (submitted && f['url'].errors) {
+                    <div class="invalid-feedback">
+                        @if (f['url'].errors['required']) {
+                        <div>Vui lòng nhập url</div>
+                        }
+                    </div>
+                    }
             </div>
             <div class="col-12">
                 <label for="parentId" class="form-label">Thể loại cha</label>
-                <select id="parentId" class="form-select" #select (change)="onChangeParentId(select.value)">
-                    <option value="default" selected>Chọn thể loại cha</option>
+                <select id="parentId" class="form-select" #select1 (change)="onChangeParentId(select1.value)">
+                    <option value="0" [selected]="parentIdSelected === 0">Chọn thể loại cha</option>
                     @if (categories.length > 0) {
                         @for (item of categories; track item.id) {
-                            <option [value]="item.id">{{ item | transformCategory }}</option>
+                        <option [value]="item.id" [selected]="parentIdSelected === item.id">{{ item | transformCategory }}</option>
                         }
                     }
                 </select>
             </div>
-            <div class="col-12 text-center">
-                <button class="btn btn-primary" type="submit">Lưu thông tin</button>
+            <div class="col-12 d-flex justify-content-center gap-3">
+                <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
+                <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
             </div>
         </form>
     </div>
-    <div class="col-12 col-lg-6">
-        <table class="table table-bordered">
-            <tr>
-                <th class="text-center text-nowrap">Id</th>
-                <th class="text-center text-nowrap">Parent Id</th>
-                <th class="text-center text-nowrap">Name</th>
-                <th class="text-center text-nowrap">Name eng</th>
-                <th class="text-center text-nowrap">Level</th>
-                <th class="text-center text-nowrap">Sort</th>
-                <th class="text-center text-nowrap">Type</th>
-                <th class="text-center text-nowrap">Url</th>
-            </tr>
-        </table>
+</div>
+
+<div class="row g-3 mt-3">
+    <div class="col-12">
+        <div class="table overflow-x-auto">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center text-nowrap py-2"></th>
+                        <th class="text-center text-nowrap py-2">Id</th>
+                        <th class="text-center text-nowrap py-2">Parent Id</th>
+                        <th class="text-center text-nowrap py-2">Name</th>
+                        <th class="text-center text-nowrap py-2">Name eng</th>
+                        <th class="text-center text-nowrap py-2">Level</th>
+                        <th class="text-center text-nowrap py-2">Sort</th>
+                        <th class="text-center text-nowrap py-2">Type</th>
+                        <th class="text-center text-nowrap py-2">Url</th>
+                        <th class="text-center text-nowrap py-2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of categoryHierarchy; track item.id) {
+                        <tr>
+                            <td class="text-center text-nowrap py-2" role="button" (click)="onEdit(item)"><i class="ti ti-edit"></i></td>
+                            <td class="text-center text-nowrap py-2">{{ item.id }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.parentId }}</td>
+                            <td class="py-2 text-nowrap">
+                                @if (item.parentId > 0) {
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                }
+                                {{ item.name }}
+                            </td>
+                            <td class="text-center text-nowrap py-2">{{ item.nameEng }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.level }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.sort }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.type }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.url }}</td>
+                            <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)"><i class="ti ti-trash"></i></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+<p-toast position="bottom-right" key="br" />
+<p-confirmDialog />

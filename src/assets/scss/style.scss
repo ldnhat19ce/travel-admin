@@ -1,13 +1,13 @@
 @charset "utf-8";
 
-$primary: #13357B;
+$primary: #13357b;
 $secondary: #1f05e6;
-$light: #F2F2F2;
-$dark: #14141F;
+$light: #f2f2f2;
+$dark: #14141f;
 
-$font-family-base: 'Roboto', sans-serif;
+$font-family-base: "Roboto", sans-serif;
 
-$headings-font-family: 'Lato', sans-serif;
+$headings-font-family: "Lato", sans-serif;
 
 $body-color: #757575;
 
@@ -39,18 +39,41 @@ $enable-negative-margins: true;
 
 @import "../css/icons/tabler-icons/tabler-icons.css";
 
-
 @import "./layouts/sidebar";
 @import "./layouts/header";
 @import "./layouts/layouts";
 
-
 @import "./component/reboot";
 @import "./component/card";
-
 
 @import "./utilities/icon-size";
 @import "./utilities/background";
 
-
 @import "./pages/dashboard1";
+
+@import "primeng/resources/primeng.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeicons/primeicons.css";
+
+@import "./ngprime";
+
+table {
+    border: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.table {
+    // th,
+    // td {
+    //     text-wrap: nowrap;
+    // }
+
+    th {
+        font-weight: 400;
+        background: #e9ecef47;
+        color: #26282b;
+    }
+    border-color: #e5e7ea;
+}
