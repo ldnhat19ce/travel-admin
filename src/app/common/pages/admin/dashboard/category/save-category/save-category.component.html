@@ -97,9 +97,14 @@
                                 @if (item.parentId > 0) {
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 }
-                                {{ item.name }}
+                                {{ item.nameOrg }}
                             </td>
-                            <td class="text-center text-nowrap py-2">{{ item.nameEng }}</td>
+                            <td class="text-center text-nowrap py-2">
+                                @if (item.parentId > 0) {
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                }
+                                {{ item.nameEngOrg }}
+                            </td>
                             <td class="text-center text-nowrap py-2">{{ item.level }}</td>
                             <td class="text-center text-nowrap py-2">{{ item.sort }}</td>
                             <td class="text-center text-nowrap py-2">{{ item.type }}</td>

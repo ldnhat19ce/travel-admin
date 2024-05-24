@@ -8,5 +8,7 @@ export interface Category {
     parentId: number;
     modifiedAt: string;
     hasChild: number;
-    url: string
+    url: string;
+    nameOrg: string;
+    nameEngOrg: string;
 }

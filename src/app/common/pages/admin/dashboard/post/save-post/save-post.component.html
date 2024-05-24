@@ -1,1 +1,90 @@
-<p>save-post works!</p>
+<div class="row g-3">
+    <div class="col-12">
+        <form class="row g-3" [formGroup]="postForm">
+            <div class="col-12">
+                <label for="name" class="form-label">Tên</label>
+                <input type="text" id="name" class="form-control" formControlName="name"
+                    [ngClass]="{'is-invalid': submitted && f['name'].errors }">
+                @if (submitted && f['name'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['name'].errors['required']) {
+                    <div>Vui lòng nhập tên</div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-12">
+                <label for="nameEng" class="form-label">Tên Tiếng anh</label>
+                <input type="text" id="nameEng" class="form-control" formControlName="nameEng"
+                    [ngClass]="{'is-invalid': submitted && f['nameEng'].errors }">
+                @if (submitted && f['nameEng'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['nameEng'].errors['required']) {
+                    <div>Vui lòng nhập tên tiếng anh</div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-12">
+                <label for="content" class="form-label">Nội dung</label>
+                <p-editor formControlName="content" [style]="{ height: '320px' }" [ngClass]="{'is-invalid': submitted && f['content'].errors }" />
+                @if (submitted && f['content'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['content'].errors['required']) {
+                    <div>Vui lòng nhập nội dung</div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-12">
+                <label for="contentEng" class="form-label">Nội dung Tiếng anh</label>
+                <p-editor formControlName="contentEng" [style]="{ height: '320px' }" [ngClass]="{'is-invalid': submitted && f['contentEng'].errors }"/>
+                @if (submitted && f['contentEng'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['contentEng'].errors['required']) {
+                    <div>Vui lòng nhập nội dung tiếng anh</div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-12">
+                <label for="sort" class="form-label">Sắp xếp</label>
+                <input type="number" id="sort" value="0" class="form-control" formControlName="sort" min="0">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Hình ảnh phía trên</label>
+                <input class="form-control" type="file" (change)="onUpload($event, 'top')" accept="/image/*">
+            </div>
+            <div class="col-12">
+                <label class="form-label">Hình ảnh phía dưới</label>
+                <input class="form-control" type="file" (change)="onUpload($event, 'bottom')" accept="/image/*">
+            </div>
+            <div class="col-12">
+                <label for="categoryId" class="form-label">Thể loại</label>
+                <select id="categoryId" class="form-select" #select (change)="onChangeCategoryId(select.value)" [ngClass]="{'is-invalid': submitted && f['categoryId'].errors }">
+                    <option value="0" [selected]="categoryIdSelected === 0">Chọn thể loại</option>
+                    @if (categories.length > 0) {
+                    @for (item of categories; track item.id) {
+                    <option [value]="item.id" [selected]="categoryIdSelected === item.id">{{ item | transformCategory }}
+                    </option>
+                    }
+                    }
+                </select>
+                @if (submitted && f['categoryId'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['categoryId'].errors['required']) {
+                    <div>Vui lòng chọn thể loại</div>
+                    }
+                </div>
+                }
+            </div>
+
+            <div class="col-12 d-flex justify-content-center gap-3">
+                <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
+                <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<p-toast position="bottom-right" key="br" />

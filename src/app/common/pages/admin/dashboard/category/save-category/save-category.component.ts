@@ -144,7 +144,6 @@ export class SaveCategoryComponent implements OnInit {
                 this._categoryService
                     .deleteCategory(item.id)
                     .subscribe((res) => {
-                        console.log(res);
                         if (res !== null && res !== undefined) {
                             if (res.status === 200) {
                                 this._messageService.add({

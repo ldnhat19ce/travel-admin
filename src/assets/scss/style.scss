@@ -51,11 +51,15 @@ $enable-negative-margins: true;
 
 @import "./pages/dashboard1";
 
+@import "quill/dist/quill.snow.css";
+
 @import "primeng/resources/primeng.css";
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeicons/primeicons.css";
 
 @import "./ngprime";
+
+
 
 table {
     border: 0;
@@ -65,11 +69,6 @@ table {
 }
 
 .table {
-    // th,
-    // td {
-    //     text-wrap: nowrap;
-    // }
-
     th {
         font-weight: 400;
         background: #e9ecef47;
