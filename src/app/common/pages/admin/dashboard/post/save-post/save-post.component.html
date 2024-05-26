@@ -58,11 +58,11 @@
             </div>
             <div class="col-12">
                 <label class="form-label">Hình ảnh phía trên</label>
-                <input class="form-control" type="file" (change)="onUpload($event, 'top')" accept="/image/*">
+                <input class="form-control" id="topImage" type="file" (change)="onUpload($event, 'top')" accept="/image/*">
             </div>
             <div class="col-12">
                 <label class="form-label">Hình ảnh phía dưới</label>
-                <input class="form-control" type="file" (change)="onUpload($event, 'bottom')" accept="/image/*">
+                <input class="form-control" id="bottomImage" type="file" (change)="onUpload($event, 'bottom')" accept="/image/*">
             </div>
             <div class="col-12">
                 <label for="categoryId" class="form-label">Thể loại</label>
@@ -83,6 +83,13 @@
                 </div>
                 }
             </div>
+
+            @if (f['id'].value > 0) {
+                <div class="col-auto">
+                    <input class="form-check-input" type="checkbox" formControlName="used">
+                    <label class="form-check-label ms-3">Sử dụng</label>
+                </div>
+            }
 
             <div class="col-12 d-flex justify-content-center gap-3">
                 <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>

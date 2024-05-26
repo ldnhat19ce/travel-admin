@@ -28,13 +28,6 @@ interface PageEvent {
     pageCount?: number;
 }
 
-interface EditorTextChangeEvent {
-    htmlValue: string;
-    textValue: string;
-    delta: string;
-    source: string;
-}
-
 @Component({
     selector: 'app-save-post',
     standalone: true,
@@ -60,6 +53,8 @@ export class SavePostComponent implements OnInit {
     private _postService = inject(PostService);
     private _confirmationService = inject(ConfirmationService);
 
+    isChangeTopImage: boolean = false;
+    isChangeBottomImage: boolean = false;
     submitted: boolean = false;
 
     categoryIdSelected: number = 0;
@@ -82,6 +77,7 @@ export class SavePostComponent implements OnInit {
         bottomImage: [''],
         bottomImageName: [''],
         categoryId: ['', Validators.required],
+        used: [false]
     });
 
     options = [
@@ -110,6 +106,24 @@ export class SavePostComponent implements OnInit {
         }
 
         if (this.f['id'].value > 0) {
+            let value = this.postForm.value;
+
+            this._postService
+                .updatePost(this.f['id'].value, {...value, changeTopImage: this.isChangeTopImage, changeBottomImage: this.isChangeBottomImage})
+                .subscribe((res) => {
+                    if (res !== null && res !== undefined) {
+                        let result = res.body || ({} as Category);
+                        this._messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Chỉnh sửa thành công [ID]: ' + result.id,
+                            key: 'br',
+                            life: 3000,
+                        });
+                        this.onReset();
+                        this.getPost();
+                    }
+                });
         } else {
             this._postService.savePost(this.postForm.value).subscribe((res) => {
                 if (res !== null && res !== undefined) {
@@ -145,9 +159,23 @@ export class SavePostComponent implements OnInit {
             bottomImage: '',
             bottomImageName: '',
             categoryId: '',
+            used: false
         });
 
+        this.isChangeTopImage = false;
+        this.isChangeBottomImage = false;
+
         this.categoryIdSelected = 0;
+
+        let topImage = <HTMLInputElement> document.getElementById("topImage");
+        if(ValidationUtil.isNotNullAndNotUndefined(topImage)) {
+            topImage.value = "";
+        }
+
+        let bottomImage = <HTMLInputElement> document.getElementById("bottomImage");
+        if(ValidationUtil.isNotNullAndNotUndefined(bottomImage)) {
+            bottomImage.value = "";
+        }
     }
 
     onEdit(item: Post) {
@@ -163,6 +191,7 @@ export class SavePostComponent implements OnInit {
             bottomImage: '',
             bottomImageName: '',
             categoryId: item.categoryId,
+            used: item.used
         });
 
         this.categoryIdSelected = item.categoryId;
@@ -178,31 +207,29 @@ export class SavePostComponent implements OnInit {
             rejectIcon: 'none',
             rejectButtonStyleClass: 'p-button-text',
             accept: () => {
-                this._postService
-                    .deletePost(item.id)
-                    .subscribe((res) => {
-                        if (res !== null && res !== undefined) {
-                            if (res.status === 200) {
-                                this._messageService.add({
-                                    severity: 'success',
-                                    summary: 'Success',
-                                    detail: 'xoá thành công [ID]: ' + item.id,
-                                    key: 'br',
-                                    life: 3000,
-                                });
-                                this.onReset();
-                                this.getPost();
-                            } else {
-                                this._messageService.add({
-                                    severity: 'danger',
-                                    summary: 'Error',
-                                    detail: 'xoá không thành công',
-                                    key: 'br',
-                                    life: 3000,
-                                });
-                            }
+                this._postService.deletePost(item.id).subscribe((res) => {
+                    if (res !== null && res !== undefined) {
+                        if (res.status === 200) {
+                            this._messageService.add({
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'xoá thành công [ID]: ' + item.id,
+                                key: 'br',
+                                life: 3000,
+                            });
+                            this.onReset();
+                            this.getPost();
+                        } else {
+                            this._messageService.add({
+                                severity: 'danger',
+                                summary: 'Error',
+                                detail: 'xoá không thành công',
+                                key: 'br',
+                                life: 3000,
+                            });
                         }
-                    });
+                    }
+                });
             },
             reject: () => {},
         });
@@ -235,11 +262,17 @@ export class SavePostComponent implements OnInit {
         reader.readAsDataURL(file);
         reader.onload = () => {
             if (type === 'top') {
+                if (this.f['id'].value > 0) {
+                    this.isChangeTopImage = true;
+                }
                 this.postForm.patchValue({
                     topImage: reader.result,
                     topImageName: file.name,
                 });
             } else if (type === 'bottom') {
+                if (this.f['id'].value > 0) {
+                    this.isChangeBottomImage = true;
+                }
                 this.postForm.patchValue({
                     bottomImage: reader.result,
                     bottomImageName: file.name,
