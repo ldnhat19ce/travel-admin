@@ -9,4 +9,6 @@ export interface Post {
     categoryId: number;
     sort: number;
     modifiedDate: string;
+    categoryName: string;
+    used: boolean;
 }

@@ -1,0 +1,48 @@
+<div class="row g-3 mt-3">
+    <div class="col-12">
+        <div class="table overflow-x-auto">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center text-nowrap py-2"></th>
+                        <th class="text-center text-nowrap py-2">Id</th>
+                        <th class="text-center text-nowrap py-2">Category</th>
+                        <th class="text-center text-nowrap py-2">Name</th>
+                        <th class="text-center text-nowrap py-2">Name eng</th>
+                        <th class="text-center text-nowrap py-2">Level</th>
+                        <th class="text-center text-nowrap py-2">Sort</th>
+                        <th class="text-center text-nowrap py-2">Type</th>
+                        <th class="text-center text-nowrap py-2">Url</th>
+                        <th class="text-center text-nowrap py-2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- @for (item of categoryHierarchy; track item.id) {
+                        <tr>
+                            <td class="text-center text-nowrap py-2" role="button" (click)="onEdit(item)"><i class="ti ti-edit"></i></td>
+                            <td class="text-center text-nowrap py-2">{{ item.id }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.parentId }}</td>
+                            <td class="py-2 text-nowrap">
+                                @if (item.parentId > 0) {
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                }
+                                {{ item.nameOrg }}
+                            </td>
+                            <td class="text-center text-nowrap py-2">
+                                @if (item.parentId > 0) {
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                }
+                                {{ item.nameEngOrg }}
+                            </td>
+                            <td class="text-center text-nowrap py-2">{{ item.level }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.sort }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.type }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.url }}</td>
+                            <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)"><i class="ti ti-trash"></i></td>
+                        </tr>
+                    } -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

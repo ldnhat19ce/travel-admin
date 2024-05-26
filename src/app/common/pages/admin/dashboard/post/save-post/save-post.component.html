@@ -27,7 +27,12 @@
             </div>
             <div class="col-12">
                 <label for="content" class="form-label">Nội dung</label>
-                <p-editor formControlName="content" [style]="{ height: '320px' }" [ngClass]="{'is-invalid': submitted && f['content'].errors }" />
+                <p-editor
+                    #editor
+                    formControlName="content"
+                    [style]="{ height: '500px' }"
+                    [ngClass]="{'is-invalid': submitted && f['content'].errors }"
+                     />
                 @if (submitted && f['content'].errors) {
                 <div class="invalid-feedback">
                     @if (f['content'].errors['required']) {
@@ -38,7 +43,7 @@
             </div>
             <div class="col-12">
                 <label for="contentEng" class="form-label">Nội dung Tiếng anh</label>
-                <p-editor formControlName="contentEng" [style]="{ height: '320px' }" [ngClass]="{'is-invalid': submitted && f['contentEng'].errors }"/>
+                <p-editor formControlName="contentEng" [style]="{ height: '500px' }" [ngClass]="{'is-invalid': submitted && f['contentEng'].errors }"/>
                 @if (submitted && f['contentEng'].errors) {
                 <div class="invalid-feedback">
                     @if (f['contentEng'].errors['required']) {
@@ -87,4 +92,46 @@
     </div>
 </div>
 
+<div class="row g-3 mt-3">
+    <div class="col-12">
+        <div class="table overflow-x-auto">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center text-nowrap py-2"></th>
+                        <th class="text-center text-nowrap py-2">Id</th>
+                        <th class="text-center text-nowrap py-2">Thể loại</th>
+                        <th class="text-center text-nowrap py-2">Tên</th>
+                        <th class="text-center text-nowrap py-2">Tên tiếng anh</th>
+                        <th class="text-center text-nowrap py-2">Sắp xếp</th>
+                        <th class="text-center text-nowrap py-2">Sử dụng</th>
+                        <th class="text-center text-nowrap py-2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of post; track item.id) {
+                        <tr>
+                            <td class="text-center text-nowrap py-2" role="button" (click)="onEdit(item)"><i class="ti ti-edit"></i></td>
+                            <td class="text-center text-nowrap py-2">{{ item.id }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.categoryName }}</td>
+                            <td class="py-2 text-nowrap">{{ item.name }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.nameEng }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.sort }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.used? 'Sử dụng' : 'Không sử dụng' }}</td>
+                            <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)"><i class="ti ti-trash"></i></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="flex align-items-center justify-content-end">
+    <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)" [showCurrentPageReport]="true"
+        currentPageReportTemplate="{first} - {last} of {totalRecords}" [showPageLinks]="false" [showFirstLastIcon]="true"></p-paginator>
+</div>
+
 <p-toast position="bottom-right" key="br" />
+<p-confirmDialog />

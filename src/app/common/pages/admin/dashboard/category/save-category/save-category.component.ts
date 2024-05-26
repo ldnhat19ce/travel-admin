@@ -224,7 +224,7 @@ export class SaveCategoryComponent implements OnInit {
     private getParams() {
         return {
             page: 1,
-            len: 100,
+            limit: 100,
             level: 0,
         };
     }
