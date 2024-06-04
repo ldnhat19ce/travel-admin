@@ -20,13 +20,8 @@ import { PostService } from '../../../../../services/post.service';
 import { Post } from '../../../../../model/post.model';
 import { PaginatorModule } from 'primeng/paginator';
 import { ValidationUtil } from '../../../../../utils/validation.util';
-
-interface PageEvent {
-    first?: number;
-    rows?: number;
-    page?: number;
-    pageCount?: number;
-}
+import { RouterLink } from '@angular/router';
+import { PageEvent } from '../../../../../model/page-event.model';
 
 @Component({
     selector: 'app-save-post',
@@ -41,6 +36,7 @@ interface PageEvent {
         EditorModule,
         FileUploadModule,
         PaginatorModule,
+        RouterLink
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-post.component.html',

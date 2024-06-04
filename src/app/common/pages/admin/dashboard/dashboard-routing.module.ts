@@ -14,6 +14,11 @@ const routes: Routes = [
         import('./post/post.module').then(
             (module) => module.PostModule
         ),
+    canActivate: [authGuard], },
+    { path: 'post-form', loadChildren: () =>
+        import('./post-form/post-form.module').then(
+            (module) => module.PostFormModule
+        ),
     canActivate: [authGuard], }
 ];
 

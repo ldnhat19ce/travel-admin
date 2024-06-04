@@ -112,6 +112,7 @@
                         <th class="text-center text-nowrap py-2">Tên tiếng anh</th>
                         <th class="text-center text-nowrap py-2">Sắp xếp</th>
                         <th class="text-center text-nowrap py-2">Sử dụng</th>
+                        <th class="text-center text-nowrap py-2">Thêm form</th>
                         <th class="text-center text-nowrap py-2"></th>
                     </tr>
                 </thead>
@@ -125,6 +126,9 @@
                             <td class="text-center text-nowrap py-2">{{ item.nameEng }}</td>
                             <td class="text-center text-nowrap py-2">{{ item.sort }}</td>
                             <td class="text-center text-nowrap py-2">{{ item.used? 'Sử dụng' : 'Không sử dụng' }}</td>
+                            <td class="text-center text-nowrap py-2">
+                                <button class="btn btn-primary" routerLink="/post-form/save/{{ item.id }}">Thêm Form</button>
+                            </td>
                             <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)"><i class="ti ti-trash"></i></td>
                         </tr>
                     }
