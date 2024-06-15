@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
     ReactiveFormsModule,
     FormsModule,
@@ -12,7 +12,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { TransformCategoryPipe } from '../../../../../pipe/transform-category.pipe';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { Editor, EditorModule } from 'primeng/editor';
+import { EditorModule } from 'primeng/editor';
 import { FileUploadModule } from 'primeng/fileupload';
 import { Category } from '../../../../../model/category.model';
 import { CategoryService } from '../../../../../services/category.service';
@@ -36,7 +36,7 @@ import { PageEvent } from '../../../../../model/page-event.model';
         EditorModule,
         FileUploadModule,
         PaginatorModule,
-        RouterLink
+        RouterLink,
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-post.component.html',
@@ -73,7 +73,7 @@ export class SavePostComponent implements OnInit {
         bottomImage: [''],
         bottomImageName: [''],
         categoryId: ['', Validators.required],
-        used: [false]
+        used: [false],
     });
 
     options = [
@@ -82,8 +82,6 @@ export class SavePostComponent implements OnInit {
         { label: 20, value: 20 },
         { label: 120, value: 120 },
     ];
-
-    @ViewChild('editor') public editor!: Editor;
 
     ngOnInit(): void {
         this.getCategory();
@@ -94,9 +92,56 @@ export class SavePostComponent implements OnInit {
         return this.postForm.controls;
     }
 
+    editorOnInit(event: any, qlHTMLId: string) {
+        const quillInstance = event.editor;
+        let quillEd_txtArea_1 = document.createElement('textarea');
+        let attrQuillTxtArea = document.createAttribute('quill__html');
+        quillEd_txtArea_1.setAttributeNode(attrQuillTxtArea);
+
+        let quillCustomDiv = quillInstance.addContainer('ql-custom');
+        quillCustomDiv.appendChild(quillEd_txtArea_1);
+
+        let quillHtmlBtn = document.getElementById(qlHTMLId);
+        if(quillHtmlBtn !== null && quillHtmlBtn !== undefined) {
+            quillHtmlBtn.addEventListener('click', (evt: any) => {
+                if (
+                    ValidationUtil.isNotNullAndNotUndefined(quillEd_txtArea_1)
+                ) {
+                    let t = quillEd_txtArea_1.getAttribute('quill__html');
+                    if (t !== null && t !== undefined) {
+                        let wasActiveTxtArea_1 = t.indexOf('-active-') > -1;
+
+                        if (wasActiveTxtArea_1) {
+                            quillInstance.pasteHTML(quillEd_txtArea_1.value);
+                            evt.target.classList.remove('ql-active');
+                        } else {
+                            quillEd_txtArea_1.value = quillInstance.root.innerHTML;
+                            evt.target.classList.add('ql-active');
+                        }
+
+                        quillEd_txtArea_1.setAttribute(
+                            'quill__html',
+                            wasActiveTxtArea_1 ? '' : '-active-'
+                        );
+                    }
+                }
+                if(qlHTMLId === "qlHTMLId2") {
+                    this.postForm.patchValue({
+                        contentEng: quillInstance.root.innerHTML
+                    });
+                } else if(qlHTMLId === "qlHTMLId2") {
+                    this.postForm.patchValue({
+                        content: quillInstance.root.innerHTML
+                    });
+                }
+            });
+        }
+
+    }
+
     onSubmit() {
         this.submitted = true;
-
+        console.log(this.postForm.value)
         if (this.postForm.invalid) {
             return;
         }
@@ -105,7 +150,11 @@ export class SavePostComponent implements OnInit {
             let value = this.postForm.value;
 
             this._postService
-                .updatePost(this.f['id'].value, {...value, changeTopImage: this.isChangeTopImage, changeBottomImage: this.isChangeBottomImage})
+                .updatePost(this.f['id'].value, {
+                    ...value,
+                    changeTopImage: this.isChangeTopImage,
+                    changeBottomImage: this.isChangeBottomImage,
+                })
                 .subscribe((res) => {
                     if (res !== null && res !== undefined) {
                         let result = res.body || ({} as Category);
@@ -155,7 +204,7 @@ export class SavePostComponent implements OnInit {
             bottomImage: '',
             bottomImageName: '',
             categoryId: '',
-            used: false
+            used: false,
         });
 
         this.isChangeTopImage = false;
@@ -163,14 +212,16 @@ export class SavePostComponent implements OnInit {
 
         this.categoryIdSelected = 0;
 
-        let topImage = <HTMLInputElement> document.getElementById("topImage");
-        if(ValidationUtil.isNotNullAndNotUndefined(topImage)) {
-            topImage.value = "";
+        let topImage = <HTMLInputElement>document.getElementById('topImage');
+        if (ValidationUtil.isNotNullAndNotUndefined(topImage)) {
+            topImage.value = '';
         }
 
-        let bottomImage = <HTMLInputElement> document.getElementById("bottomImage");
-        if(ValidationUtil.isNotNullAndNotUndefined(bottomImage)) {
-            bottomImage.value = "";
+        let bottomImage = <HTMLInputElement>(
+            document.getElementById('bottomImage')
+        );
+        if (ValidationUtil.isNotNullAndNotUndefined(bottomImage)) {
+            bottomImage.value = '';
         }
     }
 
@@ -187,7 +238,7 @@ export class SavePostComponent implements OnInit {
             bottomImage: '',
             bottomImageName: '',
             categoryId: item.categoryId,
-            used: item.used
+            used: item.used,
         });
 
         this.categoryIdSelected = item.categoryId;
