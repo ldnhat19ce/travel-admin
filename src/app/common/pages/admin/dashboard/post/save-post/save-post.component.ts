@@ -129,7 +129,7 @@ export class SavePostComponent implements OnInit {
                     this.postForm.patchValue({
                         contentEng: quillInstance.root.innerHTML
                     });
-                } else if(qlHTMLId === "qlHTMLId2") {
+                } else if(qlHTMLId === "qlHTMLId1") {
                     this.postForm.patchValue({
                         content: quillInstance.root.innerHTML
                     });
