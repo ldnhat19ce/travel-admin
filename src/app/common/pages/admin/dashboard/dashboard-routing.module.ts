@@ -19,6 +19,11 @@ const routes: Routes = [
         import('./post-form/post-form.module').then(
             (module) => module.PostFormModule
         ),
+    canActivate: [authGuard], },
+    { path: 'post-form-definition', loadChildren: () =>
+        import('./post-form-definition/post-form-definition.module').then(
+            (module) => module.PostFormDefinitionModule
+        ),
     canActivate: [authGuard], }
 ];
 

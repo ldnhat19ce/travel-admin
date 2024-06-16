@@ -74,6 +74,12 @@ export class SavePostComponent implements OnInit {
         bottomImageName: [''],
         categoryId: ['', Validators.required],
         used: [false],
+        defTitle: [''],
+        defName1: [''],
+        defName2: [''],
+        defContent1: [''],
+        defContent2: [''],
+        postId: [0]
     });
 
     options = [
@@ -141,7 +147,6 @@ export class SavePostComponent implements OnInit {
 
     onSubmit() {
         this.submitted = true;
-        console.log(this.postForm.value)
         if (this.postForm.invalid) {
             return;
         }

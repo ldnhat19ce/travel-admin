@@ -11,18 +11,18 @@ import { Data } from '../model/data.model';
 export class PostFormService {
     private _httpClient = inject(HttpClient);
 
-    savePostForm(params: {}, postId: number): Observable<HttpResponse<PostForm>> {
-        let url = `${environment.apiUrl}/admin/post-form/${postId}`;
+    savePostForm(params: {}, postFormDefId: number): Observable<HttpResponse<PostForm>> {
+        let url = `${environment.apiUrl}/admin/post-form/${postFormDefId}`;
         return this._httpClient.post<PostForm>(url, params, { observe: 'response' });
     }
 
-    getAllByPostId(postId: number): Observable<HttpResponse<PostForm[]>> {
-        let url = `${environment.apiUrl}/admin/post-form/${postId}`;
+    getAllByPostId(postFormDefId: number): Observable<HttpResponse<PostForm[]>> {
+        let url = `${environment.apiUrl}/admin/post-form/${postFormDefId}`;
         return this._httpClient.get<PostForm[]>(url, { observe: 'response' });
     }
 
-    getPagePostForm(params: {}, postId: number): Observable<HttpResponse<Data<PostForm[]>>> {
-        let url = `${environment.apiUrl}/admin/post-form/page/${postId}`;
+    getPagePostForm(params: {}, postFormDefId: number): Observable<HttpResponse<Data<PostForm[]>>> {
+        let url = `${environment.apiUrl}/admin/post-form/page/${postFormDefId}`;
         return this._httpClient.get<Data<PostForm[]>>(url, { params: params, observe: 'response' });
     }
 

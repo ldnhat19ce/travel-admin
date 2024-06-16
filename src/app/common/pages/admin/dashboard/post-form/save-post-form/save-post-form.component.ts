@@ -46,7 +46,7 @@ export class SavePostFormComponent implements OnInit {
     submitted: boolean = false;
     blocked: boolean = false;
 
-    postId: number = 0;
+    postFormDefId: number = 0;
     first: number = 0;
     rows: number = 10;
     totalRecords: number = 0;
@@ -84,7 +84,7 @@ export class SavePostFormComponent implements OnInit {
     ngOnInit(): void {
         this._activatedRoute.params.subscribe(route => {
             if(ValidationUtil.isNotNullAndNotUndefined(route["id"])) {
-                this.postId = route["id"];
+                this.postFormDefId = route["id"];
                 this.getPostFormList();
                 this.getPagePostForm();
             }
@@ -137,7 +137,7 @@ export class SavePostFormComponent implements OnInit {
                 fieldType: this.fieldTypeSelected
             });
 
-            this._postFormService.savePostForm(this.postForm.value, this.postId).subscribe(res => {
+            this._postFormService.savePostForm(this.postForm.value, this.postFormDefId).subscribe(res => {
                 if (ValidationUtil.isNotNullAndNotUndefined(res)) {
                     this.blocked = false;
                     if (res.status === 200) {
@@ -313,7 +313,7 @@ export class SavePostFormComponent implements OnInit {
     }
 
     private getPostFormList() {
-        this._postFormService.getAllByPostId(this.postId).subscribe(res => {
+        this._postFormService.getAllByPostId(this.postFormDefId).subscribe(res => {
             if(ValidationUtil.isNotNullAndNotUndefined(res)) {
                 this.postFormList = res.body || [];
             }
@@ -321,7 +321,7 @@ export class SavePostFormComponent implements OnInit {
     }
 
     private getPagePostForm() {
-        this._postFormService.getPagePostForm(this.getParamSearchPostForm(), this.postId).subscribe(res => {
+        this._postFormService.getPagePostForm(this.getParamSearchPostForm(), this.postFormDefId).subscribe(res => {
             if(ValidationUtil.isNotNullAndNotUndefined(res)) {
                 this.pagePostForm = res.body?.result || [];
                 this.totalRecords = res.body?.total || 0;
