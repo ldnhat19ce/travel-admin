@@ -52,7 +52,9 @@ export class SavePostComponent implements OnInit {
     isChangeTopImage: boolean = false;
     isChangeBottomImage: boolean = false;
     submitted: boolean = false;
+    isMainEditItem: boolean = false;
 
+    categoryEditItem: number = 0;
     categoryIdSelected: number = 0;
     first: number = 0;
     rows: number = 10;
@@ -79,7 +81,8 @@ export class SavePostComponent implements OnInit {
         defName2: [''],
         defContent1: [''],
         defContent2: [''],
-        postId: [0]
+        postId: [0],
+        main: [false]
     });
 
     options = [
@@ -210,11 +213,14 @@ export class SavePostComponent implements OnInit {
             bottomImageName: '',
             categoryId: '',
             used: false,
+            main: false
         });
 
         this.isChangeTopImage = false;
         this.isChangeBottomImage = false;
+        this.isMainEditItem = false;
 
+        this.categoryEditItem = 0;
         this.categoryIdSelected = 0;
 
         let topImage = <HTMLInputElement>document.getElementById('topImage');
@@ -244,8 +250,11 @@ export class SavePostComponent implements OnInit {
             bottomImageName: '',
             categoryId: item.categoryId,
             used: item.used,
+            main: Number(item.mainPostId) === Number(item.id)
         });
 
+        this.isMainEditItem = Number(item.mainPostId) === Number(item.id);
+        this.categoryEditItem = item.categoryId;
         this.categoryIdSelected = item.categoryId;
     }
 
@@ -291,6 +300,7 @@ export class SavePostComponent implements OnInit {
         if (categoryId !== 'default') {
             this.postForm.patchValue({
                 categoryId: categoryId,
+                main: Number(this.categoryEditItem) === Number(categoryId) && this.isMainEditItem
             });
         }
     }

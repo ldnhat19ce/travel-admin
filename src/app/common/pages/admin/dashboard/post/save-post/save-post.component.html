@@ -46,6 +46,10 @@
                             <button class="ql-list" value="ordered" type="button"></button>
                             <button class="ql-list" value="bullet" type="button"></button>
                             <button class="ql-list" value="check" type="button"></button>
+                            <button class="ql-align" value=""></button>
+                            <button class="ql-align" value="center"></button>
+                            <button class="ql-align" value="right"></button>
+                            <button class="ql-align" value="justify"></button>
                             <button class="ql-header" value="1" type="button"></button>
                             <button class="ql-header" value="2" type="button"></button>
                             <button class="ql-indent" value="-1" type="button"></button>
@@ -103,6 +107,10 @@
                             <button class="ql-list" value="ordered" type="button"></button>
                             <button class="ql-list" value="bullet" type="button"></button>
                             <button class="ql-list" value="check" type="button"></button>
+                            <button class="ql-align" value=""></button>
+                            <button class="ql-align" value="center"></button>
+                            <button class="ql-align" value="right"></button>
+                            <button class="ql-align" value="justify"></button>
                             <button class="ql-header" value="1" type="button"></button>
                             <button class="ql-header" value="2" type="button"></button>
                             <button class="ql-indent" value="-1" type="button"></button>
@@ -180,6 +188,11 @@
                 <label class="form-check-label ms-3">Sử dụng</label>
             </div>
             }
+
+            <div class="col-auto">
+                <input class="form-check-input" type="checkbox" formControlName="main">
+                <label class="form-check-label ms-3">Bài viết chính của thể loại</label>
+            </div>
 
             <div class="col-12 d-flex justify-content-center gap-3">
                 <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>

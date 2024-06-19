@@ -11,4 +11,5 @@ export interface Post {
     modifiedDate: string;
     categoryName: string;
     used: boolean;
+    mainPostId: number;
 }

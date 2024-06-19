@@ -11,4 +11,5 @@ export interface Category {
     url: string;
     nameOrg: string;
     nameEngOrg: string;
+    mainPostId: number;
 }

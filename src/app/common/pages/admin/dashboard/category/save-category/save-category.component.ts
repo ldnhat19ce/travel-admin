@@ -127,7 +127,7 @@ export class SaveCategoryComponent implements OnInit {
         });
         this.typeSelected = item.type;
         if (item.parentId !== 0) {
-            this.parentIdSelected = item.id;
+            this.parentIdSelected = item.parentId;
         }
     }
 

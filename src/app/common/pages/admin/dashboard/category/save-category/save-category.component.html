@@ -56,7 +56,7 @@
                     <option value="0" [selected]="parentIdSelected === 0">Chọn thể loại cha</option>
                     @if (categories.length > 0) {
                         @for (item of categories; track item.id) {
-                        <option [value]="item.id" [selected]="parentIdSelected === item.id">{{ item | transformCategory }}</option>
+                        <option [value]="item.id" [selected]="+parentIdSelected === item.id">{{ item | transformCategory }}</option>
                         }
                     }
                 </select>
