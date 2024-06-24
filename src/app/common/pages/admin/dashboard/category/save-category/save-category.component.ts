@@ -14,6 +14,8 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ValidationUtil } from '../../../../../utils/validation.util';
 
 @Component({
     selector: 'app-save-category',
@@ -25,6 +27,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         ToastModule,
         CommonModule,
         ConfirmDialogModule,
+        FileUploadModule,
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-category.component.html',
@@ -43,6 +46,7 @@ export class SaveCategoryComponent implements OnInit {
     resultCategory: Category = {} as Category;
 
     submitted: boolean = false;
+    isChangeImage: boolean = false;
 
     typeSelected: string = 'BOOKING';
     parentIdSelected: number = 0;
@@ -56,6 +60,10 @@ export class SaveCategoryComponent implements OnInit {
         type: ['BOOKING'],
         url: ['', Validators.required],
         parentId: [0],
+        image: [''],
+        imageName: [''],
+        description: ['', Validators.required],
+        descriptionEng: ['', Validators.required],
     });
 
     ngOnInit(): void {
@@ -74,8 +82,12 @@ export class SaveCategoryComponent implements OnInit {
         }
 
         if (this.f['id'].value > 0) {
+            let value = this.categoryForm.value;
             this._categoryService
-                .updateCategory(this.f['id'].value, this.categoryForm.value)
+                .updateCategory(this.f['id'].value, {
+                    ...value,
+                    changeImage: this.isChangeImage,
+                })
                 .subscribe((res) => {
                     if (res !== null && res !== undefined) {
                         this.resultCategory = res.body || ({} as Category);
@@ -124,6 +136,10 @@ export class SaveCategoryComponent implements OnInit {
             url: item.url,
             type: item.type,
             parentId: item.parentId !== 0 ? item.parentId : 0,
+            image: '',
+            imageName: '',
+            description: item.description,
+            descriptionEng: item.descriptionEng,
         });
         this.typeSelected = item.type;
         if (item.parentId !== 0) {
@@ -185,6 +201,23 @@ export class SaveCategoryComponent implements OnInit {
         }
     }
 
+    onUpload(event: any) {
+        const file: File = event.target.files[0];
+
+        let reader = new FileReader();
+
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            if (this.f['id'].value > 0) {
+                this.isChangeImage = true;
+            }
+            this.categoryForm.patchValue({
+                image: reader.result,
+                imageName: file.name,
+            });
+        };
+    }
+
     onReset(): void {
         this.submitted = false;
 
@@ -197,10 +230,21 @@ export class SaveCategoryComponent implements OnInit {
             url: '',
             type: 'BOOKING',
             parentId: 0,
+            image: '',
+            imageName: '',
+            description: '',
+            descriptionEng: '',
         });
 
         this.typeSelected = 'BOOKING';
         this.parentIdSelected = 0;
+
+        this.isChangeImage = false;
+
+        let image = <HTMLInputElement>document.getElementById('image');
+        if (ValidationUtil.isNotNullAndNotUndefined(image)) {
+            image.value = '';
+        }
     }
 
     private getCategory() {

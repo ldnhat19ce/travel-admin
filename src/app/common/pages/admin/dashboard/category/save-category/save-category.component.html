@@ -33,6 +33,11 @@
                 <input type="number" id="sort" value="0" class="form-control" formControlName="sort" min="0">
             </div>
             <div class="col-12">
+                <label class="form-label">Hình ảnh</label>
+                <input class="form-control" id="image" type="file" (change)="onUpload($event)"
+                    accept="/image/*">
+            </div>
+            <div class="col-12">
                 <label for="type" class="form-label">Loại</label>
                 <select id="type" class="form-select" #select (change)="onChangeType(select.value)">
                     <option value="BOOKING" [selected]="typeSelected === 'BOOKING'">Booking</option>
@@ -46,6 +51,28 @@
                     <div class="invalid-feedback">
                         @if (f['url'].errors['required']) {
                         <div>Vui lòng nhập url</div>
+                        }
+                    </div>
+                    }
+            </div>
+            <div class="col-12">
+                <label for="sort" class="form-label">Thông tin chi tiết</label>
+                <textarea class="form-control" id="description" rows="3" formControlName="description" [ngClass]="{'is-invalid': submitted && f['description'].errors }"></textarea>
+                @if (submitted && f['description'].errors) {
+                    <div class="invalid-feedback">
+                        @if (f['description'].errors['required']) {
+                        <div>Vui lòng nhập thông tin chi tiết</div>
+                        }
+                    </div>
+                    }
+            </div>
+            <div class="col-12">
+                <label for="sort" class="form-label">Thông tin chi tiết (tiếng anh)</label>
+                <textarea class="form-control" id="descriptionEng" rows="3" formControlName="descriptionEng" [ngClass]="{'is-invalid': submitted && f['descriptionEng'].errors }"></textarea>
+                @if (submitted && f['descriptionEng'].errors) {
+                    <div class="invalid-feedback">
+                        @if (f['descriptionEng'].errors['required']) {
+                        <div>Vui lòng nhập thông tin chi tiết (tiếng anh)</div>
                         }
                     </div>
                     }

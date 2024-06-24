@@ -12,4 +12,7 @@ export interface Category {
     nameOrg: string;
     nameEngOrg: string;
     mainPostId: number;
+    imageUrl: string;
+    description: string;
+    descriptionEng: string;
 }
