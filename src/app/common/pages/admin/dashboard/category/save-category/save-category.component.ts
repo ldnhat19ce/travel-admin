@@ -16,17 +16,10 @@ import { CommonModule } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ValidationUtil } from '../../../../../utils/validation.util';
 
-import {
-    FilePondModule,
-    registerPlugin,
-} from 'ngx-filepond';
+import { FilePondModule } from 'ngx-filepond';
 
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 import { FilePond, FilePondFile, FilePondOptions } from 'filepond';
 import { environment } from '../../../../../../../environments/environment';
-
-registerPlugin(FilePondPluginImagePreview, FilePondPluginFileEncode);
 
 @Component({
     selector: 'app-save-category',
@@ -65,21 +58,20 @@ export class SaveCategoryComponent implements OnInit {
     @ViewChild('myPond')
     myPond: FilePond = {} as FilePond;
 
-    pondFiles: FilePondOptions['files'] = [
-    ];
+    pondFiles: FilePondOptions['files'] = [];
 
     pondOptions: FilePondOptions = {
         allowMultiple: false,
         allowFileEncode: true,
         labelIdle:
-            '<div class="d-flex flex-column justify-content-center align-items-center">'
-            + '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-cloud-upload">'
-            + '<path stroke="none" d="M0 0h24v24H0z" fill="none" />'
-            + '<path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1" />'
-            + '<path d="M9 15l3 -3l3 3" />'
-            + '<path d="M12 12l0 9" />'
-            + '</svg>'
-            + '<span>Drag and drop a file here or click</span></div>',
+            '<div class="d-flex flex-column justify-content-center align-items-center">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-cloud-upload">' +
+            '<path stroke="none" d="M0 0h24v24H0z" fill="none" />' +
+            '<path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1" />' +
+            '<path d="M9 15l3 -3l3 3" />' +
+            '<path d="M12 12l0 9" />' +
+            '</svg>' +
+            '<span>Drag and drop a file here or click</span></div>',
     };
 
     categoryForm: FormGroup = this._formBuilder.group({
@@ -180,7 +172,9 @@ export class SaveCategoryComponent implements OnInit {
         }
 
         if (ValidationUtil.isNotNullAndNotUndefined(item.imageUrl)) {
-            this.myPond.addFile(environment.imgUrl + item.imageUrl, { index: 0 });
+            this.myPond.addFile(environment.imgUrl + item.imageUrl, {
+                index: 0,
+            });
         }
     }
 
@@ -238,15 +232,10 @@ export class SaveCategoryComponent implements OnInit {
         }
     }
 
-    onUpdateFile(event: FilePondFile) {
-        console.log(event);
-    }
-
     pondHandleAddFile(event: any) {
         if (this.f['id'].value > 0) {
             this.isChangeImage = true;
         }
-        console.log(event)
         this.categoryForm.patchValue({
             image: event.file.getFileEncodeDataURL(),
             imageName: event.file.filename,

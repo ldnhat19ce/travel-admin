@@ -75,7 +75,16 @@ table {
         background: #e9ecef47;
         color: #26282b;
     }
-    border-color: #e5e7ea;
+    border-color: $primary;
+}
+
+.form-control,
+.form-select {
+    border: var(--bs-border-width) solid $primary;
+}
+
+.form-check-input {
+    border: 1.25px solid $primary;
 }
 
 #btn-back-to-top {
@@ -115,10 +124,20 @@ table {
 
 .filepond--root,
 .filepond--root .filepond--drop-label {
-  height: 200px;
+    height: 400px;
 }
 
 .filepond--drop-label {
-    border: 2px dashed #00ffff;
+    border: 2px dashed $primary;
 }
 
+.p-editor-container {
+	.p-editor-toolbar.ql-snow {
+		border: 1px solid $primary !important;
+	}
+	.p-editor-content.ql-snow {
+		border-left: 1px solid $primary;
+        border-right: 1px solid $primary;
+        border-bottom: 1px solid $primary;
+	}
+}

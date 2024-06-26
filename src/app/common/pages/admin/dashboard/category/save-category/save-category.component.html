@@ -1,7 +1,7 @@
 <div class="row g-3">
     <div class="col-12">
         <form class="row g-3" [formGroup]="categoryForm">
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <label for="name" class="form-label">Tên</label>
                 <input type="text" id="name" class="form-control" formControlName="name"
                     [ngClass]="{'is-invalid': submitted && f['name'].errors }">
@@ -13,7 +13,7 @@
                 </div>
                 }
             </div>
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <label for="nameEng" class="form-label">Tên Tiếng anh</label>
                 <input type="text" id="nameEng" class="form-control" formControlName="nameEng"
                     [ngClass]="{'is-invalid': submitted && f['nameEng'].errors }">
@@ -24,32 +24,6 @@
                     }
                 </div>
                 }
-            </div>
-            <div class="col-12">
-                <label for="level" class="form-label">Cấp bậc</label>
-                <input type="number" id="level" value="0" class="form-control" formControlName="level" min="0">
-            </div>
-            <div class="col-12">
-                <label for="sort" class="form-label">Sắp xếp</label>
-                <input type="number" id="sort" value="0" class="form-control" formControlName="sort" min="0">
-            </div>
-            <div class="col-12">
-                <label class="form-label">Hình ảnh</label>
-                <file-pond #myPond class="col-12"
-                    [options]="pondOptions"
-                    [files]="pondFiles"
-                    (onaddfile)="pondHandleAddFile($event)"
-                    (onprocessfile)="onUpdateFile($event)"
-                    >
-                </file-pond>
-                <!-- <input class="form-control" id="image" type="file" (change)="onUpload($event)" accept="/image/*"> -->
-            </div>
-            <div class="col-12">
-                <label for="type" class="form-label">Loại</label>
-                <select id="type" class="form-select" #select (change)="onChangeType(select.value)">
-                    <option value="BOOKING" [selected]="typeSelected === 'BOOKING'">Booking</option>
-                    <option value="BLOG" [selected]="typeSelected === 'BLOG'">Blog</option>
-                </select>
             </div>
             <div class="col-12">
                 <label for="url" class="form-label">Url</label>
@@ -88,6 +62,31 @@
                 }
             </div>
             <div class="col-12">
+                <label class="form-label">Hình ảnh</label>
+                <file-pond #myPond class="col-12"
+                    [options]="pondOptions"
+                    [files]="pondFiles"
+                    (onaddfile)="pondHandleAddFile($event)"
+                    imagePreviewMaxHeight="1024"
+                    >
+                </file-pond>
+            </div>
+            <div class="col-12 col-xl-3">
+                <label for="level" class="form-label">Cấp bậc</label>
+                <input type="number" id="level" value="0" class="form-control" formControlName="level" min="0">
+            </div>
+            <div class="col-12 col-xl-3">
+                <label for="sort" class="form-label">Sắp xếp</label>
+                <input type="number" id="sort" value="0" class="form-control" formControlName="sort" min="0">
+            </div>
+            <div class="col-12 col-xl-3">
+                <label for="type" class="form-label">Loại</label>
+                <select id="type" class="form-select" #select (change)="onChangeType(select.value)">
+                    <option value="BOOKING" [selected]="typeSelected === 'BOOKING'">Booking</option>
+                    <option value="BLOG" [selected]="typeSelected === 'BLOG'">Blog</option>
+                </select>
+            </div>
+            <div class="col-12 col-xl-3">
                 <label for="parentId" class="form-label">Thể loại cha</label>
                 <select id="parentId" class="form-select" #select1 (change)="onChangeParentId(select1.value)">
                     <option value="0" [selected]="parentIdSelected === 0">Chọn thể loại cha</option>

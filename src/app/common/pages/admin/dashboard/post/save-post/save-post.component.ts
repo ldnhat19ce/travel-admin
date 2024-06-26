@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
     ReactiveFormsModule,
     FormsModule,
@@ -13,7 +13,6 @@ import { ToastModule } from 'primeng/toast';
 import { TransformCategoryPipe } from '../../../../../pipe/transform-category.pipe';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { EditorModule } from 'primeng/editor';
-import { FileUploadModule } from 'primeng/fileupload';
 import { Category } from '../../../../../model/category.model';
 import { CategoryService } from '../../../../../services/category.service';
 import { PostService } from '../../../../../services/post.service';
@@ -22,6 +21,9 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ValidationUtil } from '../../../../../utils/validation.util';
 import { RouterLink } from '@angular/router';
 import { PageEvent } from '../../../../../model/page-event.model';
+import { FilePondModule } from 'ngx-filepond';
+import { FilePond, FilePondOptions } from 'filepond';
+import { environment } from '../../../../../../../environments/environment';
 
 @Component({
     selector: 'app-save-post',
@@ -34,9 +36,9 @@ import { PageEvent } from '../../../../../model/page-event.model';
         CommonModule,
         ConfirmDialogModule,
         EditorModule,
-        FileUploadModule,
         PaginatorModule,
         RouterLink,
+        FilePondModule,
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-post.component.html',
@@ -48,6 +50,12 @@ export class SavePostComponent implements OnInit {
     private _categoryService = inject(CategoryService);
     private _postService = inject(PostService);
     private _confirmationService = inject(ConfirmationService);
+
+    @ViewChild('topPond')
+    topPond: FilePond = {} as FilePond;
+
+    @ViewChild('bottomPond')
+    bottomPond: FilePond = {} as FilePond;
 
     isChangeTopImage: boolean = false;
     isChangeBottomImage: boolean = false;
@@ -91,6 +99,20 @@ export class SavePostComponent implements OnInit {
         { label: 20, value: 20 },
         { label: 120, value: 120 },
     ];
+
+    pondOptions: FilePondOptions = {
+        allowMultiple: false,
+        allowFileEncode: true,
+        labelIdle:
+            '<div class="d-flex flex-column justify-content-center align-items-center">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-cloud-upload">' +
+            '<path stroke="none" d="M0 0h24v24H0z" fill="none" />' +
+            '<path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1" />' +
+            '<path d="M9 15l3 -3l3 3" />' +
+            '<path d="M12 12l0 9" />' +
+            '</svg>' +
+            '<span>Drag and drop a file here or click</span></div>',
+    };
 
     ngOnInit(): void {
         this.getCategory();
@@ -146,6 +168,26 @@ export class SavePostComponent implements OnInit {
             });
         }
 
+    }
+
+    pondHandleAddFile(event: any, type: string) {
+        if (type === 'top') {
+            if (this.f['id'].value > 0) {
+                this.isChangeTopImage = true;
+            }
+            this.postForm.patchValue({
+                topImage: event.file.getFileEncodeDataURL(),
+                topImageName: event.file.filename,
+            });
+        } else if (type === 'bottom') {
+            if (this.f['id'].value > 0) {
+                this.isChangeBottomImage = true;
+            }
+            this.postForm.patchValue({
+                bottomImage: event.file.getFileEncodeDataURL(),
+                bottomImageName: event.file.filename,
+            });
+        }
     }
 
     onSubmit() {
@@ -234,6 +276,9 @@ export class SavePostComponent implements OnInit {
         if (ValidationUtil.isNotNullAndNotUndefined(bottomImage)) {
             bottomImage.value = '';
         }
+
+        this.topPond.removeFile();
+        this.bottomPond.removeFile();
     }
 
     onEdit(item: Post) {
@@ -256,6 +301,18 @@ export class SavePostComponent implements OnInit {
         this.isMainEditItem = Number(item.mainPostId) === Number(item.id);
         this.categoryEditItem = item.categoryId;
         this.categoryIdSelected = item.categoryId;
+
+        if (ValidationUtil.isNotNullAndNotUndefined(item.topImage)) {
+            this.topPond.addFile(environment.imgUrl + item.topImage, {
+                index: 0,
+            });
+        }
+
+        if (ValidationUtil.isNotNullAndNotUndefined(item.bottomImage)) {
+            this.bottomPond.addFile(environment.imgUrl + item.bottomImage, {
+                index: 0,
+            });
+        }
     }
 
     onDelete(event: Event, item: Post) {

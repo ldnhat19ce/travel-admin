@@ -5,7 +5,7 @@
 <div class="row g-3">
     <div class="col-12">
         <form class="row g-3" [formGroup]="postFormDefinition">
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <label for="defTitle" class="form-label">Tiêu đề</label>
                 <input type="text" id="defTitle" class="form-control" formControlName="defTitle"
                     [ngClass]="{'is-invalid': submitted && f['defTitle'].errors }">
@@ -17,7 +17,7 @@
                 </div>
                 }
             </div>
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <label for="defName1" class="form-label">Tên phía trên</label>
                 <input type="text" id="defName1" class="form-control" formControlName="defName1"
                     [ngClass]="{'is-invalid': submitted && f['defName1'].errors }">
@@ -29,7 +29,7 @@
                 </div>
                 }
             </div>
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <label for="defName2" class="form-label">Tên phía dưới</label>
                 <input type="text" id="defName2" class="form-control" formControlName="defName2"
                     [ngClass]="{'is-invalid': submitted && f['defName2'].errors }">
@@ -41,7 +41,7 @@
                 </div>
                 }
             </div>
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <label for="defContent1" class="form-label">Nội dung phía trên</label>
                 <input type="text" id="defContent1" class="form-control" formControlName="defContent1"
                     [ngClass]="{'is-invalid': submitted && f['defContent1'].errors }">
@@ -53,7 +53,7 @@
                 </div>
                 }
             </div>
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <label for="defContent2" class="form-label">Nội dung phía dưới</label>
                 <input type="text" id="defName2" class="form-control" formControlName="defContent2"
                     [ngClass]="{'is-invalid': submitted && f['defContent2'].errors }">
@@ -65,7 +65,7 @@
                 </div>
                 }
             </div>
-            <div class="col-12">
+            <div class="col-12 col-xl-6">
                 <label for="categoryId" class="form-label">Bài đăng</label>
                 <select id="categoryId" class="form-select" #select (change)="onChangePost(select.value)"
                     [ngClass]="{'is-invalid': submitted && f['postId'].errors }">
