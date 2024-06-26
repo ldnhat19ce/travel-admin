@@ -15,14 +15,15 @@
             </div>
             <div class="col-12">
                 <label for="nameEng" class="form-label">Tên Tiếng anh</label>
-                <input type="text" id="nameEng" class="form-control" formControlName="nameEng" [ngClass]="{'is-invalid': submitted && f['nameEng'].errors }">
+                <input type="text" id="nameEng" class="form-control" formControlName="nameEng"
+                    [ngClass]="{'is-invalid': submitted && f['nameEng'].errors }">
                 @if (submitted && f['nameEng'].errors) {
-                    <div class="invalid-feedback">
-                        @if (f['nameEng'].errors['required']) {
-                        <div>Vui lòng nhập tên tiếng anh</div>
-                        }
-                    </div>
+                <div class="invalid-feedback">
+                    @if (f['nameEng'].errors['required']) {
+                    <div>Vui lòng nhập tên tiếng anh</div>
                     }
+                </div>
+                }
             </div>
             <div class="col-12">
                 <label for="level" class="form-label">Cấp bậc</label>
@@ -34,8 +35,14 @@
             </div>
             <div class="col-12">
                 <label class="form-label">Hình ảnh</label>
-                <input class="form-control" id="image" type="file" (change)="onUpload($event)"
-                    accept="/image/*">
+                <file-pond #myPond class="col-12"
+                    [options]="pondOptions"
+                    [files]="pondFiles"
+                    (onaddfile)="pondHandleAddFile($event)"
+                    (onprocessfile)="onUpdateFile($event)"
+                    >
+                </file-pond>
+                <!-- <input class="form-control" id="image" type="file" (change)="onUpload($event)" accept="/image/*"> -->
             </div>
             <div class="col-12">
                 <label for="type" class="form-label">Loại</label>
@@ -46,45 +53,49 @@
             </div>
             <div class="col-12">
                 <label for="url" class="form-label">Url</label>
-                <input type="text" id="url" class="form-control" formControlName="url" [ngClass]="{'is-invalid': submitted && f['url'].errors }">
+                <input type="text" id="url" class="form-control" formControlName="url"
+                    [ngClass]="{'is-invalid': submitted && f['url'].errors }">
                 @if (submitted && f['url'].errors) {
-                    <div class="invalid-feedback">
-                        @if (f['url'].errors['required']) {
-                        <div>Vui lòng nhập url</div>
-                        }
-                    </div>
+                <div class="invalid-feedback">
+                    @if (f['url'].errors['required']) {
+                    <div>Vui lòng nhập url</div>
                     }
+                </div>
+                }
             </div>
             <div class="col-12">
                 <label for="sort" class="form-label">Thông tin chi tiết</label>
-                <textarea class="form-control" id="description" rows="3" formControlName="description" [ngClass]="{'is-invalid': submitted && f['description'].errors }"></textarea>
+                <textarea class="form-control" id="description" rows="3" formControlName="description"
+                    [ngClass]="{'is-invalid': submitted && f['description'].errors }"></textarea>
                 @if (submitted && f['description'].errors) {
-                    <div class="invalid-feedback">
-                        @if (f['description'].errors['required']) {
-                        <div>Vui lòng nhập thông tin chi tiết</div>
-                        }
-                    </div>
+                <div class="invalid-feedback">
+                    @if (f['description'].errors['required']) {
+                    <div>Vui lòng nhập thông tin chi tiết</div>
                     }
+                </div>
+                }
             </div>
             <div class="col-12">
                 <label for="sort" class="form-label">Thông tin chi tiết (tiếng anh)</label>
-                <textarea class="form-control" id="descriptionEng" rows="3" formControlName="descriptionEng" [ngClass]="{'is-invalid': submitted && f['descriptionEng'].errors }"></textarea>
+                <textarea class="form-control" id="descriptionEng" rows="3" formControlName="descriptionEng"
+                    [ngClass]="{'is-invalid': submitted && f['descriptionEng'].errors }"></textarea>
                 @if (submitted && f['descriptionEng'].errors) {
-                    <div class="invalid-feedback">
-                        @if (f['descriptionEng'].errors['required']) {
-                        <div>Vui lòng nhập thông tin chi tiết (tiếng anh)</div>
-                        }
-                    </div>
+                <div class="invalid-feedback">
+                    @if (f['descriptionEng'].errors['required']) {
+                    <div>Vui lòng nhập thông tin chi tiết (tiếng anh)</div>
                     }
+                </div>
+                }
             </div>
             <div class="col-12">
                 <label for="parentId" class="form-label">Thể loại cha</label>
                 <select id="parentId" class="form-select" #select1 (change)="onChangeParentId(select1.value)">
                     <option value="0" [selected]="parentIdSelected === 0">Chọn thể loại cha</option>
                     @if (categories.length > 0) {
-                        @for (item of categories; track item.id) {
-                        <option [value]="item.id" [selected]="+parentIdSelected === item.id">{{ item | transformCategory }}</option>
-                        }
+                    @for (item of categories; track item.id) {
+                    <option [value]="item.id" [selected]="+parentIdSelected === item.id">{{ item | transformCategory }}
+                    </option>
+                    }
                     }
                 </select>
             </div>
@@ -116,28 +127,30 @@
                 </thead>
                 <tbody>
                     @for (item of categoryHierarchy; track item.id) {
-                        <tr>
-                            <td class="text-center text-nowrap py-2" role="button" (click)="onEdit(item)"><i class="ti ti-edit"></i></td>
-                            <td class="text-center text-nowrap py-2">{{ item.id }}</td>
-                            <td class="text-center text-nowrap py-2">{{ item.parentId }}</td>
-                            <td class="py-2 text-nowrap">
-                                @if (item.parentId > 0) {
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                }
-                                {{ item.nameOrg }}
-                            </td>
-                            <td class="text-center text-nowrap py-2">
-                                @if (item.parentId > 0) {
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                }
-                                {{ item.nameEngOrg }}
-                            </td>
-                            <td class="text-center text-nowrap py-2">{{ item.level }}</td>
-                            <td class="text-center text-nowrap py-2">{{ item.sort }}</td>
-                            <td class="text-center text-nowrap py-2">{{ item.type }}</td>
-                            <td class="text-center text-nowrap py-2">{{ item.url }}</td>
-                            <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)"><i class="ti ti-trash"></i></td>
-                        </tr>
+                    <tr>
+                        <td class="text-center text-nowrap py-2" role="button" (click)="onEdit(item)"><i
+                                class="ti ti-edit"></i></td>
+                        <td class="text-center text-nowrap py-2">{{ item.id }}</td>
+                        <td class="text-center text-nowrap py-2">{{ item.parentId }}</td>
+                        <td class="py-2 text-nowrap">
+                            @if (item.parentId > 0) {
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            }
+                            {{ item.nameOrg }}
+                        </td>
+                        <td class="text-center text-nowrap py-2">
+                            @if (item.parentId > 0) {
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            }
+                            {{ item.nameEngOrg }}
+                        </td>
+                        <td class="text-center text-nowrap py-2">{{ item.level }}</td>
+                        <td class="text-center text-nowrap py-2">{{ item.sort }}</td>
+                        <td class="text-center text-nowrap py-2">{{ item.type }}</td>
+                        <td class="text-center text-nowrap py-2">{{ item.url }}</td>
+                        <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)"><i
+                                class="ti ti-trash"></i></td>
+                    </tr>
                     }
                 </tbody>
             </table>

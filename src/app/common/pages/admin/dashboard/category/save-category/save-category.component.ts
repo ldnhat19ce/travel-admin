@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
     AbstractControl,
     FormBuilder,
@@ -14,8 +14,19 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { FileUploadModule } from 'primeng/fileupload';
 import { ValidationUtil } from '../../../../../utils/validation.util';
+
+import {
+    FilePondModule,
+    registerPlugin,
+} from 'ngx-filepond';
+
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
+import { FilePond, FilePondFile, FilePondOptions } from 'filepond';
+import { environment } from '../../../../../../../environments/environment';
+
+registerPlugin(FilePondPluginImagePreview, FilePondPluginFileEncode);
 
 @Component({
     selector: 'app-save-category',
@@ -27,7 +38,7 @@ import { ValidationUtil } from '../../../../../utils/validation.util';
         ToastModule,
         CommonModule,
         ConfirmDialogModule,
-        FileUploadModule,
+        FilePondModule,
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-category.component.html',
@@ -50,6 +61,26 @@ export class SaveCategoryComponent implements OnInit {
 
     typeSelected: string = 'BOOKING';
     parentIdSelected: number = 0;
+
+    @ViewChild('myPond')
+    myPond: FilePond = {} as FilePond;
+
+    pondFiles: FilePondOptions['files'] = [
+    ];
+
+    pondOptions: FilePondOptions = {
+        allowMultiple: false,
+        allowFileEncode: true,
+        labelIdle:
+            '<div class="d-flex flex-column justify-content-center align-items-center">'
+            + '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-cloud-upload">'
+            + '<path stroke="none" d="M0 0h24v24H0z" fill="none" />'
+            + '<path d="M7 18a4.6 4.4 0 0 1 0 -9a5 4.5 0 0 1 11 2h1a3.5 3.5 0 0 1 0 7h-1" />'
+            + '<path d="M9 15l3 -3l3 3" />'
+            + '<path d="M12 12l0 9" />'
+            + '</svg>'
+            + '<span>Drag and drop a file here or click</span></div>',
+    };
 
     categoryForm: FormGroup = this._formBuilder.group({
         id: [0],
@@ -100,6 +131,8 @@ export class SaveCategoryComponent implements OnInit {
                             key: 'br',
                             life: 3000,
                         });
+
+                        this.myPond.removeFile();
                         this.onReset();
                         this.getCategory();
                     }
@@ -144,6 +177,10 @@ export class SaveCategoryComponent implements OnInit {
         this.typeSelected = item.type;
         if (item.parentId !== 0) {
             this.parentIdSelected = item.parentId;
+        }
+
+        if (ValidationUtil.isNotNullAndNotUndefined(item.imageUrl)) {
+            this.myPond.addFile(environment.imgUrl + item.imageUrl, { index: 0 });
         }
     }
 
@@ -199,6 +236,21 @@ export class SaveCategoryComponent implements OnInit {
                 parentId: parentId,
             });
         }
+    }
+
+    onUpdateFile(event: FilePondFile) {
+        console.log(event);
+    }
+
+    pondHandleAddFile(event: any) {
+        if (this.f['id'].value > 0) {
+            this.isChangeImage = true;
+        }
+        console.log(event)
+        this.categoryForm.patchValue({
+            image: event.file.getFileEncodeDataURL(),
+            imageName: event.file.filename,
+        });
     }
 
     onUpload(event: any) {

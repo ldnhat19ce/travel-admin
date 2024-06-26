@@ -59,6 +59,9 @@ $enable-negative-margins: true;
 
 @import "./ngprime";
 
+@import "filepond/dist/filepond.min.css";
+@import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+
 table {
     border: 0;
     border-collapse: collapse;
@@ -84,7 +87,7 @@ table {
     padding-bottom: 10px;
 }
 
-*[quill__html]{
+*[quill__html] {
     display: none;
 
     width: 100%;
@@ -102,7 +105,20 @@ table {
     border: none;
 }
 
-*[quill__html *= '-active-']{
+*[quill__html*="-active-"] {
     display: initial;
+}
+
+.filepond--root .filepond--credits {
+    display: none;
+}
+
+.filepond--root,
+.filepond--root .filepond--drop-label {
+  height: 200px;
+}
+
+.filepond--drop-label {
+    border: 2px dashed #00ffff;
 }
 
