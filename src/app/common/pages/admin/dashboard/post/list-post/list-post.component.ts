@@ -38,6 +38,8 @@ export class ListPostComponent implements OnInit {
     rows: number = 10;
     totalRecords: number = 0;
 
+    loaded: boolean = false;
+
     ngOnInit(): void {
         this.getPost();
     }
@@ -97,6 +99,7 @@ export class ListPostComponent implements OnInit {
                 if (res !== null && res !== undefined) {
                     this.post = res.body?.result || [];
                     this.totalRecords = res.body?.total || 0;
+                    this.loaded = true;
                 }
             });
     }
