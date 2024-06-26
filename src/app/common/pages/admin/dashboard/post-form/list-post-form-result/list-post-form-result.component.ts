@@ -36,6 +36,8 @@ export class ListPostFormResultComponent implements OnInit {
     postId: number = 0;
     postFormId: number = 0;
 
+    loaded: boolean = false;
+
     ngOnInit(): void {
         this.getPost();
     }
@@ -79,6 +81,7 @@ export class ListPostFormResultComponent implements OnInit {
                 if (res !== null && res !== undefined) {
                     this.post = res.body?.result || [];
                     this.totalRecords = res.body?.total || 0;
+                    this.loaded = true;
                 }
             });
     }

@@ -5,5 +5,5 @@ export interface PostFormDefinition {
     defName2: string;
     defContent1: string;
     defContent2: string;
-    postId: string;
+    postId: number;
 }

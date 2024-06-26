@@ -50,6 +50,7 @@ export class SavePostFormDefComponent implements OnInit {
 
     submitted: boolean = false;
     blocked: boolean = false;
+    loaded: boolean = false;
 
     post: Post[] = [] as Post[];
 
@@ -155,7 +156,7 @@ export class SavePostFormDefComponent implements OnInit {
             postId: postFormDef.postId,
         });
 
-        this.postSelected = 0;
+        this.postSelected = postFormDef.postId;
     }
 
     onDelete(event: Event, item: PostFormDefinition) {
@@ -237,6 +238,7 @@ export class SavePostFormDefComponent implements OnInit {
                 if (res !== null && res !== undefined) {
                     this.postFormDefinitions = res.body?.result || [];
                     this.totalRecords = res.body?.total || 0;
+                    this.loaded = true;
                 }
             });
     }

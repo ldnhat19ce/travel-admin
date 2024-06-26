@@ -91,11 +91,12 @@ table {
 
 #btn-back-to-top {
     position: fixed;
-    bottom: 20px;
+    bottom: 60px;
     right: 20px;
     display: none;
     padding-top: 10px;
     padding-bottom: 10px;
+    z-index: 1025;
 }
 
 *[quill__html] {
