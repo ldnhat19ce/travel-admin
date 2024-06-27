@@ -124,7 +124,6 @@ export class SaveCategoryComponent implements OnInit {
                             life: 3000,
                         });
 
-                        this.myPond.removeFile();
                         this.onReset();
                         this.getCategory();
                     }
@@ -171,10 +170,13 @@ export class SaveCategoryComponent implements OnInit {
             this.parentIdSelected = item.parentId;
         }
 
+        this.isChangeImage = false;
         if (ValidationUtil.isNotNullAndNotUndefined(item.imageUrl)) {
             this.myPond.addFile(environment.imgUrl + item.imageUrl, {
                 index: 0,
             });
+        } else {
+            this.myPond.removeFile();
         }
     }
 
@@ -286,6 +288,8 @@ export class SaveCategoryComponent implements OnInit {
         if (ValidationUtil.isNotNullAndNotUndefined(image)) {
             image.value = '';
         }
+
+        this.myPond.removeFile();
     }
 
     private getCategory() {

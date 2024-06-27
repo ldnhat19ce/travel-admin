@@ -302,16 +302,23 @@ export class SavePostComponent implements OnInit {
         this.categoryEditItem = item.categoryId;
         this.categoryIdSelected = item.categoryId;
 
+        this.isChangeBottomImage = false;
+        this.isChangeTopImage = false;
+
         if (ValidationUtil.isNotNullAndNotUndefined(item.topImage)) {
             this.topPond.addFile(environment.imgUrl + item.topImage, {
                 index: 0,
             });
+        } else {
+            this.topPond.removeFile();
         }
 
         if (ValidationUtil.isNotNullAndNotUndefined(item.bottomImage)) {
             this.bottomPond.addFile(environment.imgUrl + item.bottomImage, {
                 index: 0,
             });
+        } else {
+            this.bottomPond.removeFile();
         }
     }
 
