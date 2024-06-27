@@ -152,20 +152,14 @@
                 <file-pond #topPond
                     [options]="pondOptions"
                     (onaddfile)="pondHandleAddFile($event, 'top')"
-                    imagePreviewMaxHeight="1024"
                     >
                 </file-pond>
-                <!-- <input class="form-control" id="topImage" type="file" (change)="onUpload($event, 'top')"
-                    accept="/image/*"> -->
             </div>
             <div class="col-12">
                 <label class="form-label">Hình ảnh phía dưới</label>
-                <!-- <input class="form-control" id="bottomImage" type="file" (change)="onUpload($event, 'bottom')"
-                    accept="/image/*"> -->
                 <file-pond #bottomPond
                     [options]="pondOptions"
                     (onaddfile)="pondHandleAddFile($event, 'bottom')"
-                    imagePreviewMaxHeight="1024"
                     >
                 </file-pond>
             </div>
