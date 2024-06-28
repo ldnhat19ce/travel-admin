@@ -498,7 +498,7 @@ export class SavePostComponent implements OnInit {
         fd.append('file', file);
 
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', environment.apiUrl + '/admin/upload', true);
+        xhr.open('POST', environment.apiUrl + '/admin/upload?fileUploadFolder=POST_CONTENT', true);
         xhr.setRequestHeader(
             'Authorization',
             `Bearer ${this._authenticationService.getUserToken()}`
