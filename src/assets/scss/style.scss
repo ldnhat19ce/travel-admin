@@ -121,6 +121,10 @@ table {
     display: initial;
 }
 
+.ql-editing[data-mode="video"] {
+    left: 0px !important;
+}
+
 .filepond--root .filepond--credits {
     display: none;
 }

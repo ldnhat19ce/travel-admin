@@ -24,6 +24,7 @@ import { PageEvent } from '../../../../../model/page-event.model';
 import { FilePondModule } from 'ngx-filepond';
 import { FilePond, FilePondOptions } from 'filepond';
 import { environment } from '../../../../../../../environments/environment';
+import { AuthenticationService } from '../../../../../services/auth/authentication.service';
 
 @Component({
     selector: 'app-save-post',
@@ -50,6 +51,7 @@ export class SavePostComponent implements OnInit {
     private _categoryService = inject(CategoryService);
     private _postService = inject(PostService);
     private _confirmationService = inject(ConfirmationService);
+    private _authenticationService = inject(AuthenticationService);
 
     @ViewChild('topPond')
     topPond: FilePond = {} as FilePond;
@@ -90,7 +92,7 @@ export class SavePostComponent implements OnInit {
         defContent1: [''],
         defContent2: [''],
         postId: [0],
-        main: [false]
+        main: [false],
     });
 
     options = [
@@ -125,6 +127,34 @@ export class SavePostComponent implements OnInit {
 
     editorOnInit(event: any, qlHTMLId: string) {
         const quillInstance = event.editor;
+        quillInstance.root.addEventListener('paste', (e: any) => {
+            const clipboardData =
+                e.clipboardData || (<any>window).clipboardData;
+            const isImage =
+                clipboardData.types.length &&
+                clipboardData.types.join('').includes('Files');
+            if (!isImage) {
+                return;
+            }
+
+            const file = clipboardData.files[0];
+            this.saveToServer(file, quillInstance);
+        });
+
+        let newToolbar = quillInstance.getModule('toolbar');
+        newToolbar.addHandler('image', () => {
+            this.selectLocalImage(quillInstance);
+            // let contentElement = document.getElementById("content");
+            // if(contentElement !== null && contentElement !== undefined) {
+            //     contentElement.innerHTML = "<div>test</div>";
+            // }
+            // let range = quillInstance.getSelection();
+            // let value = prompt('provide image path:');
+            // if(value) {
+            //     quillInstance.insertEmbed(range.index, 'image', value, "user");
+            // }
+        });
+
         let quillEd_txtArea_1 = document.createElement('textarea');
         let attrQuillTxtArea = document.createAttribute('quill__html');
         quillEd_txtArea_1.setAttributeNode(attrQuillTxtArea);
@@ -133,7 +163,7 @@ export class SavePostComponent implements OnInit {
         quillCustomDiv.appendChild(quillEd_txtArea_1);
 
         let quillHtmlBtn = document.getElementById(qlHTMLId);
-        if(quillHtmlBtn !== null && quillHtmlBtn !== undefined) {
+        if (quillHtmlBtn !== null && quillHtmlBtn !== undefined) {
             quillHtmlBtn.addEventListener('click', (evt: any) => {
                 if (
                     ValidationUtil.isNotNullAndNotUndefined(quillEd_txtArea_1)
@@ -146,7 +176,8 @@ export class SavePostComponent implements OnInit {
                             quillInstance.pasteHTML(quillEd_txtArea_1.value);
                             evt.target.classList.remove('ql-active');
                         } else {
-                            quillEd_txtArea_1.value = quillInstance.root.innerHTML;
+                            quillEd_txtArea_1.value =
+                                quillInstance.root.innerHTML;
                             evt.target.classList.add('ql-active');
                         }
 
@@ -156,18 +187,17 @@ export class SavePostComponent implements OnInit {
                         );
                     }
                 }
-                if(qlHTMLId === "qlHTMLId2") {
+                if (qlHTMLId === 'qlHTMLId2') {
                     this.postForm.patchValue({
-                        contentEng: quillInstance.root.innerHTML
+                        contentEng: quillInstance.root.innerHTML,
                     });
-                } else if(qlHTMLId === "qlHTMLId1") {
+                } else if (qlHTMLId === 'qlHTMLId1') {
                     this.postForm.patchValue({
-                        content: quillInstance.root.innerHTML
+                        content: quillInstance.root.innerHTML,
                     });
                 }
             });
         }
-
     }
 
     pondHandleAddFile(event: any, type: string) {
@@ -255,7 +285,7 @@ export class SavePostComponent implements OnInit {
             bottomImageName: '',
             categoryId: '',
             used: false,
-            main: false
+            main: false,
         });
 
         this.isChangeTopImage = false;
@@ -295,7 +325,7 @@ export class SavePostComponent implements OnInit {
             bottomImageName: '',
             categoryId: item.categoryId,
             used: item.used,
-            main: Number(item.mainPostId) === Number(item.id)
+            main: Number(item.mainPostId) === Number(item.id),
         });
 
         this.isMainEditItem = Number(item.mainPostId) === Number(item.id);
@@ -364,7 +394,9 @@ export class SavePostComponent implements OnInit {
         if (categoryId !== 'default') {
             this.postForm.patchValue({
                 categoryId: categoryId,
-                main: Number(this.categoryEditItem) === Number(categoryId) && this.isMainEditItem
+                main:
+                    Number(this.categoryEditItem) === Number(categoryId) &&
+                    this.isMainEditItem,
             });
         }
     }
@@ -440,5 +472,49 @@ export class SavePostComponent implements OnInit {
             page: this.first + 1,
             limit: this.rows,
         };
+    }
+
+    selectLocalImage(quillInstance: any) {
+        const input = <HTMLInputElement>document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.click();
+
+        if (input !== null && input !== undefined) {
+            input.onchange = () => {
+                if (input.files !== null) {
+                    const file = input.files[0];
+                    this.saveToServer(file, quillInstance);
+                    if (/^image\//.test(file.type)) {
+                    } else {
+                        console.warn('You could only upload images.');
+                    }
+                }
+            };
+        }
+    }
+
+    saveToServer(file: File, quillInstance: any) {
+        const fd = new FormData();
+        fd.append('file', file);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', environment.apiUrl + '/admin/upload', true);
+        xhr.setRequestHeader(
+            'Authorization',
+            `Bearer ${this._authenticationService.getUserToken()}`
+        );
+
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
+                this.insertToEditor(data.url, quillInstance);
+            }
+        };
+        xhr.send(fd);
+    }
+
+    insertToEditor(url: string, quillInstance: any) {
+        const range = quillInstance.getSelection();
+        quillInstance.insertEmbed(range.index, 'image', url, 'user');
     }
 }

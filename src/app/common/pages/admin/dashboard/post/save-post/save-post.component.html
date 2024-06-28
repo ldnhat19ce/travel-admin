@@ -27,29 +27,29 @@
             </div>
             <div class="col-12">
                 <label for="content" class="form-label">Nội dung</label>
-                <p-editor #editor1 (onInit)="editorOnInit($event, 'qlHTMLId1')" formControlName="content" [style]="{ height: '500px' }"
+                <p-editor #editor1 id="content" (onInit)="editorOnInit($event, 'qlHTMLId1')" formControlName="content" [style]="{ height: '500px' }"
                     [ngClass]="{'is-invalid': submitted && f['content'].errors }">
                     <ng-template pTemplate="header">
                         <span class="ql-formats">
-                            <button type="button" class="ql-bold" aria-label="Bold"></button>
-                            <button type="button" class="ql-italic" aria-label="Italic"></button>
-                            <button type="button" class="ql-underline" aria-label="Underline"></button>
-                            <button type="button" class="ql-strike" aria-label="Strike"></button>
-                            <button type="button" class="ql-blockquote" aria-label="Blockquote"></button>
-                            <button type="button" class="ql-code-block" aria-label="Code-block"></button>
-                            <button type="button" class="ql-link" aria-label="Link"></button>
-                            <button type="button" class="ql-image" aria-label="Image"></button>
-                            <button type="button" class="ql-video" aria-label="Video"></button>
-                            <button type="button" class="ql-formula" aria-label="Formula"></button>
-                            <button class="ql-script" value="sub"></button>
-                            <button class="ql-script" value="super"></button>
-                            <button class="ql-list" value="ordered" type="button"></button>
-                            <button class="ql-list" value="bullet" type="button"></button>
-                            <button class="ql-list" value="check" type="button"></button>
+                            <button type="button" class="ql-bold" aria-label="Bold" title="Bold"></button>
+                            <button type="button" class="ql-italic" aria-label="Italic" title="Italic"></button>
+                            <button type="button" class="ql-underline" aria-label="Underline" title="Underline"></button>
+                            <button type="button" class="ql-strike" aria-label="Strike" title="Strike"></button>
+                            <button type="button" class="ql-blockquote" aria-label="Blockquote" title="Blockquote"></button>
+                            <button type="button" class="ql-code-block" aria-label="Code-block" title="Code-block"></button>
+                            <button type="button" class="ql-link" aria-label="Link" title="Link"></button>
+                            <button type="button" class="ql-image" aria-label="Image" title="Image"></button>
+                            <button type="button" class="ql-video" aria-label="Video" title="Video"></button>
+                            <button type="button" class="ql-formula" aria-label="Formula" title="Formula"></button>
+                            <button class="ql-script" value="sub" title="sub"></button>
+                            <button class="ql-script" value="super" title="super"></button>
+                            <button class="ql-list" value="ordered" type="button" title="ordered"></button>
+                            <button class="ql-list" value="bullet" type="button" title="bullet"></button>
+                            <button class="ql-list" value="check" type="button" title="check"></button>
                             <button class="ql-align" value=""></button>
-                            <button class="ql-align" value="center"></button>
-                            <button class="ql-align" value="right"></button>
-                            <button class="ql-align" value="justify"></button>
+                            <button class="ql-align" value="center" title="center"></button>
+                            <button class="ql-align" value="right" title="right"></button>
+                            <button class="ql-align" value="justify" title="justify"></button>
                             <button class="ql-header" value="1" type="button"></button>
                             <button class="ql-header" value="2" type="button"></button>
                             <button class="ql-indent" value="-1" type="button"></button>
