@@ -129,6 +129,11 @@ table {
     display: none;
 }
 
+.thumb-image .filepond--root,
+.thumb-image .filepond--root .filepond--drop-label {
+    height: 200px;
+}
+
 .filepond--root,
 .filepond--root .filepond--drop-label {
     height: 400px;
@@ -147,5 +152,11 @@ table {
         border-right: 1px solid $primary;
         border-bottom: 1px solid $primary;
 	}
+}
+
+@include media-breakpoint-up(xl) {
+    .position-xl-fixed {
+        position: fixed;
+    }
 }
 

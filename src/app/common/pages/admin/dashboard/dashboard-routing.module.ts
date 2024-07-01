@@ -29,6 +29,13 @@ const routes: Routes = [
                 (module) => module.PostFormDefinitionModule
             ),
     },
+    {
+        path: 'post-image',
+        loadChildren: () =>
+            import('./post-image/post-image.module').then(
+                (module) => module.PostImageModule
+            ),
+    },
 ];
 
 @NgModule({

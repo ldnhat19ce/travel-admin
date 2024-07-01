@@ -1,0 +1,97 @@
+<div class="row g-3">
+    <div class="col-12 col-xl-8">
+        <div class="row border mx-1">
+            <span class="h3 col-12 p-3">Hình ảnh chính</span>
+            <div class="col-12">
+                <file-pond #larger
+                    [options]="pondOptions"
+                    (onaddfile)="onAddFile($event, 'LARGE', 'L-1')"
+                    (onremovefile)="onRemoveFile($event, 'LARGE', 'L-1')"
+                    >
+                </file-pond>
+            </div>
+            <span class="h3 col-12 p-3">Hình ảnh thu nhỏ</span>
+            <div class="col-12">
+                <div class="row row-cols-3 thumb-image">
+                    <file-pond #thumb1
+                        class="col"
+                        [options]="pondOptions"
+                        (onaddfile)="onAddFile($event, 'THUMB', 'T-1')"
+                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-1')"
+                        >
+                    </file-pond>
+                    <file-pond #thumb2
+                        class="col"
+                        [options]="pondOptions"
+                        (onaddfile)="onAddFile($event, 'THUMB', 'T-2')"
+                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-2')"
+                        >
+                    </file-pond>
+                    <file-pond #thumb3
+                        class="col"
+                        [options]="pondOptions"
+                        (onaddfile)="onAddFile($event, 'THUMB', 'T-3')"
+                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-3')"
+                        >
+                    </file-pond>
+                </div>
+                <div class="row row-cols-3 thumb-image">
+                    <file-pond #thumb4
+                        class="col"
+                        [options]="pondOptions"
+                        (onaddfile)="onAddFile($event, 'THUMB', 'T-4')"
+                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-4')"
+                        >
+                    </file-pond>
+                    <file-pond #thumb5
+                        class="col"
+                        [options]="pondOptions"
+                        (onaddfile)="onAddFile($event, 'THUMB', 'T-5')"
+                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-5')"
+                        >
+                    </file-pond>
+                    <file-pond #thumb6
+                        class="col"
+                        [options]="pondOptions"
+                        (onaddfile)="onAddFile($event, 'THUMB', 'T-6')"
+                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-6')"
+                        >
+                    </file-pond>
+                </div>
+            </div>
+            <div class="col-12 d-flex justify-content-center gap-3 py-3">
+                <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
+                <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-4">
+        <div class="row border position-xl-fixed">
+            <span class="col-12 h3 d-flex justify-content-center align-items-center p-3">
+                Danh sách bài viết
+            </span>
+            <div class="col-12">
+                <div class="table overflow-auto" style="height: 500px;" (scroll)="onScroll($event)">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center text-nowrap py-2">Id</th>
+                                <th class="text-center text-nowrap py-2">Tên</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of post; track item.id) {
+                            <tr role="button" (click)="onClickRow(item)">
+                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': postId === item.id}">{{ item.id }}</td>
+                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': postId === item.id}">{{ item.name }}</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-toast position="bottom-right" key="br" />
