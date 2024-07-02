@@ -163,13 +163,23 @@ export class SavePostImageComponent implements OnInit {
     onSubmit() {
         this.submitted = true;
 
+        if(this.postId === 0) {
+            this._messageService.add({
+                severity: 'danger',
+                summary: 'Error',
+                detail: "Vui lòng chọn bài viết",
+                key: 'br',
+                life: 3000,
+            });
+        }
+
         this._postImageService.savePostImage(this.postImageForm.value, this.postId).subscribe(res => {
             if (res !== null && res !== undefined) {
                 let resultPost = res.body || ({} as Post);
                 this._messageService.add({
                     severity: 'success',
                     summary: 'Success',
-                    detail: 'Lưu thành công [ID]: ' + resultPost.id,
+                    detail: 'Lưu thành công',
                     key: 'br',
                     life: 3000,
                 });
