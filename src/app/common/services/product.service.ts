@@ -15,4 +15,9 @@ export class ProductService {
         let url = `${environment.apiUrl}/admin/product`;
         return this._httpClient.get<Data<Product[]>>(url, { params: params, observe: 'response' });
     }
+
+    saveProduct(params: {}): Observable<HttpResponse<Product>> {
+        let url = `${environment.apiUrl}/admin/product`;
+        return this._httpClient.post<Product>(url, params, { observe: 'response' });
+    }
 }

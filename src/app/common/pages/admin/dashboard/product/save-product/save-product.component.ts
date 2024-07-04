@@ -8,6 +8,11 @@ import { Category } from '../../../../../model/category.model';
 import { CategoryService } from '../../../../../services/category.service';
 import { TransformCategoryPipe } from '../../../../../pipe/transform-category.pipe';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Code } from '../../../../../model/code.model';
+import { CodeService } from '../../../../../services/code.service';
+import { CalendarModule } from 'primeng/calendar';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
     selector: 'app-save-product',
@@ -17,7 +22,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
         CommonModule,
         ReactiveFormsModule,
         FormsModule,
-        TransformCategoryPipe
+        TransformCategoryPipe,
+        CalendarModule,
+        ConfirmDialogModule
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-product.component.html',
@@ -27,10 +34,15 @@ export class SaveProductComponent implements OnInit {
     private _formBuilder = inject(FormBuilder);
     private _productService = inject(ProductService);
     private _categoryService = inject(CategoryService);
+    private _codeService = inject(CodeService);
+    private _messageService = inject(MessageService);
+    private _confirmationService = inject(ConfirmationService);
 
     products: Product[] = [] as Product[];
 
     categories: Category[] = [] as Category[];
+
+    code: Code[] = [] as Code[];
 
     first: number = 0;
     rows: number = 10;
@@ -38,17 +50,33 @@ export class SaveProductComponent implements OnInit {
     productId: number = 0;
     categoryIdSelected: number = 0;
 
+    statusSelected: string = "";
+
     submitted: boolean = false;
     isLoading: boolean = false;
 
     productForm: FormGroup = this._formBuilder.group({
         id: [0],
         pdtName: ['', Validators.required],
-        pdtNameEng: ['', Validators.required],
-        pdtCode: ['', Validators.required],
+        pdtNameEng: [''],
+        pdtCode: [''],
         sort: [0, Validators.required],
         used: [false],
-        categoryId: [0],
+        categoryId: ['', Validators.required],
+        status: ['', Validators.required],
+        option1: [''],
+        option2: [''],
+        option3: [''],
+        saleStartDate: ['', Validators.required],
+        saleEndDate: [''],
+        retailAmt: [''],
+        newStartDate: [''],
+        newEndDate: [''],
+        bestStartDate: [''],
+        bestEndDate: [''],
+        promotionStartDate: [''],
+        promotionEndDate: [''],
+        tax: ['']
     });
 
     get f(): { [key: string]: AbstractControl } {
@@ -58,6 +86,7 @@ export class SaveProductComponent implements OnInit {
     ngOnInit(): void {
         this.getCategory();
         this.getProduct();
+        this.getListCode();
     }
 
     onScroll(event: any) {
@@ -71,22 +100,93 @@ export class SaveProductComponent implements OnInit {
     }
 
     onSubmit() {
+        this.submitted = true;
+        if (this.productForm.invalid) {
+            return;
+        }
+        if (this.f['id'].value > 0) {
 
+        } else {
+            this._productService.saveProduct(this.productForm.value).subscribe({
+                next: (res: HttpResponse<Product>) => {
+                    if (res !== null && res !== undefined) {
+                        let result = res.body || ({} as Code);
+                        this._messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Lưu thành công [ID]: ' + result.id,
+                            key: 'br',
+                            life: 3000,
+                        });
+                        this.onReset();
+
+                        this.products = [];
+                        this.first = 0;
+                        this.getProduct();
+                    }
+                },
+                error: (err: HttpErrorResponse) => {
+                    let error: Error = err.error;
+                    this._messageService.add({
+                        severity: 'danger',
+                        summary: 'Error',
+                        detail: error.message,
+                        key: 'br',
+                        life: 3000,
+                    });
+                }
+            });
+        }
+        console.log(this.productForm.value);
     }
 
     onReset() {
+        this.submitted = false;
 
+        this.productForm.patchValue({
+            id: [0],
+            pdtName: '',
+            pdtNameEng: '',
+            pdtCode: '',
+            sort: 0,
+            used: false,
+            categoryId: '',
+            status: '',
+            option1: '',
+            option2: '',
+            option3: '',
+            saleStartDate: '',
+            saleEndDate: '',
+            newStartDate: '',
+            newEndDate: '',
+            bestStartDate: '',
+            bestEndDate: '',
+            promotionStartDate: '',
+            promotionEndDate: '',
+            tax: ''
+        });
+
+        this.categoryIdSelected = 0;
+
+        this.statusSelected = '';
     }
 
     onClickRow(item: Product) {
         this.productId = item.id;
-        // this.getProductImage();
     }
 
     onChangeCategoryId(categoryId: string) {
         if (categoryId !== 'default') {
             this.productForm.patchValue({
                 categoryId: categoryId
+            });
+        }
+    }
+
+    onChangeStatus(status: string) {
+        if (status !== 'default') {
+            this.productForm.patchValue({
+                status: status
             });
         }
     }
@@ -131,5 +231,13 @@ export class SaveProductComponent implements OnInit {
             page: 1,
             limit: 100,
         };
+    }
+
+    private getListCode() {
+        this._codeService.getListCode("P").subscribe(res => {
+            if(res !== null && res !== undefined) {
+                this.code = res.body || [];
+            }
+        });
     }
 }

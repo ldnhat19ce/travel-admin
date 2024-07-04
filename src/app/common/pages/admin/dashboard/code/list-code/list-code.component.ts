@@ -116,7 +116,6 @@ export class ListCodeComponent implements OnInit {
     onSubmit() {
         this.submitted = true;
         if (this.codeForm.invalid) {
-            console.log("xx")
             return;
         }
 
@@ -181,6 +180,10 @@ export class ListCodeComponent implements OnInit {
 
     onReset() {
         this.onResetCode();
+        this.kindCodeSelected = this.codeKind[0];
+        this.codeForm.patchValue({
+            kindCode: this.kindCodeSelected.kindCode
+        });
     }
 
     onEditCode(item: Code) {
