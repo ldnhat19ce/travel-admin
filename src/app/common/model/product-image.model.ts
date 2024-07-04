@@ -1,4 +1,4 @@
-export interface PostImage {
+export interface ProductImage {
     id: number;
     postId: number;
     filePath: string;

@@ -1,6 +1,7 @@
-<!-- Sidebar Start -->
+
+
+
 <aside class="left-sidebar">
-    <!-- Sidebar scroll-->
     <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
             <a routerLink="/" class="text-nowrap logo-img">
@@ -10,9 +11,8 @@
                 <i class="ti ti-x fs-8"></i>
             </div>
         </div>
-        <!-- Sidebar navigation-->
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-            <ul id="sidebarnav">
+            <ul id="sidebarnav" class="mb-5">
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">Home</span>
@@ -65,12 +65,40 @@
                         <span class="hide-menu">Thêm tiêu đề form</span>
                     </a>
                 </li>
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Sản phẩm</span>
+                </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" routerLink="/post-image/save" aria-expanded="false">
+                    <a class="sidebar-link" routerLink="/product-image/save" aria-expanded="false">
                         <span>
                             <i class="ti ti-article"></i>
                         </span>
-                        <span class="hide-menu">Thêm hình ảnh</span>
+                        <span class="hide-menu">Hình ảnh sản phẩm</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" routerLink="/product/save" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-article"></i>
+                        </span>
+                        <span class="hide-menu">Thêm sản phẩm</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" routerLink="/product/list" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-article"></i>
+                        </span>
+                        <span class="hide-menu">Danh sách sản phẩm</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" routerLink="/product/amt" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-article"></i>
+                        </span>
+                        <span class="hide-menu">Giá sản phẩm</span>
                     </a>
                 </li>
                 <li class="nav-small-cap">
@@ -85,10 +113,19 @@
                         <span class="hide-menu">DS Form submit</span>
                     </a>
                 </li>
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">Code</span>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" routerLink="/code/list" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-article"></i>
+                        </span>
+                        <span class="hide-menu">DS Code</span>
+                    </a>
+                </li>
             </ul>
         </nav>
-        <!-- End Sidebar navigation -->
     </div>
-    <!-- End Sidebar scroll-->
 </aside>
-<!--  Sidebar End -->

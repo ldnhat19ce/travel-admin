@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { PostImageRoutingModule } from './post-image-routing.module';
+import { ProductImageRoutingModule } from './product-image-routing.module';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    PostImageRoutingModule
+    ProductImageRoutingModule
   ]
 })
-export class PostImageModule { }
+export class ProductImageModule { }

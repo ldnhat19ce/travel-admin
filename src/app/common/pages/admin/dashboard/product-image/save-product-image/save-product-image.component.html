@@ -12,7 +12,7 @@
             </div>
             <span class="h3 col-12 p-3">Hình ảnh thu nhỏ</span>
             <div class="col-12">
-                <div class="row row-cols-3 thumb-image">
+                <div class="row row-cols-2 row-cols-xl-3 thumb-image">
                     <file-pond #thumb1
                         class="col"
                         [options]="pondOptions"
@@ -34,8 +34,6 @@
                         (onremovefile)="onRemoveFile($event, 'THUMB', 'T-3')"
                         >
                     </file-pond>
-                </div>
-                <div class="row row-cols-3 thumb-image">
                     <file-pond #thumb4
                         class="col"
                         [options]="pondOptions"
@@ -68,7 +66,7 @@
     <div class="col-12 col-xl-4">
         <div class="row border position-xl-fixed">
             <span class="col-12 h3 d-flex justify-content-center align-items-center p-3">
-                Danh sách bài viết
+                Danh sách sản phẩm
             </span>
             <div class="col-12">
                 <div class="table overflow-auto" style="height: 500px;" (scroll)="onScroll($event)">
@@ -80,10 +78,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for (item of post; track item.id) {
+                            @for (item of products; track item.id) {
                             <tr role="button" (click)="onClickRow(item)">
-                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': postId === item.id}">{{ item.id }}</td>
-                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': postId === item.id}">{{ item.name }}</td>
+                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': productId === item.id}">{{ item.id }}</td>
+                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': productId === item.id}">{{ item.pdtName }}</td>
                             </tr>
                             }
                         </tbody>

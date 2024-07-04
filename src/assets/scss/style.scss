@@ -144,14 +144,14 @@ table {
 }
 
 .p-editor-container {
-	.p-editor-toolbar.ql-snow {
-		border: 1px solid $primary !important;
-	}
-	.p-editor-content.ql-snow {
-		border-left: 1px solid $primary;
+    .p-editor-toolbar.ql-snow {
+        border: 1px solid $primary !important;
+    }
+    .p-editor-content.ql-snow {
+        border-left: 1px solid $primary;
         border-right: 1px solid $primary;
         border-bottom: 1px solid $primary;
-	}
+    }
 }
 
 @include media-breakpoint-up(xl) {
@@ -160,3 +160,14 @@ table {
     }
 }
 
+.text {
+    &-red {
+        color: red;
+    }
+}
+
+.bg {
+    &-oil-lavender {
+        background-color: #c6bfbd;
+    }
+}

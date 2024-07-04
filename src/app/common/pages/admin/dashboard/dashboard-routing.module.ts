@@ -30,10 +30,24 @@ const routes: Routes = [
             ),
     },
     {
-        path: 'post-image',
+        path: 'product-image',
         loadChildren: () =>
-            import('./post-image/post-image.module').then(
-                (module) => module.PostImageModule
+            import('./product-image/product-image.module').then(
+                (module) => module.ProductImageModule
+            ),
+    },
+    {
+        path: 'product',
+        loadChildren: () =>
+            import('./product/product.module').then(
+                (module) => module.ProductModule
+            ),
+    },
+    {
+        path: 'code',
+        loadChildren: () =>
+            import('./code/code.module').then(
+                (module) => module.CodeModule
             ),
     },
 ];

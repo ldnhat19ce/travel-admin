@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SavePostImageComponent } from './save-post-image.component';
+import { ProductAmtComponent } from './product-amt.component';
 
-describe('SavePostImageComponent', () => {
-  let component: SavePostImageComponent;
-  let fixture: ComponentFixture<SavePostImageComponent>;
+describe('ProductAmtComponent', () => {
+  let component: ProductAmtComponent;
+  let fixture: ComponentFixture<ProductAmtComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SavePostImageComponent]
+      imports: [ProductAmtComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(SavePostImageComponent);
+    fixture = TestBed.createComponent(ProductAmtComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

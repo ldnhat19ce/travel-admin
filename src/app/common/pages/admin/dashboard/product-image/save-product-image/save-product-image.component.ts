@@ -1,20 +1,21 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { PostService } from '../../../../../services/post.service';
 import { Post } from '../../../../../model/post.model';
 import { PageEvent } from '../../../../../model/page-event.model';
 import { ValidationUtil } from '../../../../../utils/validation.util';
 import { CommonModule } from '@angular/common';
 import { FilePondModule } from 'ngx-filepond';
 import { FilePond, FilePondOptions } from 'filepond';
-import { PostImage } from '../../../../../model/post-image.model';
-import { PostImageService } from '../../../../../services/post-image.service';
+import { ProductImage } from '../../../../../model/product-image.model';
+import { ProductImageService } from '../../../../../services/product-image.service';
 import { environment } from '../../../../../../../environments/environment';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ProductService } from '../../../../../services/product.service';
+import { Product } from '../../../../../model/product.model';
 
 @Component({
-    selector: 'app-save-post-image',
+    selector: 'app-save-product-image',
     standalone: true,
     imports: [
         CommonModule,
@@ -22,22 +23,23 @@ import { ToastModule } from 'primeng/toast';
         ToastModule
     ],
     providers: [MessageService],
-    templateUrl: './save-post-image.component.html',
-    styleUrl: './save-post-image.component.scss',
+    templateUrl: './save-product-image.component.html',
+    styleUrl: './save-product-image.component.scss',
 })
-export class SavePostImageComponent implements OnInit {
+export class SaveProductImageComponent implements OnInit {
     private _formBuilder = inject(FormBuilder);
-    private _postService = inject(PostService);
-    private _postImageService = inject(PostImageService);
+    private _productService = inject(ProductService);
+    private _productImageService = inject(ProductImageService);
     private _messageService = inject(MessageService);
 
     post: Post[] = [] as Post[];
-    postImage: PostImage[] = [] as PostImage[];
+    products: Product[] = [] as Product[];
+    productImage: ProductImage[] = [] as ProductImage[];
 
     first: number = 0;
     rows: number = 10;
     totalRecords: number = 0;
-    postId: number = 0;
+    productId: number = 0;
 
     isLoading: boolean = false;
     submitted: boolean = false;
@@ -88,7 +90,7 @@ export class SavePostImageComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getPost();
+        this.getProduct();
     }
 
     onPageChange(event: PageEvent) {
@@ -98,7 +100,7 @@ export class SavePostImageComponent implements OnInit {
         ) {
             this.first = event.first || 0;
             this.rows = event.rows || 1;
-            this.getPost();
+            this.getProduct();
         }
     }
 
@@ -151,29 +153,29 @@ export class SavePostImageComponent implements OnInit {
             event.target.clientHeight;
         if (bottom && !this.isLoading) {
             this.first += 1;
-            this.getPost();
+            this.getProduct();
         }
     }
 
-    onClickRow(item: Post) {
-        this.postId = item.id;
-        this.getPostImage();
+    onClickRow(item: Product) {
+        this.productId = item.id;
+        this.getProductImage();
     }
 
     onSubmit() {
         this.submitted = true;
 
-        if(this.postId === 0) {
+        if(this.productId === 0) {
             this._messageService.add({
                 severity: 'danger',
                 summary: 'Error',
-                detail: "Vui lòng chọn bài viết",
+                detail: "Vui lòng chọn sản phẩm",
                 key: 'br',
                 life: 3000,
             });
         }
 
-        this._postImageService.savePostImage(this.postImageForm.value, this.postId).subscribe(res => {
+        this._productImageService.saveProductImage(this.postImageForm.value, this.productId).subscribe(res => {
             if (res !== null && res !== undefined) {
                 let resultPost = res.body || ({} as Post);
                 this._messageService.add({
@@ -193,7 +195,7 @@ export class SavePostImageComponent implements OnInit {
     onReset() {
         this.submitted = false;
 
-        this.postId = 0;
+        this.productId = 0;
 
         this.resetImage();
     }
@@ -208,17 +210,17 @@ export class SavePostImageComponent implements OnInit {
         this.thumb6.removeFile();
     }
 
-    private getPost() {
+    private getProduct() {
         this.isLoading = true;
-        this._postService
-            .getAllPost(this.getParamSearchPost())
+        this._productService
+            .getPageProduct(this.getParamSearchProduct())
             .subscribe((res) => {
                 if (res !== null && res !== undefined) {
-                    let postResult = res.body?.result || [];
-                    if (postResult.length <= 0) {
+                    let productResult = res.body?.result || [];
+                    if (productResult.length <= 0) {
                         this.isLoading = true;
                     } else {
-                        this.post.push(...postResult);
+                        this.products.push(...productResult);
                         this.totalRecords = res.body?.total || 0;
                         this.isLoading = false;
                     }
@@ -226,22 +228,22 @@ export class SavePostImageComponent implements OnInit {
             });
     }
 
-    private getParamSearchPost() {
+    private getParamSearchProduct() {
         return {
             page: this.first + 1,
             limit: this.rows,
         };
     }
 
-    private getPostImage() {
+    private getProductImage() {
         this.resetImage();
 
-        this._postImageService.getAllByPostId(this.postId).subscribe((res) => {
+        this._productImageService.getAllByProductId(this.productId).subscribe((res) => {
             if (res !== null && res !== undefined) {
-                let postImageResult = res.body || [];
-                this.postImage = postImageResult;
-                if (this.postImage.length > 0) {
-                    this.postImage.forEach((v) => {
+                let productImageResult = res.body || [];
+                this.productImage = productImageResult;
+                if (this.productImage.length > 0) {
+                    this.productImage.forEach((v) => {
                         if (v.kindNo === 'L-1') {
                             this.larger.addFile(
                                 environment.imgUrl + v.filePath,

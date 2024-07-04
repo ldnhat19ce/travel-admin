@@ -2,14 +2,12 @@
     data-sidebar-position="fixed" data-header-position="fixed">
     <app-sidebar></app-sidebar>
 
-    <div class="body-wrapper">
+    <div class="body-wrapper vh-100">
         <app-header></app-header>
         <div class="container-fluid">
             <router-outlet></router-outlet>
-            <div class="mt-5">
-                <app-footer></app-footer>
-            </div>
         </div>
+        <app-footer style="bottom: 0;" class="w-100"></app-footer>
     </div>
 
     <button type="button" class="btn btn-danger rounded-circle btn-lg" id="btn-back-to-top">

@@ -1,0 +1,106 @@
+<div class="row g-3">
+    <div class="col-12 col-xl-8">
+        <form class="row g-3" [formGroup]="productForm">
+            <div class="col-12">
+                <label for="pdtName" class="form-label">Tên sản phẩm</label>
+                <input type="text" id="pdtName" class="form-control" formControlName="pdtName"
+                    [ngClass]="{'is-invalid': submitted && f['pdtName'].errors }">
+                @if (submitted && f['pdtName'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['pdtName'].errors['required']) {
+                    <div>Vui lòng nhập tên sản phẩm</div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-12">
+                <label for="pdtNameEng" class="form-label">Tên sản phẩm (tiếng anh)</label>
+                <input type="text" id="pdtNameEng" class="form-control" formControlName="pdtNameEng"
+                    [ngClass]="{'is-invalid': submitted && f['pdtNameEng'].errors }">
+                @if (submitted && f['pdtNameEng'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['pdtNameEng'].errors['required']) {
+                    <div>Vui lòng nhập tên sản phẩm (tiếng anh)</div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-12 col-xl-4">
+                <label for="pdtCode" class="form-label">Mã sản phẩm</label>
+                <input type="text" id="pdtCode" class="form-control" formControlName="pdtCode"
+                    [ngClass]="{'is-invalid': submitted && f['pdtCode'].errors }">
+                <span class="text-red fs-2">Nếu không nhập, mã sẽ tự động được tạo</span>
+                @if (submitted && f['pdtCode'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['pdtCode'].errors['required']) {
+                    <div>Vui lòng nhập mã sản phẩm</div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-12 col-xl-4">
+                <label for="sort" class="form-label">Sắp xếp</label>
+                <input type="number" id="sort" value="0" class="form-control" formControlName="sort" min="0">
+            </div>
+
+            <div class="col-12 col-xl-4">
+                <label for="categoryId" class="form-label">Thể loại</label>
+                <select id="categoryId" class="form-select" #select (change)="onChangeCategoryId(select.value)"
+                    [ngClass]="{'is-invalid': submitted && f['categoryId'].errors }">
+                    <option value="0" [selected]="categoryIdSelected === 0">Chọn thể loại</option>
+                    @if (categories.length > 0) {
+                    @for (item of categories; track item.id) {
+                    <option [value]="item.id" [selected]="categoryIdSelected === item.id">{{ item | transformCategory }}
+                    </option>
+                    }
+                    }
+                </select>
+                @if (submitted && f['categoryId'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['categoryId'].errors['required']) {
+                    <div>Vui lòng chọn thể loại</div>
+                    }
+                </div>
+                }
+            </div>
+            @if (f['id'].value > 0) {
+                <div class="col-auto d-flex justify-content-center align-items-center">
+                    <input class="form-check-input" type="checkbox" formControlName="used">
+                    <label class="form-check-label ms-3 text-dark">Sử dụng</label>
+                </div>
+            }
+
+            <div class="col-12 d-flex justify-content-center gap-3 py-3">
+                <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
+                <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-12 col-xl-4">
+        <div class="row border position-xl-fixed">
+            <span class="col-12 h3 d-flex justify-content-center align-items-center p-3">
+                Danh sách bài viết
+            </span>
+            <div class="col-12">
+                <div class="table overflow-auto" style="height: 500px;" (scroll)="onScroll($event)">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center text-nowrap py-2">Id</th>
+                                <th class="text-center text-nowrap py-2">Tên</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of products; track item.id) {
+                            <tr role="button" (click)="onClickRow(item)">
+                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': productId === item.id}">{{ item.id }}</td>
+                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': productId === item.id}">{{ item.pdtName }}</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
