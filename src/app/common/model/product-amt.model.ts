@@ -7,4 +7,7 @@ export interface ProductAmt {
     retailVat: number;
     tax: number;
     registerDate: string;
+    supplyPrice: number;
+    supplyAmt: number;
+    supplyVat: number;
 }

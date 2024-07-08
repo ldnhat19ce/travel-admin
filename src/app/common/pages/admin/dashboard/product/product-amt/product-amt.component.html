@@ -43,7 +43,24 @@
                     <div class="col-12">
                         <div class="row align-items-center py-1">
                             <div class="col-xl-3">
-                                <label for="retailAmt" class="col-form-label text-red">Giá cung cấp</label>
+                                <label for="supplyAmt" class="col-form-label text-red">Giá cung cấp</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="number" id="supplyAmt" class="form-control" formControlName="supplyAmt"
+                                [ngClass]="{'is-invalid': submitted && f['supplyAmt'].errors }">
+                            </div>
+                            <div class="col-auto">
+                                <span>VNĐ</span>
+                            </div>
+                            <div class="col-auto">
+                                Đơn giá: {{ f['supplyPrice'].value }} / VAT: {{ f['supplyVat'].value }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row align-items-center py-1">
+                            <div class="col-xl-3">
+                                <label for="retailAmt" class="col-form-label text-red">Giá khách hàng</label>
                             </div>
                             <div class="col-auto">
                                 <input type="number" id="retailAmt" class="form-control" formControlName="retailAmt"
@@ -94,6 +111,7 @@
                                 <th class="text-center text-nowrap py-2">Mã sản phẩm</th>
                                 <th class="text-center text-nowrap py-2">Tên</th>
                                 <th class="text-center text-nowrap py-2">Giá cung cấp</th>
+                                <th class="text-center text-nowrap py-2">Giá KH</th>
                                 <th class="text-center text-nowrap py-2">Ngày áp dụng</th>
                                 <th class="text-center text-nowrap py-2"></th>
                             </tr>
@@ -106,6 +124,7 @@
                                 <td class="text-center text-nowrap py-2">{{ item.id }}</td>
                                 <td class="text-center text-nowrap py-2">{{ item.productCode }}</td>
                                 <td class="text-start py-2 text-nowrap">{{ item.productName }}</td>
+                                <td class="text-end text-nowrap py-2">{{ item.supplyAmt }}</td>
                                 <td class="text-end text-nowrap py-2">{{ item.retailAmt }}</td>
                                 <td class="text-end text-nowrap py-2">{{ item.registerDate }}</td>
                                 <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)">

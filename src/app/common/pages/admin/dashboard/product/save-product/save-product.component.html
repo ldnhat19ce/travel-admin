@@ -158,7 +158,21 @@
                             <div class="col-12">
                                 <div class="row align-items-center py-1">
                                     <div class="col-xl-3">
-                                        <label for="retailAmt" class="col-form-label">Giá cung cấp</label>
+                                        <label for="supplyAmt" class="col-form-label">Giá cung cấp</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <input type="number" id="supplyAmt" class="form-control" formControlName="supplyAmt"
+                                        [ngClass]="{'is-invalid': submitted && f['supplyAmt'].errors }">
+                                    </div>
+                                    <div class="col-auto">
+                                        <span>VNĐ</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="row align-items-center py-1">
+                                    <div class="col-xl-3">
+                                        <label for="retailAmt" class="col-form-label">Giá khách hàng</label>
                                     </div>
                                     <div class="col-auto">
                                         <input type="number" id="retailAmt" class="form-control" formControlName="retailAmt"

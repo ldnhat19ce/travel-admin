@@ -100,6 +100,10 @@
                     }
                 </select>
             </div>
+            <div class="col-12 col-xl-3">
+                <input type="checkbox" id="homePageYN" class="form-check-input" (click)="onClickHomePageYN($event)">
+                <label for="homePageYN" class="form-check-label ms-3 text-dark">Hiển thị ở trang chủ</label>
+            </div>
             <div class="col-12 d-flex justify-content-center gap-3">
                 <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
                 <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>

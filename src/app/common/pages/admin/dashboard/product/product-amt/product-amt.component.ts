@@ -55,6 +55,9 @@ export class ProductAmtComponent implements OnInit {
         retailAmt: [0, Validators.required],
         tax: [0],
         registerDate: ['', Validators.required],
+        supplyPrice: [0],
+        supplyVat: [0],
+        supplyAmt: [0],
     });
 
     ngOnInit(): void {
@@ -95,7 +98,10 @@ export class ProductAmtComponent implements OnInit {
             retailVat: item.retailVat,
             retailAmt: item.retailAmt,
             registerDate: item.registerDate,
-            tax: item.tax
+            tax: item.tax,
+            supplyVat: item.supplyVat,
+            supplyAmt: item.supplyAmt,
+            supplyPrice: item.supplyPrice
         });
     }
 
@@ -108,7 +114,10 @@ export class ProductAmtComponent implements OnInit {
             retailVat: 0,
             retailAmt: 0,
             registerDate: "",
-            tax: 0
+            tax: 0,
+            supplyVat: 0,
+            supplyAmt: 0,
+            supplyPrice: 0
         });
     }
 

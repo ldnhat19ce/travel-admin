@@ -73,7 +73,8 @@ export class SaveProductComponent implements OnInit {
         promotionStartDate: [''],
         promotionEndDate: [''],
         tax: [''],
-        amtId: [0]
+        amtId: [0],
+        supplyAmt: [''],
     });
 
     get f(): { [key: string]: AbstractControl } {
@@ -189,7 +190,8 @@ export class SaveProductComponent implements OnInit {
             promotionEndDate: '',
             tax: 0,
             retailAmt: 0,
-            amtId: 0
+            amtId: 0,
+            supplyAmt: 0
         });
 
         this.categoryIdSelected = 0;
@@ -295,7 +297,8 @@ export class SaveProductComponent implements OnInit {
                     promotionEndDate: result.promotionEndDate,
                     tax: result.tax,
                     retailAmt: result.retailAmt,
-                    amtId: result.amtId
+                    amtId: result.amtId,
+                    supplyAmt: result.supplyAmt
                 });
 
                 this.categoryIdSelected = result.categoryId;

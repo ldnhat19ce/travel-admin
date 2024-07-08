@@ -21,5 +21,6 @@ export interface Product {
     retailAmt: number;
     tax: number;
     amtId: number;
+    supplyAmt: number;
 
 }
