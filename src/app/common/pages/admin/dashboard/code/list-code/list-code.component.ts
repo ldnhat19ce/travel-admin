@@ -137,7 +137,6 @@ export class ListCodeComponent implements OnInit {
                 },
                 error: (err: HttpErrorResponse) => {
                     let error: Error = err.error;
-                    console.log(err)
                     this._messageService.add({
                         severity: 'danger',
                         summary: 'Error',
@@ -165,7 +164,6 @@ export class ListCodeComponent implements OnInit {
                 },
                 error: (err: HttpErrorResponse) => {
                     let error: Error = err.error;
-                    console.log(err)
                     this._messageService.add({
                         severity: 'danger',
                         summary: 'Error',

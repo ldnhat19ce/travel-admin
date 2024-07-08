@@ -15,4 +15,5 @@ export interface Category {
     imageUrl: string;
     description: string;
     descriptionEng: string;
+    typeName: string;
 }

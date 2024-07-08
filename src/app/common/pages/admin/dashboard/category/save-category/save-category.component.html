@@ -81,8 +81,11 @@
             <div class="col-12 col-xl-3">
                 <label for="type" class="form-label">Loại</label>
                 <select id="type" class="form-select" #select (change)="onChangeType(select.value)">
-                    <option value="BOOKING" [selected]="typeSelected === 'BOOKING'">Booking</option>
-                    <option value="BLOG" [selected]="typeSelected === 'BLOG'">Blog</option>
+                    @if(code.length > 0) {
+                        @for (item of code; track item.codeCd) {
+                            <option [value]="item.codeCd" [selected]="typeSelected === item.codeCd">{{ item.codeName }}</option>
+                        }
+                    }
                 </select>
             </div>
             <div class="col-12 col-xl-3">
@@ -112,13 +115,13 @@
                 <thead>
                     <tr>
                         <th class="text-center text-nowrap py-2"></th>
-                        <th class="text-center text-nowrap py-2">Id</th>
-                        <th class="text-center text-nowrap py-2">Parent Id</th>
-                        <th class="text-center text-nowrap py-2">Name</th>
-                        <th class="text-center text-nowrap py-2">Name eng</th>
-                        <th class="text-center text-nowrap py-2">Level</th>
-                        <th class="text-center text-nowrap py-2">Sort</th>
-                        <th class="text-center text-nowrap py-2">Type</th>
+                        <th class="text-center text-nowrap py-2">Mã</th>
+                        <th class="text-center text-nowrap py-2">Mã phía trên</th>
+                        <th class="text-center text-nowrap py-2">Tên</th>
+                        <th class="text-center text-nowrap py-2">Tên (tiếng anh)</th>
+                        <th class="text-center text-nowrap py-2">Cấp</th>
+                        <th class="text-center text-nowrap py-2">Sắp xếp</th>
+                        <th class="text-center text-nowrap py-2">Loại</th>
                         <th class="text-center text-nowrap py-2">Url</th>
                         <th class="text-center text-nowrap py-2"></th>
                     </tr>

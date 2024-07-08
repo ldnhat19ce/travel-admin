@@ -257,6 +257,7 @@ export class SaveProductComponent implements OnInit {
         return {
             page: 1,
             limit: 100,
+            type: '01C30'
         };
     }
 

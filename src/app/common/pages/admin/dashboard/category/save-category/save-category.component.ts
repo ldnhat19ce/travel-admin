@@ -20,6 +20,8 @@ import { FilePondModule } from 'ngx-filepond';
 
 import { FilePond, FilePondFile, FilePondOptions } from 'filepond';
 import { environment } from '../../../../../../../environments/environment';
+import { CodeService } from '../../../../../services/code.service';
+import { Code } from '../../../../../model/code.model';
 
 @Component({
     selector: 'app-save-category',
@@ -42,17 +44,20 @@ export class SaveCategoryComponent implements OnInit {
     private _categoryService = inject(CategoryService);
     private _messageService = inject(MessageService);
     private _confirmationService = inject(ConfirmationService);
+    private _codeService = inject(CodeService);
 
     categories: Category[] = [] as Category[];
 
     categoryHierarchy: Category[] = [] as Category[];
+
+    code: Code[] = [] as Code[];
 
     resultCategory: Category = {} as Category;
 
     submitted: boolean = false;
     isChangeImage: boolean = false;
 
-    typeSelected: string = 'BOOKING';
+    typeSelected: string = '';
     parentIdSelected: number = 0;
 
     @ViewChild('myPond')
@@ -90,6 +95,7 @@ export class SaveCategoryComponent implements OnInit {
     });
 
     ngOnInit(): void {
+        this.getListCode();
         this.getCategory();
     }
 
@@ -271,7 +277,7 @@ export class SaveCategoryComponent implements OnInit {
             level: 0,
             sort: 0,
             url: '',
-            type: 'BOOKING',
+            type: this.code[0].codeCd,
             parentId: 0,
             image: '',
             imageName: '',
@@ -279,7 +285,7 @@ export class SaveCategoryComponent implements OnInit {
             descriptionEng: '',
         });
 
-        this.typeSelected = 'BOOKING';
+        this.typeSelected = this.code[0].codeCd;
         this.parentIdSelected = 0;
 
         this.isChangeImage = false;
@@ -316,5 +322,14 @@ export class SaveCategoryComponent implements OnInit {
             limit: 100,
             level: 0,
         };
+    }
+
+    private getListCode() {
+        this._codeService.getListCode("C").subscribe(res => {
+            if(res !== null && res !== undefined) {
+                this.code = res.body || [];
+                this.typeSelected = this.code[0].codeCd;
+            }
+        });
     }
 }
