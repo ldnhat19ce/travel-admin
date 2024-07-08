@@ -7,12 +7,11 @@ import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModu
 import { Category } from '../../../../../model/category.model';
 import { CategoryService } from '../../../../../services/category.service';
 import { TransformCategoryPipe } from '../../../../../pipe/transform-category.pipe';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { Code } from '../../../../../model/code.model';
 import { CodeService } from '../../../../../services/code.service';
 import { CalendarModule } from 'primeng/calendar';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
     selector: 'app-save-product',
@@ -23,10 +22,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         ReactiveFormsModule,
         FormsModule,
         TransformCategoryPipe,
-        CalendarModule,
-        ConfirmDialogModule
+        CalendarModule
     ],
-    providers: [MessageService, ConfirmationService],
+    providers: [MessageService],
     templateUrl: './save-product.component.html',
     styleUrl: './save-product.component.scss',
 })
@@ -36,8 +34,6 @@ export class SaveProductComponent implements OnInit {
     private _categoryService = inject(CategoryService);
     private _codeService = inject(CodeService);
     private _messageService = inject(MessageService);
-    private _confirmationService = inject(ConfirmationService);
-
     products: Product[] = [] as Product[];
 
     categories: Category[] = [] as Category[];
@@ -47,10 +43,10 @@ export class SaveProductComponent implements OnInit {
     first: number = 0;
     rows: number = 10;
     totalRecords: number = 0;
-    productId: number = 0;
     categoryIdSelected: number = 0;
 
     statusSelected: string = "";
+    productCode: string = "";
 
     submitted: boolean = false;
     isLoading: boolean = false;
@@ -76,7 +72,8 @@ export class SaveProductComponent implements OnInit {
         bestEndDate: [''],
         promotionStartDate: [''],
         promotionEndDate: [''],
-        tax: ['']
+        tax: [''],
+        amtId: [0]
     });
 
     get f(): { [key: string]: AbstractControl } {
@@ -105,12 +102,40 @@ export class SaveProductComponent implements OnInit {
             return;
         }
         if (this.f['id'].value > 0) {
+            this._productService.updateProduct(this.productForm.value).subscribe({
+                next: (res: HttpResponse<Product>) => {
+                    if (res !== null && res !== undefined) {
+                        let result = res.body || ({} as Product);
+                        this._messageService.add({
+                            severity: 'success',
+                            summary: 'Success',
+                            detail: 'Chỉnh sửa thành công [ID]: ' + result.id,
+                            key: 'br',
+                            life: 3000,
+                        });
+                        this.onReset();
 
+                        this.products = [];
+                        this.first = 0;
+                        this.getProduct();
+                    }
+                },
+                error: (err: HttpErrorResponse) => {
+                    let error: Error = err.error;
+                    this._messageService.add({
+                        severity: 'danger',
+                        summary: 'Error',
+                        detail: error.message,
+                        key: 'br',
+                        life: 3000,
+                    });
+                }
+            });
         } else {
             this._productService.saveProduct(this.productForm.value).subscribe({
                 next: (res: HttpResponse<Product>) => {
                     if (res !== null && res !== undefined) {
-                        let result = res.body || ({} as Code);
+                        let result = res.body || ({} as Product);
                         this._messageService.add({
                             severity: 'success',
                             summary: 'Success',
@@ -137,14 +162,13 @@ export class SaveProductComponent implements OnInit {
                 }
             });
         }
-        console.log(this.productForm.value);
     }
 
     onReset() {
         this.submitted = false;
 
         this.productForm.patchValue({
-            id: [0],
+            id: 0,
             pdtName: '',
             pdtNameEng: '',
             pdtCode: '',
@@ -163,7 +187,9 @@ export class SaveProductComponent implements OnInit {
             bestEndDate: '',
             promotionStartDate: '',
             promotionEndDate: '',
-            tax: ''
+            tax: 0,
+            retailAmt: 0,
+            amtId: 0
         });
 
         this.categoryIdSelected = 0;
@@ -172,7 +198,8 @@ export class SaveProductComponent implements OnInit {
     }
 
     onClickRow(item: Product) {
-        this.productId = item.id;
+        this.productCode = item.pdtCode;
+        this.getDetailProduct(item.pdtCode);
     }
 
     onChangeCategoryId(categoryId: string) {
@@ -237,6 +264,41 @@ export class SaveProductComponent implements OnInit {
         this._codeService.getListCode("P").subscribe(res => {
             if(res !== null && res !== undefined) {
                 this.code = res.body || [];
+            }
+        });
+    }
+
+    private getDetailProduct(productCode: string) {
+        this._productService.getDetailProduct(productCode).subscribe(res => {
+            if(res !== null && res !== undefined) {
+                let result: Product = res.body || {} as Product;
+                this.productForm.patchValue({
+                    id: result.id,
+                    pdtName: result.pdtName,
+                    pdtNameEng: result.pdtNameEng,
+                    pdtCode: result.pdtCode,
+                    sort: result.sort,
+                    used: result.used,
+                    categoryId: result.categoryId,
+                    status: result.status,
+                    option1: result.option1,
+                    option2: result.option2,
+                    option3: result.option3,
+                    saleStartDate: result.saleStartDate,
+                    saleEndDate: result.saleEndDate,
+                    newStartDate: result.newStartDate,
+                    newEndDate: result.newEndDate,
+                    bestStartDate: result.bestStartDate,
+                    bestEndDate: result.bestEndDate,
+                    promotionStartDate: result.promotionStartDate,
+                    promotionEndDate: result.promotionEndDate,
+                    tax: result.tax,
+                    retailAmt: result.retailAmt,
+                    amtId: result.amtId
+                });
+
+                this.categoryIdSelected = result.categoryId;
+                this.statusSelected = result.status;
             }
         });
     }

@@ -20,4 +20,14 @@ export class ProductService {
         let url = `${environment.apiUrl}/admin/product`;
         return this._httpClient.post<Product>(url, params, { observe: 'response' });
     }
+
+    updateProduct(params: {}): Observable<HttpResponse<Product>> {
+        let url = `${environment.apiUrl}/admin/product`;
+        return this._httpClient.put<Product>(url, params, { observe: 'response' });
+    }
+
+    getDetailProduct(id: string): Observable<HttpResponse<Product>> {
+        let url = `${environment.apiUrl}/admin/product/${id}`;
+        return this._httpClient.get<Product>(url, { observe: 'response' });
+    }
 }
