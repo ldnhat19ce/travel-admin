@@ -1,6 +1,6 @@
 export interface ProductImage {
     id: number;
-    postId: number;
+    productCode: string;
     filePath: string;
     fileName: string;
     imageKind: string;

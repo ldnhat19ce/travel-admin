@@ -39,7 +39,8 @@ export class SaveProductImageComponent implements OnInit {
     first: number = 0;
     rows: number = 10;
     totalRecords: number = 0;
-    productId: number = 0;
+
+    productCode: string = "";
 
     isLoading: boolean = false;
     submitted: boolean = false;
@@ -158,14 +159,14 @@ export class SaveProductImageComponent implements OnInit {
     }
 
     onClickRow(item: Product) {
-        this.productId = item.id;
+        this.productCode = item.pdtCode;
         this.getProductImage();
     }
 
     onSubmit() {
         this.submitted = true;
 
-        if(this.productId === 0) {
+        if(this.productCode.length <= 0) {
             this._messageService.add({
                 severity: 'danger',
                 summary: 'Error',
@@ -175,7 +176,7 @@ export class SaveProductImageComponent implements OnInit {
             });
         }
 
-        this._productImageService.saveProductImage(this.postImageForm.value, this.productId).subscribe(res => {
+        this._productImageService.saveProductImage(this.postImageForm.value, this.productCode).subscribe(res => {
             if (res !== null && res !== undefined) {
                 let resultPost = res.body || ({} as Post);
                 this._messageService.add({
@@ -195,7 +196,7 @@ export class SaveProductImageComponent implements OnInit {
     onReset() {
         this.submitted = false;
 
-        this.productId = 0;
+        this.productCode = "";
 
         this.resetImage();
     }
@@ -238,7 +239,7 @@ export class SaveProductImageComponent implements OnInit {
     private getProductImage() {
         this.resetImage();
 
-        this._productImageService.getAllByProductId(this.productId).subscribe((res) => {
+        this._productImageService.getAllByProductCode(this.productCode).subscribe((res) => {
             if (res !== null && res !== undefined) {
                 let productImageResult = res.body || [];
                 this.productImage = productImageResult;

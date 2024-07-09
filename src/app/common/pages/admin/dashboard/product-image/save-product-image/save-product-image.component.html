@@ -80,8 +80,8 @@
                         <tbody>
                             @for (item of products; track item.id) {
                             <tr role="button" (click)="onClickRow(item)">
-                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': productId === item.id}">{{ item.id }}</td>
-                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': productId === item.id}">{{ item.pdtName }}</td>
+                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">{{ item.pdtCode }}</td>
+                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">{{ item.pdtName }}</td>
                             </tr>
                             }
                         </tbody>

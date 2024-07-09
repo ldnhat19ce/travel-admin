@@ -10,13 +10,13 @@ import { Observable } from 'rxjs';
 export class ProductImageService {
     private _httpClient = inject(HttpClient);
 
-    saveProductImage(params: {}, postId: number): Observable<HttpResponse<ProductImage>> {
-        let url = `${environment.apiUrl}/admin/product-image/${postId}`;
+    saveProductImage(params: {}, productCode: string): Observable<HttpResponse<ProductImage>> {
+        let url = `${environment.apiUrl}/admin/product-image/${productCode}`;
         return this._httpClient.post<ProductImage>(url, params, { observe: 'response' });
     }
 
-    getAllByProductId(postId: number): Observable<HttpResponse<ProductImage[]>> {
-        let url = `${environment.apiUrl}/admin/product-image/${postId}`;
+    getAllByProductCode(productCode: string): Observable<HttpResponse<ProductImage[]>> {
+        let url = `${environment.apiUrl}/admin/product-image/${productCode}`;
         return this._httpClient.get<ProductImage[]>(url, { observe: 'response' });
     }
 }
