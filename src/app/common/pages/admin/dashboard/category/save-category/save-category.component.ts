@@ -92,7 +92,7 @@ export class SaveCategoryComponent implements OnInit {
         imageName: [''],
         description: ['', Validators.required],
         descriptionEng: ['', Validators.required],
-        homePageYN: ['N'],
+        availableHomePage: [false],
         used: [false]
     });
 
@@ -172,7 +172,7 @@ export class SaveCategoryComponent implements OnInit {
             imageName: '',
             description: item.description,
             descriptionEng: item.descriptionEng,
-            homePageYN: item.homePageYN,
+            availableHomePage: item.availableHomePage,
             used: item.used
         });
         this.typeSelected = item.type;
@@ -254,18 +254,6 @@ export class SaveCategoryComponent implements OnInit {
         });
     }
 
-    onClickHomePageYN(event: any) {
-        if(event.target.checked) {
-            this.categoryForm.patchValue({
-                homePageYN: 'Y'
-            });
-        } else {
-            this.categoryForm.patchValue({
-                homePageYN: 'N'
-            });
-        }
-    }
-
     onUpload(event: any) {
         const file: File = event.target.files[0];
 
@@ -299,7 +287,7 @@ export class SaveCategoryComponent implements OnInit {
             imageName: '',
             description: '',
             descriptionEng: '',
-            homePageYN: '',
+            availableHomePage: false,
             used: false
         });
 

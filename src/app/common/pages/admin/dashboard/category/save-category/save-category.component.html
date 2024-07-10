@@ -98,8 +98,8 @@
                 </select>
             </div>
             <div class="col-12 col-xl-3">
-                <input type="checkbox" id="homePageYN" class="form-check-input" (click)="onClickHomePageYN($event)">
-                <label for="homePageYN" class="form-check-label ms-3 text-dark">Hiển thị ở trang chủ</label>
+                <input type="checkbox" id="availableHomePage" formControlName="availableHomePage" class="form-check-input">
+                <label for="availableHomePage" class="form-check-label ms-3 text-dark">Hiển thị ở trang chủ</label>
             </div>
             @if (f['id'].value > 0) {
             <div class="col-auto d-flex justify-content-center align-items-center">
