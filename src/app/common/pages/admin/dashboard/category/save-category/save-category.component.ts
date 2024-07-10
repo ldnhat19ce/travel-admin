@@ -92,7 +92,8 @@ export class SaveCategoryComponent implements OnInit {
         imageName: [''],
         description: ['', Validators.required],
         descriptionEng: ['', Validators.required],
-        homePageYN: ['N']
+        homePageYN: ['N'],
+        used: [false]
     });
 
     ngOnInit(): void {
@@ -171,7 +172,8 @@ export class SaveCategoryComponent implements OnInit {
             imageName: '',
             description: item.description,
             descriptionEng: item.descriptionEng,
-            homePageYN: item.homePageYN
+            homePageYN: item.homePageYN,
+            used: item.used
         });
         this.typeSelected = item.type;
         if (item.parentId !== 0) {
@@ -297,7 +299,8 @@ export class SaveCategoryComponent implements OnInit {
             imageName: '',
             description: '',
             descriptionEng: '',
-            homePageYN: ''
+            homePageYN: '',
+            used: false
         });
 
         this.typeSelected = this.code[0].codeCd;

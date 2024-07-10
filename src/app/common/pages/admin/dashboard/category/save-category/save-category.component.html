@@ -63,11 +63,8 @@
             </div>
             <div class="col-12">
                 <label class="form-label">Hình ảnh</label>
-                <file-pond #myPond class="col-12"
-                    [options]="pondOptions"
-                    [files]="pondFiles"
-                    (onaddfile)="pondHandleAddFile($event)"
-                    >
+                <file-pond #myPond class="col-12" [options]="pondOptions" [files]="pondFiles"
+                    (onaddfile)="pondHandleAddFile($event)">
                 </file-pond>
             </div>
             <div class="col-12 col-xl-3">
@@ -82,9 +79,9 @@
                 <label for="type" class="form-label">Loại</label>
                 <select id="type" class="form-select" #select (change)="onChangeType(select.value)">
                     @if(code.length > 0) {
-                        @for (item of code; track item.codeCd) {
-                            <option [value]="item.codeCd" [selected]="typeSelected === item.codeCd">{{ item.codeName }}</option>
-                        }
+                    @for (item of code; track item.codeCd) {
+                    <option [value]="item.codeCd" [selected]="typeSelected === item.codeCd">{{ item.codeName }}</option>
+                    }
                     }
                 </select>
             </div>
@@ -104,6 +101,13 @@
                 <input type="checkbox" id="homePageYN" class="form-check-input" (click)="onClickHomePageYN($event)">
                 <label for="homePageYN" class="form-check-label ms-3 text-dark">Hiển thị ở trang chủ</label>
             </div>
+            @if (f['id'].value > 0) {
+            <div class="col-auto d-flex justify-content-center align-items-center">
+                <input class="form-check-input" type="checkbox" formControlName="used">
+                <label class="form-check-label ms-3 text-dark">Sử dụng</label>
+            </div>
+            }
+
             <div class="col-12 d-flex justify-content-center gap-3">
                 <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
                 <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>

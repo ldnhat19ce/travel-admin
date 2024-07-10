@@ -17,4 +17,5 @@ export interface Category {
     descriptionEng: string;
     typeName: string;
     homePageYN: string;
+    used: boolean;
 }
