@@ -83,7 +83,11 @@ export class SaveProductComponent implements OnInit {
         amtId: [0],
         supplyAmt: [''],
         intro: [''],
-        introEng: ['']
+        introEng: [''],
+        schedule: [''],
+        scheduleEng: [''],
+        policy: [''],
+        policyEng: ['']
     });
 
     get f(): { [key: string]: AbstractControl } {
@@ -202,7 +206,11 @@ export class SaveProductComponent implements OnInit {
             amtId: 0,
             supplyAmt: 0,
             intro: '',
-            introEng: ''
+            introEng: '',
+            schedule: '',
+            scheduleEng: '',
+            policy: '',
+            policyEng: ''
         });
 
         this.categoryIdSelected = 0;
@@ -284,14 +292,43 @@ export class SaveProductComponent implements OnInit {
                         );
                     }
                 }
-                if (qlHTMLId === 'qlHTMLId2') {
-                    this.productForm.patchValue({
-                        contentEng: quillInstance.root.innerHTML,
-                    });
-                } else if (qlHTMLId === 'qlHTMLId1') {
-                    this.productForm.patchValue({
-                        content: quillInstance.root.innerHTML,
-                    });
+
+                switch(qlHTMLId) {
+                    case 'qlHTMLId1':
+                        this.productForm.patchValue({
+                            content: quillInstance.root.innerHTML,
+                        });
+                    break
+
+                    case 'qlHTMLId2':
+                        this.productForm.patchValue({
+                            contentEng: quillInstance.root.innerHTML,
+                        });
+                    break
+
+                    case 'qlHTMLId3':
+                        this.productForm.patchValue({
+                            schedule: quillInstance.root.innerHTML,
+                        });
+                    break
+
+                    case 'qlHTMLId4':
+                        this.productForm.patchValue({
+                            scheduleEng: quillInstance.root.innerHTML,
+                        });
+                    break
+
+                    case 'qlHTMLId5':
+                        this.productForm.patchValue({
+                            policy: quillInstance.root.innerHTML,
+                        });
+                    break
+
+                    case 'qlHTMLId6':
+                        this.productForm.patchValue({
+                            policyEng: quillInstance.root.innerHTML,
+                        });
+                    break
                 }
             });
         }
@@ -377,7 +414,11 @@ export class SaveProductComponent implements OnInit {
                     amtId: result.amtId,
                     supplyAmt: result.supplyAmt,
                     intro: result.intro,
-                    introEng: result.introEng
+                    introEng: result.introEng,
+                    schedule: result.schedule,
+                    scheduleEng: result.scheduleEng,
+                    policy: result.policy,
+                    policyEng: result.policyEng
                 });
 
                 this.categoryIdSelected = result.categoryId;

@@ -24,5 +24,9 @@ export interface Product {
     supplyAmt: number;
     intro: string;
     introEng: string;
+    schedule: string;
+    scheduleEng: string;
+    policy: string;
+    policyEng: string;
 
 }
