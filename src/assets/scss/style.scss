@@ -158,6 +158,12 @@ table {
     .position-xl-fixed {
         position: fixed;
     }
+
+    .product-xl-fixed {
+        position: fixed;
+        right:20px;
+        left: calc(73%);
+    }
 }
 
 .text {
@@ -203,4 +209,5 @@ table {
         width: -webkit-fill-available;
     }
 }
+
 

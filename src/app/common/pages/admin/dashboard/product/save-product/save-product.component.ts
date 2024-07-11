@@ -12,6 +12,10 @@ import { Code } from '../../../../../model/code.model';
 import { CodeService } from '../../../../../services/code.service';
 import { CalendarModule } from 'primeng/calendar';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { EditorModule } from 'primeng/editor';
+import { ValidationUtil } from '../../../../../utils/validation.util';
+import { environment } from '../../../../../../../environments/environment';
+import { AuthenticationService } from '../../../../../services/auth/authentication.service';
 
 @Component({
     selector: 'app-save-product',
@@ -22,7 +26,8 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
         ReactiveFormsModule,
         FormsModule,
         TransformCategoryPipe,
-        CalendarModule
+        CalendarModule,
+        EditorModule
     ],
     providers: [MessageService],
     templateUrl: './save-product.component.html',
@@ -34,6 +39,8 @@ export class SaveProductComponent implements OnInit {
     private _categoryService = inject(CategoryService);
     private _codeService = inject(CodeService);
     private _messageService = inject(MessageService);
+    private _authenticationService = inject(AuthenticationService);
+
     products: Product[] = [] as Product[];
 
     categories: Category[] = [] as Category[];
@@ -75,6 +82,8 @@ export class SaveProductComponent implements OnInit {
         tax: [''],
         amtId: [0],
         supplyAmt: [''],
+        intro: [''],
+        introEng: ['']
     });
 
     get f(): { [key: string]: AbstractControl } {
@@ -191,7 +200,9 @@ export class SaveProductComponent implements OnInit {
             tax: 0,
             retailAmt: 0,
             amtId: 0,
-            supplyAmt: 0
+            supplyAmt: 0,
+            intro: '',
+            introEng: ''
         });
 
         this.categoryIdSelected = 0;
@@ -216,6 +227,72 @@ export class SaveProductComponent implements OnInit {
         if (status !== 'default') {
             this.productForm.patchValue({
                 status: status
+            });
+        }
+    }
+
+    editorOnInit(event: any, qlHTMLId: string) {
+        const quillInstance = event.editor;
+        quillInstance.root.addEventListener('paste', (e: any) => {
+            const clipboardData =
+                e.clipboardData || (<any>window).clipboardData;
+            const isImage =
+                clipboardData.types.length &&
+                clipboardData.types.join('').includes('Files');
+            if (!isImage) {
+                return;
+            }
+
+            const file = clipboardData.files[0];
+            this.saveToServer(file, quillInstance);
+        });
+
+        let newToolbar = quillInstance.getModule('toolbar');
+        newToolbar.addHandler('image', () => {
+            this.selectLocalImage(quillInstance);
+        });
+
+        let quillEd_txtArea_1 = document.createElement('textarea');
+        let attrQuillTxtArea = document.createAttribute('quill__html');
+        quillEd_txtArea_1.setAttributeNode(attrQuillTxtArea);
+
+        let quillCustomDiv = quillInstance.addContainer('ql-custom');
+        quillCustomDiv.appendChild(quillEd_txtArea_1);
+
+        let quillHtmlBtn = document.getElementById(qlHTMLId);
+        if (quillHtmlBtn !== null && quillHtmlBtn !== undefined) {
+            quillHtmlBtn.addEventListener('click', (evt: any) => {
+                if (
+                    ValidationUtil.isNotNullAndNotUndefined(quillEd_txtArea_1)
+                ) {
+                    let t = quillEd_txtArea_1.getAttribute('quill__html');
+                    if (t !== null && t !== undefined) {
+                        let wasActiveTxtArea_1 = t.indexOf('-active-') > -1;
+
+                        if (wasActiveTxtArea_1) {
+                            quillInstance.pasteHTML(quillEd_txtArea_1.value);
+                            evt.target.classList.remove('ql-active');
+                        } else {
+                            quillEd_txtArea_1.value =
+                                quillInstance.root.innerHTML;
+                            evt.target.classList.add('ql-active');
+                        }
+
+                        quillEd_txtArea_1.setAttribute(
+                            'quill__html',
+                            wasActiveTxtArea_1 ? '' : '-active-'
+                        );
+                    }
+                }
+                if (qlHTMLId === 'qlHTMLId2') {
+                    this.productForm.patchValue({
+                        contentEng: quillInstance.root.innerHTML,
+                    });
+                } else if (qlHTMLId === 'qlHTMLId1') {
+                    this.productForm.patchValue({
+                        content: quillInstance.root.innerHTML,
+                    });
+                }
             });
         }
     }
@@ -298,12 +375,58 @@ export class SaveProductComponent implements OnInit {
                     tax: result.tax,
                     retailAmt: result.retailAmt,
                     amtId: result.amtId,
-                    supplyAmt: result.supplyAmt
+                    supplyAmt: result.supplyAmt,
+                    intro: result.intro,
+                    introEng: result.introEng
                 });
 
                 this.categoryIdSelected = result.categoryId;
                 this.statusSelected = result.status;
             }
         });
+    }
+
+    private selectLocalImage(quillInstance: any) {
+        const input = <HTMLInputElement>document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.click();
+
+        if (input !== null && input !== undefined) {
+            input.onchange = () => {
+                if (input.files !== null) {
+                    const file = input.files[0];
+                    this.saveToServer(file, quillInstance);
+                    if (/^image\//.test(file.type)) {
+                    } else {
+                        console.warn('You could only upload images.');
+                    }
+                }
+            };
+        }
+    }
+
+    private saveToServer(file: File, quillInstance: any) {
+        const fd = new FormData();
+        fd.append('file', file);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', environment.apiUrl + '/admin/upload?fileUploadFolder=PRODUCT_INTRO_FOLDER', true);
+        xhr.setRequestHeader(
+            'Authorization',
+            `Bearer ${this._authenticationService.getUserToken()}`
+        );
+
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                const data = JSON.parse(xhr.responseText);
+                this.insertToEditor(data.url, quillInstance);
+            }
+        };
+        xhr.send(fd);
+    }
+
+    insertToEditor(url: string, quillInstance: any) {
+        const range = quillInstance.getSelection();
+        quillInstance.insertEmbed(range.index, 'image', url, 'user');
     }
 }

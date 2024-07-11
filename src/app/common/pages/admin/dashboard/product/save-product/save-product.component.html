@@ -1,7 +1,7 @@
 <div class="row g-3">
     <div class="col-12 col-xl-8">
         <form class="row g-3" [formGroup]="productForm">
-            <span class="col-12 h4 pt-3">
+            <span class="col-12 h4 pt-3 text-primary">
                 Thông tin cơ bản (màu đỏ là trường bắt buộc)
             </span>
             <div class="col-12">
@@ -13,7 +13,8 @@
                             </div>
                             <div class="col-xl-4">
                                 <input type="text" id="pdtCode" class="form-control" formControlName="pdtCode"
-                                [ngClass]="{'is-invalid': submitted && f['pdtCode'].errors }" aria-describedby="pdtCodeHelpBlock">
+                                    [ngClass]="{'is-invalid': submitted && f['pdtCode'].errors }"
+                                    aria-describedby="pdtCodeHelpBlock">
                             </div>
 
                             <div class="col-auto">
@@ -30,7 +31,7 @@
                             </div>
                             <div class="col-xl-9">
                                 <input type="text" id="pdtName" class="form-control" formControlName="pdtName"
-                                [ngClass]="{'is-invalid': submitted && f['pdtName'].errors }">
+                                    [ngClass]="{'is-invalid': submitted && f['pdtName'].errors }">
                             </div>
                         </div>
                     </div>
@@ -41,7 +42,7 @@
                             </div>
                             <div class="col-xl-9">
                                 <input type="text" id="pdtNameEng" class="form-control" formControlName="pdtNameEng"
-                                [ngClass]="{'is-invalid': submitted && f['pdtNameEng'].errors }">
+                                    [ngClass]="{'is-invalid': submitted && f['pdtNameEng'].errors }">
                             </div>
                         </div>
                     </div>
@@ -52,16 +53,18 @@
                                 <label for="categoryId" class="col-form-label text-red">Tên danh mục</label>
                             </div>
                             <div class="col-auto">
-                                <select id="categoryId" class="form-select" #select (change)="onChangeCategoryId(select.value)"
+                                <select id="categoryId" class="form-select" #select
+                                    (change)="onChangeCategoryId(select.value)"
                                     [ngClass]="{'is-invalid': submitted && f['categoryId'].errors }">
                                     <option value="0" [selected]="categoryIdSelected === 0">Chọn danh mục</option>
                                     @if (categories.length > 0) {
-                                        @for (item of categories; track item.id) {
-                                            <option [value]="item.id" [selected]="categoryIdSelected === item.id">{{ item | transformCategory }}
-                                            </option>
-                                        }
+                                    @for (item of categories; track item.id) {
+                                    <option [value]="item.id" [selected]="categoryIdSelected === item.id">{{ item |
+                                        transformCategory }}
+                                    </option>
                                     }
-                        </select>
+                                    }
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -72,7 +75,7 @@
                             </div>
                             <div class="col-xl-9">
                                 <input type="text" id="option1" class="form-control" formControlName="option1"
-                                [ngClass]="{'is-invalid': submitted && f['option1'].errors }">
+                                    [ngClass]="{'is-invalid': submitted && f['option1'].errors }">
                             </div>
                         </div>
                     </div>
@@ -84,7 +87,7 @@
                             </div>
                             <div class="col-xl-9">
                                 <input type="text" id="option2" class="form-control" formControlName="option2"
-                                [ngClass]="{'is-invalid': submitted && f['option2'].errors }">
+                                    [ngClass]="{'is-invalid': submitted && f['option2'].errors }">
                             </div>
                         </div>
                     </div>
@@ -96,7 +99,7 @@
                             </div>
                             <div class="col-xl-9">
                                 <input type="text" id="option3" class="form-control" formControlName="option3"
-                                [ngClass]="{'is-invalid': submitted && f['option3'].errors }">
+                                    [ngClass]="{'is-invalid': submitted && f['option3'].errors }">
                             </div>
                         </div>
                     </div>
@@ -106,14 +109,15 @@
                                 <label for="option3" class="col-form-label">Sắp xếp</label>
                             </div>
                             <div class="col-auto">
-                                <input type="number" id="sort" value="0" class="form-control" formControlName="sort" min="0">
+                                <input type="number" id="sort" value="0" class="form-control" formControlName="sort"
+                                    min="0">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <span class="col-12 h4 pt-3">
+            <span class="col-12 h4 pt-3 text-primary">
                 Thông tin đặt hàng
             </span>
 
@@ -127,16 +131,19 @@
                                         <label for="status" class="col-form-label text-red">Trạng thái</label>
                                     </div>
                                     <div class="col-auto">
-                                        <select id="status" class="form-select" #select2 (change)="onChangeStatus(select2.value)"
-                                        [ngClass]="{'is-invalid': submitted && f['status'].errors }">
-                                        <option value="0" [selected]="statusSelected === '0'">Chọn trạng thái</option>
-                                        @if (code.length > 0) {
-                                        @for (item of code; track item.id) {
-                                        <option [value]="item.codeCd" [selected]="statusSelected === item.codeCd">{{ item.codeName }}
-                                        </option>
-                                        }
-                                        }
-                                    </select>
+                                        <select id="status" class="form-select" #select2
+                                            (change)="onChangeStatus(select2.value)"
+                                            [ngClass]="{'is-invalid': submitted && f['status'].errors }">
+                                            <option value="0" [selected]="statusSelected === '0'">Chọn trạng thái
+                                            </option>
+                                            @if (code.length > 0) {
+                                            @for (item of code; track item.id) {
+                                            <option [value]="item.codeCd" [selected]="statusSelected === item.codeCd">{{
+                                                item.codeName }}
+                                            </option>
+                                            }
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -147,9 +154,14 @@
                                     </div>
                                     <div class="col-xl-9">
                                         <div class="d-flex justify-content-between align-items-center gap-2">
-                                            <p-calendar formControlName="saleStartDate" dataType="string" variant="filled" [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd" [ngClass]="{'ng-invalid ng-dirty': submitted && f['saleStartDate'].errors }"/>
+                                            <p-calendar formControlName="saleStartDate" dataType="string"
+                                                variant="filled" [showIcon]="true" readonlyInput="true"
+                                                dateFormat="yy/mm/dd"
+                                                [ngClass]="{'ng-invalid ng-dirty': submitted && f['saleStartDate'].errors }" />
                                             <span>~</span>
-                                            <p-calendar formControlName="saleEndDate" dataType="string" variant="filled" [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd" [ngClass]="{'ng-invalid ng-dirty': submitted && f['saleEndDate'].errors }"/>
+                                            <p-calendar formControlName="saleEndDate" dataType="string" variant="filled"
+                                                [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd"
+                                                [ngClass]="{'ng-invalid ng-dirty': submitted && f['saleEndDate'].errors }" />
                                         </div>
                                     </div>
                                 </div>
@@ -161,8 +173,9 @@
                                         <label for="supplyAmt" class="col-form-label">Giá cung cấp</label>
                                     </div>
                                     <div class="col-auto">
-                                        <input type="number" id="supplyAmt" class="form-control" formControlName="supplyAmt"
-                                        [ngClass]="{'is-invalid': submitted && f['supplyAmt'].errors }">
+                                        <input type="number" id="supplyAmt" class="form-control"
+                                            formControlName="supplyAmt"
+                                            [ngClass]="{'is-invalid': submitted && f['supplyAmt'].errors }">
                                     </div>
                                     <div class="col-auto">
                                         <span>VNĐ</span>
@@ -175,8 +188,9 @@
                                         <label for="retailAmt" class="col-form-label">Giá khách hàng</label>
                                     </div>
                                     <div class="col-auto">
-                                        <input type="number" id="retailAmt" class="form-control" formControlName="retailAmt"
-                                        [ngClass]="{'is-invalid': submitted && f['retailAmt'].errors }">
+                                        <input type="number" id="retailAmt" class="form-control"
+                                            formControlName="retailAmt"
+                                            [ngClass]="{'is-invalid': submitted && f['retailAmt'].errors }">
                                     </div>
                                     <div class="col-auto">
                                         <span>VNĐ</span>
@@ -190,7 +204,7 @@
                                     </div>
                                     <div class="col-auto">
                                         <input type="number" id="tax" class="form-control" formControlName="tax"
-                                        [ngClass]="{'is-invalid': submitted && f['tax'].errors }">
+                                            [ngClass]="{'is-invalid': submitted && f['tax'].errors }">
                                     </div>
                                     <div class="col-auto">
                                         <span>%</span>
@@ -202,7 +216,7 @@
                 </div>
             </div>
 
-            <span class="col-12 h4 pt-3">
+            <span class="col-12 h4 pt-3 text-primary">
                 Thông tin khuyến mãi và sự kiện
             </span>
 
@@ -217,9 +231,12 @@
                                     </div>
                                     <div class="col-xl-9">
                                         <div class="d-flex justify-content-between align-items-center gap-2">
-                                            <p-calendar formControlName="newStartDate" dataType="string" variant="filled" [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd"/>
+                                            <p-calendar formControlName="newStartDate" dataType="string"
+                                                variant="filled" [showIcon]="true" readonlyInput="true"
+                                                dateFormat="yy/mm/dd" />
                                             <span>~</span>
-                                            <p-calendar formControlName="newEndDate" dataType="string" variant="filled" [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd"/>
+                                            <p-calendar formControlName="newEndDate" dataType="string" variant="filled"
+                                                [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd" />
                                         </div>
                                     </div>
                                 </div>
@@ -232,9 +249,12 @@
                                     </div>
                                     <div class="col-xl-9">
                                         <div class="d-flex justify-content-between align-items-center gap-2">
-                                            <p-calendar formControlName="bestStartDate" dataType="string" variant="filled" [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd"/>
+                                            <p-calendar formControlName="bestStartDate" dataType="string"
+                                                variant="filled" [showIcon]="true" readonlyInput="true"
+                                                dateFormat="yy/mm/dd" />
                                             <span>~</span>
-                                            <p-calendar formControlName="bestEndDate" dataType="string" variant="filled" [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd"/>
+                                            <p-calendar formControlName="bestEndDate" dataType="string" variant="filled"
+                                                [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd" />
                                         </div>
                                     </div>
                                 </div>
@@ -247,9 +267,13 @@
                                     </div>
                                     <div class="col-xl-9">
                                         <div class="d-flex justify-content-between align-items-center gap-2">
-                                            <p-calendar formControlName="promotionStartDate" dataType="string" variant="filled" [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd"/>
+                                            <p-calendar formControlName="promotionStartDate" dataType="string"
+                                                variant="filled" [showIcon]="true" readonlyInput="true"
+                                                dateFormat="yy/mm/dd" />
                                             <span>~</span>
-                                            <p-calendar formControlName="promotionEndDate" dataType="string" variant="filled" [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd"/>
+                                            <p-calendar formControlName="promotionEndDate" dataType="string"
+                                                variant="filled" [showIcon]="true" readonlyInput="true"
+                                                dateFormat="yy/mm/dd" />
                                         </div>
                                     </div>
                                 </div>
@@ -266,6 +290,199 @@
                 </div>
             </div>
 
+            <span class="col-12 h4 pt-3 text-primary">
+                Thông tin giới thiệu
+            </span>
+
+            <div class="col-12">
+                <div class="row border border-dark mx-auto">
+                    <div class="col-12">
+                        <label for="intro" class="form-label mt-1">Giới thiệu</label>
+                        <p-editor #editor1 id="intro" (onInit)="editorOnInit($event, 'qlHTMLId1')"
+                            formControlName="intro" [style]="{ height: '500px' }">
+                            <ng-template pTemplate="header">
+                                <span class="ql-formats">
+                                    <button type="button" class="ql-bold" aria-label="Bold" title="Bold"></button>
+                                    <button type="button" class="ql-italic" aria-label="Italic" title="Italic"></button>
+                                    <button type="button" class="ql-underline" aria-label="Underline"
+                                        title="Underline"></button>
+                                    <button type="button" class="ql-strike" aria-label="Strike" title="Strike"></button>
+                                    <button type="button" class="ql-blockquote" aria-label="Blockquote"
+                                        title="Blockquote"></button>
+                                    <button type="button" class="ql-code-block" aria-label="Code-block"
+                                        title="Code-block"></button>
+                                    <button type="button" class="ql-link" aria-label="Link" title="Link"></button>
+                                    <button type="button" class="ql-image" aria-label="Image" title="Image"></button>
+                                    <button type="button" class="ql-video" aria-label="Video" title="Video"></button>
+                                    <button type="button" class="ql-formula" aria-label="Formula"
+                                        title="Formula"></button>
+                                    <button class="ql-script" value="sub" title="sub"></button>
+                                    <button class="ql-script" value="super" title="super"></button>
+                                    <button class="ql-list" value="ordered" type="button" title="ordered"></button>
+                                    <button class="ql-list" value="bullet" type="button" title="bullet"></button>
+                                    <button class="ql-list" value="check" type="button" title="check"></button>
+                                    <button class="ql-align" value=""></button>
+                                    <button class="ql-align" value="center" title="center"></button>
+                                    <button class="ql-align" value="right" title="right"></button>
+                                    <button class="ql-align" value="justify" title="justify"></button>
+                                    <button class="ql-header" value="1" type="button"></button>
+                                    <button class="ql-header" value="2" type="button"></button>
+                                    <button class="ql-indent" value="-1" type="button"></button>
+                                    <button class="ql-indent" value="+1" type="button"></button>
+                                    <button class="ql-direction" value="rtl" type="button"></button>
+                                    <select class="ql-size">
+                                        <option value="small"></option>
+                                        <option selected></option>
+                                        <option value="large"></option>
+                                        <option value="huge"></option>
+                                    </select>
+                                    <select class="ql-header">
+                                        <option value="1"></option>
+                                        <option value="2"></option>
+                                        <option value="3"></option>
+                                        <option value="4"></option>
+                                        <option value="5"></option>
+                                        <option value="6"></option>
+                                        <option selected>Header</option>
+                                    </select>
+                                    <select class="ql-color">
+                                        <option selected="selected"></option>
+                                        <option value="#e60000"></option>
+                                        <option value="#ff9900"></option>
+                                        <option value="#ffff00"></option>
+                                        <option value="#008a00"></option>
+                                        <option value="#0066cc"></option>
+                                        <option value="#9933ff"></option>
+                                        <option value="#ffffff"></option>
+                                        <option value="#facccc"></option>
+                                        <option value="#ffebcc"></option>
+                                        <option value="#ffffcc"></option>
+                                        <option value="#cce8cc"></option>
+                                        <option value="#cce0f5"></option>
+                                        <option value="#ebd6ff"></option>
+                                        <option value="#bbbbbb"></option>
+                                        <option value="#f06666"></option>
+                                        <option value="#ffc266"></option>
+                                        <option value="#ffff66"></option>
+                                        <option value="#66b966"></option>
+                                        <option value="#66a3e0"></option>
+                                        <option value="#c285ff"></option>
+                                        <option value="#888888"></option>
+                                        <option value="#a10000"></option>
+                                        <option value="#b26b00"></option>
+                                        <option value="#b2b200"></option>
+                                        <option value="#006100"></option>
+                                        <option value="#0047b2"></option>
+                                        <option value="#6b24b2"></option>
+                                        <option value="#444444"></option>
+                                        <option value="#5c0000"></option>
+                                        <option value="#663d00"></option>
+                                        <option value="#666600"></option>
+                                        <option value="#003700"></option>
+                                        <option value="#002966"></option>
+                                        <option value="#3d1466"></option>
+                                    </select>
+                                    <select class="ql-background">
+                                        <option value="#000000"></option>
+                                        <option value="#e60000"></option>
+                                        <option value="#ff9900"></option>
+                                        <option value="#ffff00"></option>
+                                        <option value="#008a00"></option>
+                                        <option value="#0066cc"></option>
+                                        <option value="#9933ff"></option>
+                                        <option selected="selected"></option>
+                                        <option value="#facccc"></option>
+                                        <option value="#ffebcc"></option>
+                                        <option value="#ffffcc"></option>
+                                        <option value="#cce8cc"></option>
+                                        <option value="#cce0f5"></option>
+                                        <option value="#ebd6ff"></option>
+                                        <option value="#bbbbbb"></option>
+                                        <option value="#f06666"></option>
+                                        <option value="#ffc266"></option>
+                                        <option value="#ffff66"></option>
+                                        <option value="#66b966"></option>
+                                        <option value="#66a3e0"></option>
+                                        <option value="#c285ff"></option>
+                                        <option value="#888888"></option>
+                                        <option value="#a10000"></option>
+                                        <option value="#b26b00"></option>
+                                        <option value="#b2b200"></option>
+                                        <option value="#006100"></option>
+                                        <option value="#0047b2"></option>
+                                        <option value="#6b24b2"></option>
+                                        <option value="#444444"></option>
+                                        <option value="#5c0000"></option>
+                                        <option value="#663d00"></option>
+                                        <option value="#666600"></option>
+                                        <option value="#003700"></option>
+                                        <option value="#002966"></option>
+                                        <option value="#3d1466"></option>
+                                    </select>
+                                </span>
+                                <span class="ql-formats">
+                                    <button class="ql-html" value="html" id="qlHTMLId1">HTML</button>
+                                </span>
+                            </ng-template>
+                        </p-editor>
+                    </div>
+
+                    <div class="col-12 py-3">
+                        <label for="introEng" class="form-label">Giới thiệu (tiếng anh)</label>
+                        <p-editor #editor2 (onInit)="editorOnInit($event, 'qlHTMLId2')" formControlName="introEng" [style]="{ height: '500px' }">
+                    <ng-template pTemplate="header">
+                        <span class="ql-formats">
+                            <button type="button" class="ql-bold" aria-label="Bold"></button>
+                            <button type="button" class="ql-italic" aria-label="Italic"></button>
+                            <button type="button" class="ql-underline" aria-label="Underline"></button>
+                            <button type="button" class="ql-strike" aria-label="Strike"></button>
+                            <button type="button" class="ql-blockquote" aria-label="Blockquote"></button>
+                            <button type="button" class="ql-code-block" aria-label="Code-block"></button>
+                            <button type="button" class="ql-link" aria-label="Link"></button>
+                            <button type="button" class="ql-image" aria-label="Image"></button>
+                            <button type="button" class="ql-video" aria-label="Video"></button>
+                            <button type="button" class="ql-formula" aria-label="Formula"></button>
+                            <button class="ql-script" value="sub"></button>
+                            <button class="ql-script" value="super"></button>
+                            <button class="ql-list" value="ordered" type="button"></button>
+                            <button class="ql-list" value="bullet" type="button"></button>
+                            <button class="ql-list" value="check" type="button"></button>
+                            <button class="ql-align" value=""></button>
+                            <button class="ql-align" value="center"></button>
+                            <button class="ql-align" value="right"></button>
+                            <button class="ql-align" value="justify"></button>
+                            <button class="ql-header" value="1" type="button"></button>
+                            <button class="ql-header" value="2" type="button"></button>
+                            <button class="ql-indent" value="-1" type="button"></button>
+                            <button class="ql-indent" value="+1" type="button"></button>
+                            <button class="ql-direction" value="rtl" type="button"></button>
+                            <select class="ql-size">
+                                <option value="small"></option>
+                                <option selected></option>
+                                <option value="large"></option>
+                                <option value="huge"></option>
+                            </select>
+                            <select class="ql-header">
+                                <option value="1"></option>
+                                <option value="2"></option>
+                                <option value="3"></option>
+                                <option value="4"></option>
+                                <option value="5"></option>
+                                <option value="6"></option>
+                                <option selected>Header</option>
+                            </select>
+                            <select class="ql-color"><option selected="selected"></option><option value="#e60000"></option><option value="#ff9900"></option><option value="#ffff00"></option><option value="#008a00"></option><option value="#0066cc"></option><option value="#9933ff"></option><option value="#ffffff"></option><option value="#facccc"></option><option value="#ffebcc"></option><option value="#ffffcc"></option><option value="#cce8cc"></option><option value="#cce0f5"></option><option value="#ebd6ff"></option><option value="#bbbbbb"></option><option value="#f06666"></option><option value="#ffc266"></option><option value="#ffff66"></option><option value="#66b966"></option><option value="#66a3e0"></option><option value="#c285ff"></option><option value="#888888"></option><option value="#a10000"></option><option value="#b26b00"></option><option value="#b2b200"></option><option value="#006100"></option><option value="#0047b2"></option><option value="#6b24b2"></option><option value="#444444"></option><option value="#5c0000"></option><option value="#663d00"></option><option value="#666600"></option><option value="#003700"></option><option value="#002966"></option><option value="#3d1466"></option></select>
+                            <select class="ql-background"><option value="#000000"></option><option value="#e60000"></option><option value="#ff9900"></option><option value="#ffff00"></option><option value="#008a00"></option><option value="#0066cc"></option><option value="#9933ff"></option><option selected="selected"></option><option value="#facccc"></option><option value="#ffebcc"></option><option value="#ffffcc"></option><option value="#cce8cc"></option><option value="#cce0f5"></option><option value="#ebd6ff"></option><option value="#bbbbbb"></option><option value="#f06666"></option><option value="#ffc266"></option><option value="#ffff66"></option><option value="#66b966"></option><option value="#66a3e0"></option><option value="#c285ff"></option><option value="#888888"></option><option value="#a10000"></option><option value="#b26b00"></option><option value="#b2b200"></option><option value="#006100"></option><option value="#0047b2"></option><option value="#6b24b2"></option><option value="#444444"></option><option value="#5c0000"></option><option value="#663d00"></option><option value="#666600"></option><option value="#003700"></option><option value="#002966"></option><option value="#3d1466"></option></select>
+                        </span>
+                        <span class="ql-formats">
+                            <button class="ql-html" value="html" id="qlHTMLId2">HTML</button>
+                        </span>
+                    </ng-template>
+                </p-editor>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-12 d-flex justify-content-center gap-3 py-3">
                 <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
                 <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
@@ -273,28 +490,36 @@
         </form>
     </div>
     <div class="col-12 col-xl-4">
-        <div class="row border position-xl-fixed">
-            <span class="col-12 h3 d-flex justify-content-center align-items-center p-3">
+        <div class="row g-3 product-xl-fixed">
+            <span class="col-12 h4 pt-3 d-flex justify-content-center align-items-center text-primary">
                 Danh sách sản phẩm
             </span>
             <div class="col-12">
-                <div class="table overflow-auto" style="height: 500px;" (scroll)="onScroll($event)">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="text-center text-nowrap py-2">Mã sản phẩm</th>
-                                <th class="text-center text-nowrap py-2">Tên</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (item of products; track item.id) {
-                            <tr role="button" (click)="onClickRow(item)">
-                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">{{ item.pdtCode }}</td>
-                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">{{ item.pdtName }}</td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="row border border-dark">
+                    <div class="col-12 pt-1">
+                        <div class="table overflow-auto" style="height: 500px;" (scroll)="onScroll($event)">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center text-nowrap py-2">Mã sản phẩm</th>
+                                        <th class="text-center text-nowrap py-2">Tên</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (item of products; track item.id) {
+                                    <tr role="button" (click)="onClickRow(item)">
+                                        <td class="text-center text-nowrap py-2"
+                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">{{
+                                            item.pdtCode }}</td>
+                                        <td class="text-center text-nowrap py-2"
+                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">{{
+                                            item.pdtName }}</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

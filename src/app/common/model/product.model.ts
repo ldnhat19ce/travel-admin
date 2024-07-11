@@ -22,5 +22,7 @@ export interface Product {
     tax: number;
     amtId: number;
     supplyAmt: number;
+    intro: string;
+    introEng: string;
 
 }
