@@ -210,4 +210,10 @@ table {
     }
 }
 
+:host ::ng-deep {
+    [pDraggable] {
+        cursor: move;
+    }
+}
+
 
