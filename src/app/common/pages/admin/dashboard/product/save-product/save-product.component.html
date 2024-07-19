@@ -1130,10 +1130,12 @@
                                     @for (item of products; track item.id) {
                                     <tr role="button" (click)="onClickRow(item)">
                                         <td class="text-center text-nowrap py-2"
-                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">{{
+                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">
+                                            {{
                                             item.pdtCode }}</td>
                                         <td class="text-center text-nowrap py-2"
-                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">{{
+                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">
+                                            {{
                                             item.pdtName }}</td>
                                     </tr>
                                     }
@@ -1150,5 +1152,9 @@
 <div class="d-flex justify-content-center gap-3 py-3 position-fixed ps-2" style="bottom: 50px;">
     <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
     <button class="btn btn-gray border border-secondary bg-oil-lavender text-dark" (click)="onReset()">Reset</button>
+    @if (productCode.length > 0) {
+        <button class="btn btn-gray border border-secondary bg-red text-white" (click)="onDelete($event)">Delete</button>
+    }
 </div>
 <p-toast position="bottom-right" key="br" />
+<p-confirmDialog />

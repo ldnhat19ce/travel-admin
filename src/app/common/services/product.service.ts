@@ -30,4 +30,9 @@ export class ProductService {
         let url = `${environment.apiUrl}/admin/product/${id}`;
         return this._httpClient.get<Product>(url, { observe: 'response' });
     }
+
+    deleteProduct(productCode: string): Observable<HttpResponse<void>> {
+        let url = `${environment.apiUrl}/admin/product/${productCode}`;
+        return this._httpClient.delete<void>(url, { observe: 'response' });
+    }
 }

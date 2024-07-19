@@ -51,7 +51,7 @@ export class ProductRelatedComponent implements OnInit {
     private _confirmationService = inject(ConfirmationService);
 
     first: number = 0;
-    rows: number = 10;
+    rows: number = 15;
     totalRecords: number = 0;
 
     firstAvailable: number = 0;
@@ -98,22 +98,6 @@ export class ProductRelatedComponent implements OnInit {
         if (this.draggedProduct) {
             this.onReset();
             this.visible = true;
-            let draggedProductIndex = this.findIndex(this.draggedProduct);
-            let product: ProductRelation = {
-                productCode: this.productSelected.pdtCode,
-                productName: this.productSelected.pdtName,
-                relatedProductCode: this.draggedProduct.pdtCode,
-                relatedProductName: this.draggedProduct.pdtName,
-                sort: 0,
-                used: true,
-            };
-            this.selectedProducts = [
-                ...(this.selectedProducts as ProductRelation[]),
-                product,
-            ];
-            this.availableProduct = this.availableProduct?.filter(
-                (val, i) => i != draggedProductIndex
-            );
 
             this.productRelationForm.patchValue({
                 productCode: this.productSelected.pdtCode,
@@ -121,6 +105,11 @@ export class ProductRelatedComponent implements OnInit {
                 relatedProductCode: this.draggedProduct.pdtCode,
             });
         }
+    }
+
+    onCancel() {
+        this.visible = false;
+        this.onReset();
     }
 
     onSubmit() {
@@ -147,6 +136,23 @@ export class ProductRelatedComponent implements OnInit {
                         this.getRelationProduct();
 
                         this.isLoadingSave = false;
+
+                        let draggedProductIndex = this.findIndex(this.draggedProduct);
+                        let product: ProductRelation = {
+                            productCode: this.productSelected.pdtCode,
+                            productName: this.productSelected.pdtName,
+                            relatedProductCode: this.draggedProduct.pdtCode,
+                            relatedProductName: this.draggedProduct.pdtName,
+                            sort: 0,
+                            used: true,
+                        };
+                        this.selectedProducts = [
+                            ...(this.selectedProducts as ProductRelation[]),
+                            product,
+                        ];
+                        this.availableProduct = this.availableProduct?.filter(
+                            (val, i) => i != draggedProductIndex
+                        );
 
                         this._messageService.add({
                             severity: 'success',

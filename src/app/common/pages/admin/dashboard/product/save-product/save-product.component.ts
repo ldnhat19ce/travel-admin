@@ -7,7 +7,7 @@ import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModu
 import { Category } from '../../../../../model/category.model';
 import { CategoryService } from '../../../../../services/category.service';
 import { TransformCategoryPipe } from '../../../../../pipe/transform-category.pipe';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Code } from '../../../../../model/code.model';
 import { CodeService } from '../../../../../services/code.service';
 import { CalendarModule } from 'primeng/calendar';
@@ -19,6 +19,7 @@ import { AuthenticationService } from '../../../../../services/auth/authenticati
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ProductZone } from '../../../../../model/product-zone.model';
 import { ProductZoneService } from '../../../../../services/product-zone.service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 interface AutoCompleteCompleteEvent {
     originalEvent: Event;
@@ -36,9 +37,10 @@ interface AutoCompleteCompleteEvent {
         TransformCategoryPipe,
         CalendarModule,
         EditorModule,
-        AutoCompleteModule
+        AutoCompleteModule,
+        ConfirmDialogModule
     ],
-    providers: [MessageService],
+    providers: [MessageService, ConfirmationService],
     templateUrl: './save-product.component.html',
     styleUrl: './save-product.component.scss',
 })
@@ -50,6 +52,7 @@ export class SaveProductComponent implements OnInit {
     private _messageService = inject(MessageService);
     private _authenticationService = inject(AuthenticationService);
     private _productZoneService = inject(ProductZoneService);
+    private _confirmationService = inject(ConfirmationService);
 
     products: Product[] = [] as Product[];
 
@@ -63,7 +66,7 @@ export class SaveProductComponent implements OnInit {
     codeAFiltered: Code[] = [] as Code[];
 
     first: number = 0;
-    rows: number = 10;
+    rows: number = 15;
     totalRecords: number = 0;
     categoryIdSelected: number = 0;
 
@@ -250,6 +253,46 @@ export class SaveProductComponent implements OnInit {
         this.statusSelected = '';
 
         this.codeAFiltered = [];
+    }
+
+    onDelete(event: any) {
+        this._confirmationService.confirm({
+            target: event.target as EventTarget,
+            message: 'Bạn có muốn xoá item này?',
+            header: 'Xác nhận',
+            icon: 'pi pi-exclamation-triangle',
+            acceptIcon: 'none',
+            rejectIcon: 'none',
+            rejectButtonStyleClass: 'p-button-text',
+            accept: () => {
+                this._productService.deleteProduct(this.productCode).subscribe((res) => {
+                    if (res !== null && res !== undefined) {
+                        if (res.status === 200) {
+                            this._messageService.add({
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'xoá thành công [ID]: ' + this.productCode,
+                                key: 'br',
+                                life: 3000,
+                            });
+                            this.onReset();
+                            this.products = [];
+                            this.first = 0;
+                            this.getProduct();
+                        } else {
+                            this._messageService.add({
+                                severity: 'danger',
+                                summary: 'Error',
+                                detail: 'xoá không thành công',
+                                key: 'br',
+                                life: 3000,
+                            });
+                        }
+                    }
+                });
+            },
+            reject: () => {},
+        });
     }
 
     onClickRow(item: Product) {
