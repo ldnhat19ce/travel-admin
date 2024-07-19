@@ -16,6 +16,14 @@ import { EditorModule } from 'primeng/editor';
 import { ValidationUtil } from '../../../../../utils/validation.util';
 import { environment } from '../../../../../../../environments/environment';
 import { AuthenticationService } from '../../../../../services/auth/authentication.service';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ProductZone } from '../../../../../model/product-zone.model';
+import { ProductZoneService } from '../../../../../services/product-zone.service';
+
+interface AutoCompleteCompleteEvent {
+    originalEvent: Event;
+    query: string;
+}
 
 @Component({
     selector: 'app-save-product',
@@ -27,7 +35,8 @@ import { AuthenticationService } from '../../../../../services/auth/authenticati
         FormsModule,
         TransformCategoryPipe,
         CalendarModule,
-        EditorModule
+        EditorModule,
+        AutoCompleteModule
     ],
     providers: [MessageService],
     templateUrl: './save-product.component.html',
@@ -40,12 +49,18 @@ export class SaveProductComponent implements OnInit {
     private _codeService = inject(CodeService);
     private _messageService = inject(MessageService);
     private _authenticationService = inject(AuthenticationService);
+    private _productZoneService = inject(ProductZoneService);
 
     products: Product[] = [] as Product[];
 
     categories: Category[] = [] as Category[];
 
+    productZones: ProductZone[] = [] as ProductZone[];
+
     code: Code[] = [] as Code[];
+
+    codeA: Code[] = [] as Code[];
+    codeAFiltered: Code[] = [] as Code[];
 
     first: number = 0;
     rows: number = 10;
@@ -87,7 +102,8 @@ export class SaveProductComponent implements OnInit {
         schedule: [''],
         scheduleEng: [''],
         policy: [''],
-        policyEng: ['']
+        policyEng: [''],
+        zones: [[]]
     });
 
     get f(): { [key: string]: AbstractControl } {
@@ -98,6 +114,21 @@ export class SaveProductComponent implements OnInit {
         this.getCategory();
         this.getProduct();
         this.getListCode();
+        this.getCodeA();
+    }
+
+    filterCode(event: AutoCompleteCompleteEvent) {
+        let filtered: Code[] = [];
+        let query = event.query;
+
+        for (let i = 0; i < this.codeA.length; i++) {
+            let code = this.codeA[i];
+            if (code.codeName.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+                filtered.push(code);
+            }
+        }
+
+        this.codeAFiltered = filtered;
     }
 
     onScroll(event: any) {
@@ -210,17 +241,22 @@ export class SaveProductComponent implements OnInit {
             schedule: '',
             scheduleEng: '',
             policy: '',
-            policyEng: ''
+            policyEng: '',
+            zones: []
         });
 
         this.categoryIdSelected = 0;
 
         this.statusSelected = '';
+
+        this.codeAFiltered = [];
     }
 
     onClickRow(item: Product) {
+        this.onReset();
         this.productCode = item.pdtCode;
         this.getDetailProduct(item.pdtCode);
+        this.getListProductZone(item.pdtCode);
     }
 
     onChangeCategoryId(categoryId: string) {
@@ -385,6 +421,34 @@ export class SaveProductComponent implements OnInit {
         });
     }
 
+    private getCodeA() {
+        this._codeService.getListCode("A").subscribe(res => {
+            if(res !== null && res !== undefined) {
+                this.codeA = res.body || [];
+            }
+        });
+    }
+
+    private getListProductZone(productCode: string) {
+        this._productZoneService.getListProductRelation(productCode).subscribe(res => {
+            if(res !== null && res !== undefined) {
+                this.productZones = res.body || [];
+                if(this.productZones.length > 0) {
+                    this.productZones.forEach(pz => {
+                        this.codeA.forEach(ca => {
+                            if(pz.codeCd === ca.codeCd) {
+                                this.codeAFiltered.push(ca);
+                            }
+                        })
+                    });
+                    this.productForm.patchValue({
+                        zones: this.codeAFiltered
+                    })
+                }
+            }
+        });
+    }
+
     private getDetailProduct(productCode: string) {
         this._productService.getDetailProduct(productCode).subscribe(res => {
             if(res !== null && res !== undefined) {
@@ -466,7 +530,7 @@ export class SaveProductComponent implements OnInit {
         xhr.send(fd);
     }
 
-    insertToEditor(url: string, quillInstance: any) {
+    private insertToEditor(url: string, quillInstance: any) {
         const range = quillInstance.getSelection();
         quillInstance.insertEmbed(range.index, 'image', url, 'user');
     }
