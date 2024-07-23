@@ -8,11 +8,12 @@ import { FilePond, FilePondOptions } from 'filepond';
 import { ProductImage } from '../../../../../model/product-image.model';
 import { ProductImageService } from '../../../../../services/product-image.service';
 import { environment } from '../../../../../../../environments/environment';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ProductService } from '../../../../../services/product.service';
 import { Product } from '../../../../../model/product.model';
+import { ProductModalComponent } from '../../../../general/modal/product-modal/product-modal.component';
 
 @Component({
     selector: 'app-save-product-image',
@@ -20,7 +21,9 @@ import { Product } from '../../../../../model/product.model';
     imports: [
         CommonModule,
         FilePondModule,
-        ToastModule
+        ToastModule,
+        ProductModalComponent,
+        FormsModule
     ],
     providers: [MessageService],
     templateUrl: './save-product-image.component.html',
@@ -41,9 +44,11 @@ export class SaveProductImageComponent implements OnInit {
     totalRecords: number = 0;
 
     productCode: string = "";
+    query: string = "";
 
     isLoading: boolean = false;
     submitted: boolean = false;
+    visible: boolean = false;
 
     @ViewChild('larger')
     larger: FilePond = {} as FilePond;
@@ -161,6 +166,16 @@ export class SaveProductImageComponent implements OnInit {
     onClickRow(item: Product) {
         this.productCode = item.pdtCode;
         this.getProductImage();
+        this.visible = false;
+        this.query = item.pdtName;
+    }
+
+    onShowProductModal() {
+        this.visible = true;
+    }
+
+    onCloseProductModal(event: any) {
+        this.visible = false;
     }
 
     onSubmit() {
@@ -197,6 +212,10 @@ export class SaveProductImageComponent implements OnInit {
         this.submitted = false;
 
         this.productCode = "";
+
+        this.query = "";
+
+        this.visible = false;
 
         this.resetImage();
     }

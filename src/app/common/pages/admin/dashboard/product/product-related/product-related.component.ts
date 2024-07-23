@@ -17,6 +17,7 @@ import { ProductRelation } from '../../../../../model/product-relation.model';
 import { DialogModule } from 'primeng/dialog';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ProductModalComponent } from '../../../../general/modal/product-modal/product-modal.component';
 
 @Component({
     selector: 'app-product-related',
@@ -28,7 +29,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         FormsModule,
         DragDropModule,
         DialogModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        ProductModalComponent
     ],
     providers: [MessageService, ConfirmationService],
     styles: [
@@ -58,10 +60,13 @@ export class ProductRelatedComponent implements OnInit {
     rowsAvailable: number = 10;
     totalRecordsAvailable: number = 0;
 
+    query: string = "";
+
     isLoading: boolean = false;
     isLoadingAvailable: boolean = false;
     isLoadingSave: boolean = false;
     visible: boolean = false;
+    productModalVisible: boolean = false;
 
     productSelected: Product = {} as Product;
 
@@ -92,6 +97,14 @@ export class ProductRelatedComponent implements OnInit {
 
     onDragEnd() {
         this.draggedProduct = {} as Product;
+    }
+
+    onShowProductModal() {
+        this.productModalVisible = true;
+    }
+
+    onCloseProductModal(event: any) {
+        this.productModalVisible = false;
     }
 
     onDrop() {
@@ -240,6 +253,9 @@ export class ProductRelatedComponent implements OnInit {
         this.selectedProducts = [];
         this.getAvailableProduct();
         this.getRelationProduct();
+
+        this.visible = false;
+        this.query = item.pdtName;
     }
 
     onScroll(event: any, type: string) {

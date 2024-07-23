@@ -1,0 +1,52 @@
+<p-dialog
+    header="Tìm kiếm sản phẩm"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [maximizable]="true"
+    (onHide)="onHide($event)">
+    <div class="input-group py-2 sticky-top bg-white">
+        <input class="form-control border-end-0 border border-primary" type="text" placeholder="Tìm kiếm sản phẩm" [(ngModel)]="query">
+        <button class="btn bg-white border border-primary rounded-0 ms-n5 cursor-pointer" type="button" (click)="getProduct()">
+            <i class="ti ti-search"></i>
+        </button>
+    </div>
+    <div class="row g-3">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 pt-1">
+                    <div class="table overflow-auto">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center text-nowrap py-2">Mã sản phẩm</th>
+                                    <th class="text-center text-nowrap py-2">Tên</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (item of products; track item.id) {
+                                <tr role="button" (click)="onSelectRow(item)">
+                                    <td class="text-center text-nowrap py-2">
+                                        {{
+                                        item.pdtCode }}</td>
+                                    <td class="text-center text-nowrap py-2">
+                                        {{
+                                        item.pdtName }}</td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <div class="d-flex align-items-center justify-content-center">
+            <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)"
+            [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+        </div>
+        <button class="btn btn-secondary" (click)="onHide($event)">Đóng</button>
+    </ng-template>
+</p-dialog>

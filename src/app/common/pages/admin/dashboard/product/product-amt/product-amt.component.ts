@@ -10,6 +10,7 @@ import { Product } from '../../../../../model/product.model';
 import { ProductAmt } from '../../../../../model/product-amt.model';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ProductModalComponent } from '../../../../general/modal/product-modal/product-modal.component';
 
 @Component({
     selector: 'app-product-amt',
@@ -20,7 +21,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         ReactiveFormsModule,
         FormsModule,
         CalendarModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        ProductModalComponent
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './product-amt.component.html',
@@ -38,9 +40,11 @@ export class ProductAmtComponent implements OnInit {
     totalRecords: number = 0;
 
     productCode: string = "";
+    query: string = "";
 
     submitted: boolean = false;
     isLoading: boolean = false;
+    visible: boolean = false;
 
     products: Product[] = [] as Product[];
 
@@ -87,6 +91,17 @@ export class ProductAmtComponent implements OnInit {
         });
 
         this.getListProductAmt(item.pdtCode);
+
+        this.visible = false;
+        this.query = item.pdtName;
+    }
+
+    onShowProductModal() {
+        this.visible = true;
+    }
+
+    onCloseProductModal(event: any) {
+        this.visible = false;
     }
 
     onEdit(item: ProductAmt) {
@@ -119,6 +134,10 @@ export class ProductAmtComponent implements OnInit {
             supplyAmt: 0,
             supplyPrice: 0
         });
+
+        this.visible = false;
+
+        this.query = "";
     }
 
     onSubmit() {

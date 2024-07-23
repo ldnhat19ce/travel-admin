@@ -20,6 +20,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ProductZone } from '../../../../../model/product-zone.model';
 import { ProductZoneService } from '../../../../../services/product-zone.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ProductModalComponent } from '../../../../general/modal/product-modal/product-modal.component';
 
 interface AutoCompleteCompleteEvent {
     originalEvent: Event;
@@ -38,7 +39,8 @@ interface AutoCompleteCompleteEvent {
         CalendarModule,
         EditorModule,
         AutoCompleteModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        ProductModalComponent
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-product.component.html',
@@ -72,9 +74,11 @@ export class SaveProductComponent implements OnInit {
 
     statusSelected: string = "";
     productCode: string = "";
+    query: string = "";
 
     submitted: boolean = false;
     isLoading: boolean = false;
+    visible: boolean = false;
 
     productForm: FormGroup = this._formBuilder.group({
         id: [0],
@@ -142,6 +146,14 @@ export class SaveProductComponent implements OnInit {
             this.first += 1;
             this.getProduct();
         }
+    }
+
+    onShowProductModal() {
+        this.visible = true;
+    }
+
+    onCloseProductModal(event: any) {
+        this.visible = false;
     }
 
     onSubmit() {
@@ -253,6 +265,10 @@ export class SaveProductComponent implements OnInit {
         this.statusSelected = '';
 
         this.codeAFiltered = [];
+
+        this.visible = false;
+
+        this.query = "";
     }
 
     onDelete(event: any) {
@@ -300,6 +316,8 @@ export class SaveProductComponent implements OnInit {
         this.productCode = item.pdtCode;
         this.getDetailProduct(item.pdtCode);
         this.getListProductZone(item.pdtCode);
+        this.visible = false;
+        this.query = item.pdtName;
     }
 
     onChangeCategoryId(categoryId: string) {
