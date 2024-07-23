@@ -66,7 +66,7 @@ export class SaveProductComponent implements OnInit {
     codeAFiltered: Code[] = [] as Code[];
 
     first: number = 0;
-    rows: number = 15;
+    rows: number = 20;
     totalRecords: number = 0;
     categoryIdSelected: number = 0;
 

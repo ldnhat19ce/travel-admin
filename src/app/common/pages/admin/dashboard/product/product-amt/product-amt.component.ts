@@ -34,7 +34,7 @@ export class ProductAmtComponent implements OnInit {
     private _confirmationService = inject(ConfirmationService);
 
     first: number = 0;
-    rows: number = 15;
+    rows: number = 20;
     totalRecords: number = 0;
 
     productCode: string = "";

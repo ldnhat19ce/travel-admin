@@ -51,7 +51,7 @@ export class ProductRelatedComponent implements OnInit {
     private _confirmationService = inject(ConfirmationService);
 
     first: number = 0;
-    rows: number = 15;
+    rows: number = 20;
     totalRecords: number = 0;
 
     firstAvailable: number = 0;

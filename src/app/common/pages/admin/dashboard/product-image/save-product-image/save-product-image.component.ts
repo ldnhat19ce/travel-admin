@@ -37,7 +37,7 @@ export class SaveProductImageComponent implements OnInit {
     productImage: ProductImage[] = [] as ProductImage[];
 
     first: number = 0;
-    rows: number = 10;
+    rows: number = 20;
     totalRecords: number = 0;
 
     productCode: string = "";
