@@ -954,3 +954,157 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
 .p-link:disabled {
     cursor: default;
 }
+
+.p-panel {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background-color: #ffffff;
+}
+
+.p-panel.p-panel-toggleable .p-panel-header {
+    padding: 0.75rem 1.125rem;
+}
+
+.p-panel .p-panel-header, .p-panel .p-panel-content, .p-panel .p-panel-footer {
+    background: transparent;
+    border: 0 none;
+}
+
+.p-panel .p-panel-header {
+    border: 1px solid #e2e8f0;
+    padding: 1.125rem;
+    background: #ffffff;
+    color: #334155;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+.p-panel-header {
+    display: flex;
+    align-items: center;
+}
+
+.p-panel .p-panel-icons-end {
+    order: 2;
+    margin-left: auto;
+}
+
+.p-panel .p-panel-header .p-panel-header-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: #64748b;
+    border: 0 none;
+    background: transparent;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, outline-color 0.2s;
+}
+
+.p-panel-header-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    overflow: hidden;
+    position: relative;
+}
+
+.pi {
+    font-family: primeicons;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.pi {
+    font-size: 1rem;
+}
+
+.p-panel:has(.p-panel-footer) .p-panel-content {
+    padding-bottom: 0.875rem;
+}
+
+.p-panel .p-panel-header, .p-panel .p-panel-content, .p-panel .p-panel-footer {
+    background: transparent;
+    border: 0 none;
+}
+
+.p-panel .p-panel-content {
+    padding: 0 1.125rem 1.125rem 1.125rem;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #334155;
+    border-top: 0 none;
+}
+
+.p-panel .p-panel-header, .p-panel .p-panel-content, .p-panel .p-panel-footer {
+    background: transparent;
+    border: 0 none;
+}
+
+.p-panel .p-panel-footer {
+    padding: 0 1.125rem 1.125rem 1.125rem;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #334155;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-top: 0 none;
+}
+
+.p-datatable {
+    position: relative;
+}
+
+.p-datatable>.p-datatable-wrapper {
+    overflow: auto;
+}
+
+.p-datatable-table {
+    border-spacing: 0px;
+    width: 100%;
+}
+
+.p-datatable.p-datatable-gridlines .p-datatable-thead > tr > th {
+    border-width: 1px 0 1px 1px;
+    text-wrap: nowrap;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-width: 0 0 1px 0;
+    font-weight: 600;
+    color: #334155;
+    background: #ffffff;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, outline-color 0.2s;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+    background: #ffffff;
+    color: #334155;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, outline-color 0.2s;
+}
+
+.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody > tr > td {
+    border-width: 0 0 1px 1px;
+}
+
+.p-datatable.p-datatable-gridlines .p-datatable-tbody > tr > td {
+    border-width: 1px 0 0 1px;
+    text-wrap: nowrap;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    text-align: left;
+    border: 1px solid #e2e8f0;
+    border-width: 0 0 1px 0;
+    padding: 0.75rem 1rem;
+}
