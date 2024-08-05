@@ -13,6 +13,9 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { httpTranslateLoaderFactory } from './common/utils/translate-browser.loader';
 import { jwtInterceptor } from './common/interceptor/jwt.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { vi } from 'date-fns/locale';
+import { DateFnsConfigurationService } from 'ngx-date-fns';
+import { viCf } from './common/utils/date-fns.config';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -38,6 +41,7 @@ export const appConfig: ApplicationConfig = {
                 },
             })
         ),
-        importProvidersFrom(BrowserAnimationsModule)
+        importProvidersFrom(BrowserAnimationsModule),
+        { provide: DateFnsConfigurationService, useValue: viCf }
     ],
 };

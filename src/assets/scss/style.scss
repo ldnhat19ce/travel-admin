@@ -4,6 +4,9 @@ $primary: #13357b;
 $secondary: #1f05e6;
 $light: #f2f2f2;
 $dark: #14141f;
+$bellflower-blue: #e2e8f0;
+$white: #ffffff;
+$black-river-falls: #334155;
 
 $font-family-base: "Roboto", sans-serif;
 
@@ -83,6 +86,7 @@ table {
 .form-control,
 .form-select {
     border: var(--bs-border-width) solid $primary;
+    background-color: #ffffff !important;
 }
 
 .form-check-input {
@@ -217,6 +221,13 @@ table {
     [pDraggable] {
         cursor: move;
     }
+}
+
+.page-content {
+    padding: 0 1.125rem 1.125rem 1.125rem;
+    border: 1px solid $bellflower-blue;
+    background: $white;
+    color: $black-river-falls;
 }
 
 

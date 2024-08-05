@@ -50,6 +50,13 @@ const routes: Routes = [
                 (module) => module.CodeModule
             ),
     },
+    {
+        path: 'booking',
+        loadChildren: () =>
+            import('./booking/booking.module').then(
+                (module) => module.BookingModule
+            ),
+    },
 ];
 
 @NgModule({
