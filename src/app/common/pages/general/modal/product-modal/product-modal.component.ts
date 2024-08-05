@@ -44,7 +44,9 @@ export class ProductModalComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if(ValidationUtil.isNotNullAndNotUndefined(changes["visible"].currentValue)) {
-            this.getProduct();
+            if(changes["visible"].currentValue === true) {
+                this.getProduct();
+            }
         }
     }
 
