@@ -72,7 +72,11 @@
         [virtualScroll]="true"
         [virtualScrollItemSize]="10"
         [lazy]="true"
-        (onLazyLoad)="loadBookingLazy($event)">
+        (onLazyLoad)="loadBookingLazy($event)"
+        dataKey="bookingCode"
+        [(selection)]="selectedBooking"
+        (onRowSelect)="onRowSelect($event)"
+        selectionMode="single"  >
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="bookingCode">
@@ -130,7 +134,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-booking>
-            <tr>
+            <tr [pSelectableRow]="booking">
                 <td>{{ booking.bookingCode }}</td>
                 <td>{{ booking.productCode }}</td>
                 <td>{{ booking.productName }}</td>
@@ -169,3 +173,39 @@
 <app-product-modal [visible]="productModalVisible"
                 (invisible)="onCloseProductModal($event)"
                 (selectRow)="onClickRow($event)"></app-product-modal>
+
+<p-sidebar [(visible)]="sidebarVisible" styleClass="w-30rem" position="right" [modal]="false">
+    <ng-template pTemplate="header">
+        <span class="font-semibold text-xl">Chi tiết đơn hàng</span>
+    </ng-template>
+    <div class="row g-3">
+        <dl class="col-12">
+            <dt class="fw-bold text-primary fs-5">Mã booking:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.bookingCode }}</dd>
+            <dt class="fw-bold text-primary fs-5">Mã sản phẩm:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.productCode }}</dd>
+            <dt class="fw-bold text-primary fs-5">Tên sản phẩm:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.productName }}</dd>
+            <dt class="fw-bold text-primary fs-5">Ngày đăng ký:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.registerDate }}</dd>
+            <dt class="fw-bold text-primary fs-5">Tên:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.name }}</dd>
+            <dt class="fw-bold text-primary fs-5">Email:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.email }}</dd>
+            <dt class="fw-bold text-primary fs-5">Số điện thoại:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.phone }}</dd>
+            <dt class="fw-bold text-primary fs-5">Địa chỉ:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.address }}</dd>
+            <dt class="fw-bold text-primary fs-5">Người lớn:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.adult }}</dd>
+            <dt class="fw-bold text-primary fs-5">Trẻ em (dưới 5 tuổi):&nbsp;</dt>
+            <dd class="">{{ selectedBooking.childrent1 }}</dd>
+            <dt class="fw-bold text-primary fs-5">Trẻ em (5 - 10 tuổi):&nbsp;</dt>
+            <dd class="">{{ selectedBooking.childrent2 }}</dd>
+            <dt class="fw-bold text-primary fs-5">Số tiền:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.productAmt }}</dd>
+            <dt class="fw-bold text-primary fs-5">Ghi chú:&nbsp;</dt>
+            <dd class="">{{ selectedBooking.remark }}</dd>
+        </dl>
+    </div>
+</p-sidebar>
