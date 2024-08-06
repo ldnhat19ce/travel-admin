@@ -31,6 +31,7 @@
         "filepond-plugin-image-preview": "^4.6.12",
         "ngx-date-fns": "^11.0.0",
         "ngx-filepond": "^7.0.3",
+        "primeflex": "^3.3.1",
         "primeicons": "^7.0.0",
         "primeng": "^17.16.1",
         "quill": "^1.3.7",
