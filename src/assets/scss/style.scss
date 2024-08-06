@@ -59,6 +59,7 @@ $enable-negative-margins: true;
 @import "primeng/resources/primeng.css";
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeicons/primeicons.css";
+@import "primeflex/primeflex.min.css";
 
 @import "./ngprime";
 
@@ -228,6 +229,10 @@ table {
     border: 1px solid $bellflower-blue;
     background: $white;
     color: $black-river-falls;
+}
+
+::ng-deep .p-sidebar-mask {
+    z-index: 0 !important;
 }
 
 

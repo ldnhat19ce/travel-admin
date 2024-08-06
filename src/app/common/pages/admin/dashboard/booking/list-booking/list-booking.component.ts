@@ -11,9 +11,10 @@ import { ValidationUtil } from '../../../../../utils/validation.util';
 import { PageEvent } from '../../../../../model/page-event.model';
 import { Booking } from '../../../../../model/booking.model';
 import { BookingService } from '../../../../../services/booking.service';
-import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
-import { LazyLoadEvent, SortEvent } from 'primeng/api';
+import { Table, TableModule } from 'primeng/table';
+import { SortEvent } from 'primeng/api';
 import { SkeletonModule } from 'primeng/skeleton';
+import { SidebarModule } from 'primeng/sidebar';
 
 @Component({
     selector: 'app-list-booking',
@@ -27,7 +28,8 @@ import { SkeletonModule } from 'primeng/skeleton';
         ProductModalComponent,
         DateFnsModule,
         TableModule,
-        SkeletonModule
+        SkeletonModule,
+        SidebarModule
     ],
     templateUrl: './list-booking.component.html',
     styleUrl: './list-booking.component.scss',
@@ -37,6 +39,8 @@ export class ListBookingComponent implements OnInit {
     private _bookingService = inject(BookingService);
 
     productModalVisible: boolean = false;
+    sidebarVisible: boolean = false;
+
     isSorted: any = null;
 
     page: number = 0;
@@ -47,6 +51,7 @@ export class ListBookingComponent implements OnInit {
     bookings: Booking[] = [] as Booking[];
     initialValue: Booking[] = [] as Booking[];
     virtualBookings: Booking[] = [] as Booking[];
+    selectedBooking: Booking = {} as Booking;
 
     @ViewChild('dt')
     dt: Table = {} as Table;
@@ -111,6 +116,11 @@ export class ListBookingComponent implements OnInit {
         }
 
         this.getBooking();
+    }
+
+    onRowSelect(event: any) {
+        this.sidebarVisible = true;
+        this.selectedBooking = event.data;
     }
 
     onPageChange(event: PageEvent) {

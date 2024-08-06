@@ -1108,3 +1108,64 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
     border-width: 0 0 1px 0;
     padding: 0.75rem 1rem;
 }
+
+.p-datatable .p-datatable-tbody > tr.p-highlight {
+    background: #EFF6FF;
+    color: #1D4ED8;
+}
+
+.p-datatable .p-datatable-tbody > tr.p-highlight > td {
+    border-bottom-color: #bedaff;
+}
+
+.p-datatable.p-datatable-hoverable-rows .p-datatable-tbody > tr:not(.p-highlight):hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.p-sidebar .p-sidebar-header {
+    padding: 1.125rem;
+}
+
+.p-sidebar-header {
+    display: flex;
+    align-items: center;
+}
+
+.p-sidebar .p-sidebar-header .p-sidebar-close, .p-sidebar .p-sidebar-header .p-sidebar-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    color: #64748b;
+    border: 0 none;
+    background: transparent;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s, outline-color 0.2s;
+}
+
+.p-sidebar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+}
+
+.p-sidebar .p-sidebar-header + .p-sidebar-content {
+    padding-top: 0;
+}
+
+.p-sidebar .p-sidebar-content {
+    padding: 0 1.125rem 1.125rem 1.125rem;
+}
+
+.p-sidebar-content {
+    position: relative;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.p-sidebar {
+    background: #ffffff;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
