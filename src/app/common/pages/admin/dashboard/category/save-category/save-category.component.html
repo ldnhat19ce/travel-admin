@@ -1,0 +1,247 @@
+<div class="card p-fluid">
+    <p-panel header="Thêm thể loại" [toggleable]="true">
+        <form class="g-3" [formGroup]="categoryForm">
+            <div class="field grid">
+                <label htmlFor="name" class="col-12 mb-2 md:col-2 md:mb-0">Tên</label>
+                <div class="col-12 md:col-10">
+                    <input pInputText id="name" type="text"
+                        formControlName="name"
+                        aria-describedby="name-help"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['name'].errors }"/>
+                    @if (submitted && f['name'].errors) {
+                        @if (f['name'].errors['required']) {
+                            <small id="name-help" class="text-red-600">
+                                Vui lòng nhập tên
+                            </small>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="nameEng" class="col-12 mb-2 md:col-2 md:mb-0">Tên Tiếng anh</label>
+                <div class="col-12 md:col-10">
+                    <input pInputText id="nameEng" type="text"
+                        formControlName="nameEng"
+                        aria-describedby="nameEng-help"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['nameEng'].errors }"/>
+                    @if (submitted && f['nameEng'].errors) {
+                        @if (f['nameEng'].errors['required']) {
+                            <small id="nameEng-help" class="text-red-600">
+                                Vui lòng nhập tên tiếng anh
+                            </small>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="url" class="col-12 mb-2 md:col-2 md:mb-0">Url</label>
+                <div class="col-12 md:col-10">
+                    <input pInputText id="url" type="text"
+                        formControlName="url"
+                        aria-describedby="url-help"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['url'].errors }"/>
+                    @if (submitted && f['url'].errors) {
+                        @if (f['url'].errors['required']) {
+                            <small id="url-help" class="text-red-600">
+                                Vui lòng nhập url
+                            </small>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="description" class="col-12 mb-2 md:col-2 md:mb-0">Thông tin chi tiết</label>
+                <div class="col-12 md:col-10">
+                    <textarea pInputTextarea id="description"
+                        rows="3" cols="30"
+                        formControlName="description"
+                        aria-describedby="description-help"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['description'].errors }">
+                    </textarea>
+                    @if (submitted && f['description'].errors) {
+                        @if (f['description'].errors['required']) {
+                            <small id="description-help" class="text-red-600">
+                                Vui lòng nhập thông tin chi tiết
+                            </small>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="descriptionEng" class="col-12 mb-2 md:col-2 md:mb-0">Thông tin chi tiết (tiếng anh)</label>
+                <div class="col-12 md:col-10">
+                    <textarea pInputTextarea id="descriptionEng"
+                        rows="3" cols="30"
+                        formControlName="descriptionEng"
+                        aria-describedby="descriptionEng-help"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['descriptionEng'].errors }">
+                    </textarea>
+                    @if (submitted && f['descriptionEng'].errors) {
+                        @if (f['descriptionEng'].errors['required']) {
+                            <small id="descriptionEng-help" class="text-red-600">
+                                Vui lòng nhập thông tin chi tiết (tiếng anh)
+                            </small>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="field grid">
+                <label class="col-12 mb-2 md:col-2 md:mb-0">Hình ảnh</label>
+                <div class="col-12 md:col-10">
+                    <file-pond #myPond [options]="pondOptions" [files]="pondFiles"
+                        (onaddfile)="pondHandleAddFile($event)">
+                    </file-pond>
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="level" class="col-12 mb-2 md:col-2 md:mb-0">Cấp bậc</label>
+                <div class="col-12 md:col-4">
+                    <p-inputNumber
+                        inputId="level"
+                        formControlName="level"
+                        min="0"
+                        [showButtons]="true"
+                        buttonLayout="horizontal"
+                        [step]="1"
+                        decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success"
+                        incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus"
+                        inputStyleClass="text-center"
+                        decrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"
+                        incrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"></p-inputNumber>
+                </div>
+                <label htmlFor="sort" class="col-12 mb-2 md:col-2 md:mb-0">Sắp xếp</label>
+                <div class="col-12 md:col-4">
+                    <p-inputNumber
+                        inputId="sort"
+                        formControlName="sort"
+                        min="0"
+                        [showButtons]="true"
+                        buttonLayout="horizontal"
+                        [step]="1"
+                        decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success"
+                        incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus"
+                        inputStyleClass="text-center"
+                        decrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"
+                        incrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"></p-inputNumber>
+                </div>
+            </div>
+            <div class="field grid">
+                <label class="col-12 mb-2 md:col-2 md:mb-0">Loại</label>
+                <div class="col-12 md:col-4">
+                    <p-dropdown
+                        [options]="code"
+                        optionLabel="codeName"
+                        optionValue="codeCd"
+                        placeholder="Chọn loại"
+                        [showClear]="true"
+                        formControlName="type"
+                        [checkmark]="true"
+                        >
+                    </p-dropdown>
+                </div>
+                <label class="col-12 mb-2 md:col-2 md:mb-0">Thể loại cha</label>
+                <div class="col-12 md:col-4">
+                    <p-dropdown
+                        [options]="categories"
+                        optionLabel="name"
+                        optionValue="id"
+                        placeholder="Chọn thể loại cha"
+                        [showClear]="true"
+                        formControlName="parentId"
+                        [checkmark]="true"
+                        >
+
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="field grid">
+                <div class="col-12 md:col-4">
+                    <div class="field-checkbox">
+                        <p-checkbox
+                        formControlName="availableHomePage"
+                        [binary]="true"
+                        inputId="availableHomePage"></p-checkbox>
+                        <label for="availableHomePage">Hiển thị ở trang chủ</label>
+                    </div>
+                </div>
+                @if (f['id'].value > 0) {
+                    <div class="col-12 md:col-4">
+                        <div class="field-checkbox">
+                            <p-checkbox
+                            [binary]="true"
+                            formControlName="used"
+                            inputId="used"></p-checkbox>
+                            <label for="used">Sử dụng</label>
+                        </div>
+                    </div>
+                }
+                <div class="col-12 flex align-items-center justify-content-center gap-3">
+                    <button pButton pRipple label="Lưu thông tin" (click)="onSubmit()"></button>
+                    <button pButton pRipple label="Khởi tạo" (click)="onReset()" class="p-button-secondary"></button>
+                </div>
+            </div>
+        </form>
+    </p-panel>
+</div>
+
+<div class="card p-fluid">
+    <p-table
+        [value]="categoryHierarchy"
+        #dt1
+        dataKey="id"
+        [rows]="100"
+        scrollDirection="both"
+        [scrollable]="true"
+        [rowHover]="true"
+        styleClass="p-datatable-gridlines"
+        responsiveLayout="scroll"
+        [loading]="loading"
+
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center text-nowrap"></th>
+                <th class="text-center text-nowrap">Mã</th>
+                <th class="text-center text-nowrap">Tên</th>
+                <th class="text-center text-nowrap">Tên (tiếng anh)</th>
+                <th class="text-center text-nowrap">Cấp</th>
+                <th class="text-center text-nowrap">Sắp xếp</th>
+                <th class="text-center text-nowrap">Loại</th>
+                <th class="text-center text-nowrap">Url</th>
+                <th class="text-center text-nowrap"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+            <tr>
+                <td class="cursor-pointer" (click)="onEdit(item)"><i
+                        class="pi pi-eye"></i></td>
+                <td class="text-center text-nowrap">{{ item.id }}</td>
+                <td class="text-nowrap">
+                    @if (item.parentId > 0) {
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    }
+                    {{ item.nameOrg }}
+                </td>
+                <td class="text-nowrap">
+                    @if (item.parentId > 0) {
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    }
+                    {{ item.nameEngOrg }}
+                </td>
+                <td class="text-center text-nowrap">{{ item.level }}</td>
+                <td class="text-center text-nowrap">{{ item.sort }}</td>
+                <td class="text-center text-nowrap">{{ item.type }}</td>
+                <td>{{ item.url }}</td>
+                <td class="cursor-pointer" (click)="onDelete($event, item)"><i
+                        class="pi pi-trash"></i></td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-toast position="bottom-right" key="br" />
+<p-confirmDialog />

@@ -1,0 +1,76 @@
+<div class="row">
+    <div class="col-lg-4">
+        <div class="d-flex justify-content-center align-items-center" [ngClass]="loaded ? 'd-none' : ''">
+            <div class="loader"></div>
+        </div>
+
+        <div class="row g-3" [ngClass]="loaded ? '' : 'd-none'">
+            <div class="table overflow-x-auto">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center text-nowrap py-2">Id</th>
+                            <th class="text-center text-nowrap py-2">Tên</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of post; track item.id) {
+                            <tr role="button" (click)="onShowPostFormResult(item.id)">
+                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': postId === item.id}">{{ item.id }}</td>
+                                <td class="py-2 text-nowrap" [ngClass]="{'bg-primary text-white': postId === item.id}">{{ item.name }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="flex align-items-center justify-content-end" [ngClass]="loaded ? '' : 'd-none'">
+            <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)"
+                [showCurrentPageReport]="true" currentPageReportTemplate="{first} - {last} of {totalRecords}"
+                [showPageLinks]="false" [showFirstLastIcon]="true"></p-paginator>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="row g-3">
+            <div class="table overflow-x-auto">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center text-nowrap py-2">Mã</th>
+                            <th class="text-center text-nowrap py-2">Kết quả</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of postFormResult; track item.id) {
+                            <tr role="button" (click)="onTransformResult(item)">
+                                <td class="text-center text-nowrap py-2" [ngClass]="{'bg-primary text-white': postFormId === item.id}">{{ item.id }}</td>
+                                <td class="py-2 text-nowrap" [ngClass]="{'bg-primary text-white': postFormId === item.id}">Result - {{ item.createdDate }}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="flex align-items-center justify-content-end">
+            <p-paginator [first]="firstPostForm" [rows]="rowPostForm" [totalRecords]="totalRecordPostForm" (onPageChange)="onPageChangePostForm($event)"
+                [showCurrentPageReport]="true" currentPageReportTemplate="{first} - {last} of {totalRecords}"
+                [showPageLinks]="false" [showFirstLastIcon]="true"></p-paginator>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <h2 class="col-12">Thông tin Form</h2>
+    <div class="col-12 px-4">
+        <div class="row gx-5">
+            @for (item of formResults; track item.id) {
+                <div class="col-md-2 col-12 p-3 border fw-bold text-dark">
+                    {{ item.name }}
+                </div>
+                <div class="col-md-4 col-12 p-3 border">
+                    {{ item.value }}
+                </div>
+            }
+        </div>
+    </div>
+</div>

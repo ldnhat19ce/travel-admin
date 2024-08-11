@@ -1,0 +1,108 @@
+<div class="row g-3">
+    <div class="col-12 col-xl-4">
+        <div class="row border position-xl-fixed">
+            <span class="col-12 h3 d-flex justify-content-center align-items-center p-3">
+                Loại mã
+            </span>
+            <div class="col-12">
+                <div class="table overflow-auto">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center text-nowrap py-2">Mã</th>
+                                <th class="text-center text-nowrap py-2">Tên</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of codeKind; track item.kindCode) {
+                            <tr role="button" (click)="onClickRow(item)">
+                                <td class="text-center text-nowrap py-2"
+                                    [ngClass]="{'bg-primary text-white': kindCodeSelected.kindCode === item.kindCode}">{{
+                                    item.kindCode }}</td>
+                                <td class="text-center text-nowrap py-2"
+                                    [ngClass]="{'bg-primary text-white': kindCodeSelected.kindCode === item.kindCode}">{{
+                                    item.kindName }}</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-8">
+        <div class="row border mx-2">
+            <span class="h3 col-12 p-3">Nhập dữ liệu</span>
+            <form class="col-12 mb-3" [formGroup]="codeForm">
+                <div class="row mx-auto">
+                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Phân loại mã</span>
+                    <span class="col-sm-9 col-form-label border-top border-end border-bottom border-primary"><span class="text-red">{{ kindCodeSelected.kindCode }}</span>&nbsp;({{ kindCodeSelected.kindName }})</span>
+                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Mã số</span>
+                    <input class="col-sm-1 border border-primary" type="text" [value]="'01' + kindCodeSelected.kindCode" readonly>
+                    <input class="col-sm-1 border border-primary text-center" type="text" formControlName="codeCd">
+                    <span class="col-sm-7 border border-primary text-red fs-2 d-flex justify-content-start align-items-center">Nhập số có 2 chữ số. Nếu bạn không nhập, sẽ được đăng ký tự động.</span>
+                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Tên mã</span>
+                    <input class="col-sm-9 border border-primary" type="text" formControlName="codeName" />
+                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Tên mã (tiếng anh)</span>
+                    <input class="col-sm-9 border border-primary" type="text" formControlName="codeNameEng" />
+                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Nội dung bổ dung #1</span>
+                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeS1" />
+                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeS2" />
+                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeS3" />
+                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Nội dung bổ dung #2</span>
+                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeN1" />
+                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeN2" />
+                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeN3" />
+                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Nội dung bổ dung #3</span>
+                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeD1" />
+                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeD2" />
+                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeD3" />
+                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Sử dụng</span>
+                    <div class="col-sm-3 border border-primary d-flex justify-content-center align-items-center">
+                        <input class="form-check-input" type="checkbox" formControlName="used" />
+                    </div>
+                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Sắp xếp</span>
+                    <input class="col-sm-3 border border-primary text-center" type="number" formControlName="sort" />
+                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Ghi chú</span>
+                    <input class="col-sm-9 border border-primary" type="text" formControlName="remark" />
+                </div>
+            </form>
+            <div class="col-12">
+                <div class="table overflow-y-auto" style="height: 200px;">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-center text-nowrap py-2"></th>
+                                <th class="text-center text-nowrap py-2">Mã</th>
+                                <th class="text-center text-nowrap py-2">Tên</th>
+                                <th class="text-center text-nowrap py-2">Tên (tiếng anh)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (item of code; track item.codeCd) {
+                            <tr role="button">
+                                <td class="text-center text-nowrap py-2">
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <button class="btn btn-primary mx-1" (click)="onEditCode(item)"><i class="ti ti-edit"></i></button>
+                                        <button class="btn btn-primary mx-1" (click)="onDeleteCode($event, item)"><i class="ti ti-trash-x"></i></button>
+                                    </div>
+                                </td>
+                                <td class="text-center text-nowrap py-2">{{ item.codeCd }}</td>
+                                <td class="text-center text-nowrap py-2">{{ item.codeName }}</td>
+                                <td class="text-center text-nowrap py-2">{{ item.codeNameEng }}</td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-12 d-flex justify-content-center gap-3 py-3">
+                <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
+                <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-toast position="bottom-right" key="br" />
+<p-confirmDialog />

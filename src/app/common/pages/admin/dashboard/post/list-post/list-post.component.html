@@ -1,0 +1,53 @@
+<div class="d-flex justify-content-center align-items-center" [ngClass]="loaded ? 'd-none' : ''">
+    <div class="loader"></div>
+</div>
+
+<div [ngClass]="loaded ? '' : 'd-none'">
+    <div class="row g-3 mt-3">
+        <div class="col-12">
+            <div class="table overflow-x-auto">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center text-nowrap py-2">Id</th>
+                            <th class="text-center text-nowrap py-2">Thể loại</th>
+                            <th class="text-center text-nowrap py-2">Tên</th>
+                            <th class="text-center text-nowrap py-2">Tên tiếng anh</th>
+                            <th class="text-center text-nowrap py-2">Sắp xếp</th>
+                            <th class="text-center text-nowrap py-2">Sử dụng</th>
+                            <th class="text-center text-nowrap py-2">Thêm form</th>
+                            <th class="text-center text-nowrap py-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (item of post; track item.id) {
+                        <tr>
+                            <td class="text-center text-nowrap py-2">{{ item.id }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.categoryName }}</td>
+                            <td class="py-2 text-nowrap">{{ item.name }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.nameEng }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.sort }}</td>
+                            <td class="text-center text-nowrap py-2">{{ item.used? 'Sử dụng' : 'Không sử dụng' }}</td>
+                            <td class="text-center text-nowrap py-2">
+                                <button class="btn btn-primary" routerLink="/post-form/save/{{ item.id }}">Thêm
+                                    Form</button>
+                            </td>
+                            <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)"><i
+                                    class="ti ti-trash"></i></td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex align-items-center justify-content-end">
+        <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)"
+            [showCurrentPageReport]="true" currentPageReportTemplate="{first} - {last} of {totalRecords}"
+            [showPageLinks]="false" [showFirstLastIcon]="true"></p-paginator>
+    </div>
+
+    <p-toast position="bottom-right" key="br" />
+    <p-confirmDialog />
+</div>

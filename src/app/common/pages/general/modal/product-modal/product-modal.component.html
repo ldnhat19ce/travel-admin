@@ -1,0 +1,56 @@
+<p-dialog
+    header="Tìm kiếm sản phẩm"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    [maximizable]="true"
+    (onHide)="onHide($event)">
+    <div class="field grid sticky">
+        <label class="col-12 mb-2 md:col-2 md:mb-0 font-bold text-lg">Sản phẩm</label>
+        <div class="col-12 md:col-10">
+            <p-inputGroup>
+                <input type="text" pInputText placeholder="Tìm kiếm sản phẩm" [(ngModel)]="query"/>
+                <button type="button" pButton icon="pi pi-search" (click)="getProduct()"></button>
+            </p-inputGroup>
+        </div>
+    </div>
+    <p-table
+        [value]="products"
+        styleClass="p-datatable-gridlines"
+        [tableStyle]="{ 'min-width': '50rem', }"
+        responsiveLayout="scroll"
+        scrollDirection="both"
+        [scrollable]="true"
+        [rowHover]="true"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center text-nowrap">Mã sản phẩm</th>
+                <th class="text-center text-nowrap">Tên</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+            <tr role="button" (click)="onSelectRow(item)">
+                <td class="text-center text-nowrap">
+                    {{
+                    item.pdtCode }}</td>
+                <td class="text-center text-nowrap">
+                    {{
+                    item.pdtName }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <ng-template pTemplate="footer">
+        <div class="d-flex align-items-center justify-content-center">
+            <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)"
+            [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+        </div>
+        <button
+            class="p-button-primary"
+            pButton
+            pRipple
+            label="Đóng"
+            (click)="onHide($event)"></button>
+    </ng-template>
+</p-dialog>

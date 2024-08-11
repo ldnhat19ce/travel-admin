@@ -1,0 +1,194 @@
+<p-blockUI [blocked]="blocked">
+    <p-progressSpinner></p-progressSpinner>
+</p-blockUI>
+
+<div class="row g-3">
+    <div class="col-lg-7">
+        <form class="row g-3" [formGroup]="postForm">
+            <div class="col-12">
+                <label for="fieldId" class="form-label">Mã field</label>
+                <input type="text" id="fieldId" class="form-control" formControlName="fieldId"
+                    [ngClass]="{'is-invalid': submitted && f['fieldId'].errors }">
+                @if (submitted && f['fieldId'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['fieldId'].errors['required']) {
+                    <div>Vui lòng nhập mã field</div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-12">
+                <label for="fieldName" class="form-label">Tên field</label>
+                <input type="text" id="fieldName" class="form-control" formControlName="fieldName"
+                    [ngClass]="{'is-invalid': submitted && f['fieldName'].errors }">
+                @if (submitted && f['fieldName'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['fieldName'].errors['required']) {
+                    <div>Vui lòng nhập tên field</div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-12">
+                <label for="fieldPlaceholder" class="form-label">Trình dữ chỗ</label>
+                <input type="text" id="fieldPlaceholder" class="form-control" formControlName="fieldPlaceholder"
+                    [ngClass]="{'is-invalid': submitted && f['fieldPlaceholder'].errors }">
+                @if (submitted && f['fieldPlaceholder'].errors) {
+                <div class="invalid-feedback">
+                    @if (f['fieldPlaceholder'].errors['required']) {
+                    <div>Vui lòng nhập Trình dữ chỗ</div>
+                    }
+                </div>
+                }
+            </div>
+            <div class="col-12">
+                <label for="fieldType" class="form-label">Loại field</label>
+                <select id="fieldType" class="form-select" #select (change)="onChangeFieldType(select.value)"
+                    [ngClass]="{'is-invalid': submitted && f['fieldType'].errors }">
+                    @for (item of fieldTypeOptions; track item.value) {
+                    <option [value]="item.value" [selected]="fieldTypeSelected === item.value">{{ item.label }}
+                    </option>
+                    }
+                </select>
+            </div>
+
+            @if (fieldTypeSelected === 'DROPDOWN') {
+            <div class="col-12 p-fluid" [ngClass]="{'is-invalid': submitted && listFieldType.length <= 0 }">
+                <label for="fieldType" class="form-label">Danh sách dropdown</label>
+                @if (listFieldType.length > 0) {
+                @for (item of listFieldType; track item.value) {
+                <div class="row my-2">
+                    <div class="col-5">
+                        <input type="text" class="form-control" disabled [value]="item.label">
+                    </div>
+                    <div class="col-5">
+                        <input type="text" class="form-control" disabled [value]="item.value">
+                    </div>
+
+                    <div class="col-2 d-flex align-items-end">
+                        <button class="btn btn-secondary form-control"
+                            (click)="onDeleteDropdownField(item.value)">Xoá</button>
+                    </div>
+                </div>
+                }
+                }
+                <div class="row">
+                    <div class="col-5">
+                        <label for="dropdown-label" class="form-label">Nhãn</label>
+                        <input type="text" class="form-control" id="dropdown-label">
+                    </div>
+                    <div class="col-5">
+                        <label for="dropdown-value" class="form-label">Giá trị</label>
+                        <input type="text" class="form-control" id="dropdown-value">
+                    </div>
+
+                    <div class="col-2 d-flex align-items-end">
+                        <button class="btn btn-primary form-control" (click)="onSaveDropdownField()">Thêm</button>
+                    </div>
+                </div>
+            </div>
+            @if (submitted && listFieldType.length <= 0) { <div class="invalid-feedback">
+                <div>Vui lòng nhập giá trị cho dropdown</div>
+    </div>
+    }
+    }
+
+    <div class="col-12">
+        <label for="sort" class="form-label">Sắp xếp</label>
+        <input type="number" id="sort" value="0" class="form-control" formControlName="sort" min="0">
+    </div>
+
+    @if (f['id'].value > 0) {
+    <div class="col-auto">
+        <input class="form-check-input" type="checkbox" formControlName="used">
+        <label class="form-check-label ms-3">Sử dụng</label>
+    </div>
+    }
+
+    <div class="col-auto">
+        <input class="form-check-input" type="checkbox" formControlName="oneRow">
+        <label class="form-check-label ms-3">Bao trọn hàng</label>
+    </div>
+
+    <div class="col-12 d-flex justify-content-center gap-3">
+        <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
+        <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
+    </div>
+    </form>
+</div>
+
+<div class="col-lg-5">
+    @if(postFormList.length > 0) {
+    <div class="row g-3">
+        @for (item of postFormList; track item.id) {
+        <div [ngClass]="item.oneRow ? 'col-12' : 'col-md-6'">
+            <div class="form-floating">
+                @if (item.fieldType === 'INPUT') {
+                <input type="text" class="form-control bg-white border" [id]="item.fieldId"
+                    [placeholder]="item.fieldPlaceholder">
+                } @else if (item.fieldType === 'DROPDOWN') {
+                <select class="form-select bg-white border" [id]="item.fieldId">
+                    @for (drp of item.fieldHelper1 | convertDropdown; track drp.value) {
+                    <option [value]="drp.value">{{ drp.label }}</option>
+                    }
+                </select>
+                } @else if (item.fieldType === 'TEXT_AREA') {
+                <textarea class="form-control bg-white border" [placeholder]="item.fieldPlaceholder" [id]="item.fieldId"
+                    style="height: 100px"></textarea>
+                }
+                <label for="{{ item.fieldId }}">{{ item.fieldName }}</label>
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>
+</div>
+
+<div class="row g-3 mt-3">
+    <div class="col-12">
+        <div class="table overflow-x-auto">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center text-nowrap py-2"></th>
+                        <th class="text-center text-nowrap py-2">Id</th>
+                        <th class="text-center text-nowrap py-2">Mã field</th>
+                        <th class="text-center text-nowrap py-2">Tên field</th>
+                        <th class="text-center text-nowrap py-2">Trình dữ chỗ</th>
+                        <th class="text-center text-nowrap py-2">Loại field</th>
+                        <th class="text-center text-nowrap py-2">Sắp xếp</th>
+                        <th class="text-center text-nowrap py-2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (item of pagePostForm; track item.id) {
+                    <tr>
+                        <td class="text-center text-nowrap py-2" role="button" (click)="onEdit(item)"><i
+                                class="ti ti-edit"></i></td>
+                        <td class="text-center text-nowrap py-2">{{ item.id }}</td>
+                        <td class="text-center text-nowrap py-2">{{ item.fieldId }}</td>
+                        <td class="text-start text-nowrap py-2">{{ item.fieldName }}</td>
+                        <td class="py-2 text-nowrap">{{ item.fieldPlaceholder }}</td>
+                        <td class="text-center text-nowrap py-2">{{ item.fieldType }}</td>
+                        <td class="text-center text-nowrap py-2">{{ item.sort }}</td>
+                        <td class="text-center text-nowrap py-2">{{ item.used? 'Sử dụng' : 'Không sử dụng' }}</td>
+                        <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)"><i
+                                class="ti ti-trash"></i></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="flex align-items-center justify-content-end">
+    <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)"
+        [showCurrentPageReport]="true" currentPageReportTemplate="{first} - {last} of {totalRecords}"
+        [showPageLinks]="false" [showFirstLastIcon]="true"></p-paginator>
+</div>
+
+<p-toast position="bottom-right" key="br" />
+<p-confirmDialog />

@@ -1,0 +1,148 @@
+$gutter: 1rem;
+$primary: #13357b;
+$secondary: #1f05e6;
+$relaxation_green: #f1f5f9;
+$rainmaker: #475569;
+$blueberry_whip: #d1d5db;
+
+@import "../public/assets/scss/layout/layout.scss";
+
+@import "quill/dist/quill.snow.css";
+
+@import "primeng/resources/primeng.min.css";
+@import "primeflex/primeflex.scss";
+@import "primeicons/primeicons.css";
+
+@import "primeng/resources/themes/lara-light-indigo/theme.css";
+
+@import "filepond/dist/filepond.min.css";
+@import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+
+*[quill__html] {
+    display: none;
+
+    width: 100%;
+    margin: 0;
+    background: rgb(29, 29, 29);
+    box-sizing: border-box;
+    color: rgb(204, 204, 204);
+    outline: none;
+    padding: 12px 15px;
+    line-height: 24px;
+    font-family: Consolas, Menlo, Monaco, "Courier New", monospace;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border: none;
+}
+
+*[quill__html*="-active-"] {
+    display: initial;
+}
+
+.ql-editing[data-mode="video"] {
+    left: 0px !important;
+}
+
+.filepond--root .filepond--credits {
+    display: none;
+}
+
+.thumb-image .filepond--root,
+.thumb-image .filepond--root .filepond--drop-label {
+    height: 200px;
+}
+
+.filepond--root,
+.filepond--root .filepond--drop-label {
+    height: 400px;
+}
+
+.filepond--drop-label {
+    border: 2px dashed $primary;
+}
+
+.p-editor-container {
+    .p-editor-toolbar.ql-snow {
+        border: 1px solid $primary !important;
+    }
+    .p-editor-content.ql-snow {
+        border-left: 1px solid $primary;
+        border-right: 1px solid $primary;
+        border-bottom: 1px solid $primary;
+    }
+}
+
+.text {
+    &-red {
+        color: red;
+    }
+    &-rainmaker {
+        color: $rainmaker;
+    }
+}
+
+.bg {
+    &-oil-lavender {
+        background-color: #c6bfbd;
+    }
+    &-red {
+        background-color: red;
+    }
+    &-relaxation-green {
+        background-color: $relaxation_green;
+    }
+}
+
+.border {
+    &-blueberry-whip {
+        border: 1px solid $blueberry_whip;
+    }
+}
+
+.bottom {
+    &-0 {
+        bottom: 0;
+    }
+}
+
+.top {
+    &-0 {
+        bottom: 0;
+    }
+}
+
+
+.left {
+    &-0 {
+        bottom: 0;
+    }
+}
+
+
+.right {
+    &-0 {
+        bottom: 0;
+    }
+}
+
+.w{
+    &-webkit-fill-available {
+        width: -webkit-fill-available;
+    }
+
+    &-50rem {
+        width: 50rem;
+    }
+}
+
+:host ::ng-deep {
+    [pDraggable] {
+        cursor: move;
+    }
+}
+
+.text-nowrap {
+    text-wrap: nowrap;
+}
+

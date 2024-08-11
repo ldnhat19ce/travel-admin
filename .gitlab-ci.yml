@@ -1,0 +1,35 @@
+stages:
+    - build
+    - deploy
+
+develop-build:
+    image: docker:latest
+    stage: build
+    only:
+        - develop
+    services:
+        - docker:dind
+    before_script:
+        - docker login -u $CI_DOCKER_USERNAME -p $CI_DOCKER_PASSWORD
+    script:
+        - docker build . -t demo-tailwind -f Dockerfile
+        - docker tag demo-tailwind 123456nhat/travel-admin:0.0.1
+        - docker push 123456nhat/travel-admin:0.0.1
+        - echo "push success"
+
+develop-deploy:
+    image: ubuntu:latest
+    stage: deploy
+    only:
+        - develop
+    before_script:
+        - apt-get update -qq && apt-get install -y -qq sshpass
+    script:
+        - sshpass -V
+        - export SSHPASS=$CI_USER_PASS
+        - sshpass -e ssh -tt -o StrictHostKeyChecking=no $CI_USERNAME@$CI_USER_HOST docker container stop travel-admin || true
+        - sshpass -e ssh -tt -o StrictHostKeyChecking=no $CI_USERNAME@$CI_USER_HOST docker rm -f travel-admin || true
+        - sshpass -e ssh -tt -o StrictHostKeyChecking=no $CI_USERNAME@$CI_USER_HOST docker rmi -f 123456nhat/travel-admin:0.0.1 || true
+        - sshpass -e ssh -tt -o StrictHostKeyChecking=no $CI_USERNAME@$CI_USER_HOST docker run -d -p 4300:4000 --name travel-admin 123456nhat/travel-admin:0.0.1
+
+
