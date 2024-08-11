@@ -21,20 +21,20 @@ export function app(): express.Express {
     // server.get('/api/**', (req, res) => { });
     // Serve static files from /browser
     server.get(
-        '*.*',
+        '**',
         express.static(browserDistFolder, {
             maxAge: '1y',
+            index: 'index.html',
         })
     );
 
     // All regular routes use the Angular engine
-    server.get('*', (req, res, next) => {
+    server.get('**', (req, res, next) => {
         const { protocol, originalUrl, baseUrl, headers } = req;
 
         commonEngine
             .render({
                 bootstrap,
-                inlineCriticalCss: false,
                 documentFilePath: indexHtml,
                 url: `${protocol}://${headers.host}${originalUrl}`,
                 publicPath: browserDistFolder,

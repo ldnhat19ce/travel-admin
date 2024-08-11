@@ -1,0 +1,52 @@
+<button class="layout-config-button p-link" type="button" (click)="onOpenSidebar()">
+    <i class="pi pi-search"></i>
+</button>
+
+<p-sidebar
+    [(visible)]="visible"
+    position="right"
+    [transitionOptions]="'.3s cubic-bezier(0, 0, 0.2, 1)'"
+    styleClass="layout-config-sidebar w-50rem">
+    <div class="field grid sticky">
+        <label class="col-12 mb-2 font-bold text-lg">Sản phẩm</label>
+        <div class="col-12">
+            <p-inputGroup>
+                <input type="text" pInputText placeholder="Tìm kiếm sản phẩm" [(ngModel)]="query"/>
+                <button type="button" pButton icon="pi pi-search" (click)="getProduct()"></button>
+            </p-inputGroup>
+        </div>
+    </div>
+    <p-table
+        [value]="products"
+        styleClass="p-datatable-gridlines"
+        [tableStyle]="{ 'min-width': '50rem', }"
+        responsiveLayout="scroll"
+        scrollDirection="both"
+        [scrollable]="true"
+        [rowHover]="true"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center text-nowrap">Mã sản phẩm</th>
+                <th class="text-center text-nowrap">Tên</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+            <tr class="cursor-pointer" (click)="onSelectRow(item)">
+                <td class="text-center text-nowrap">
+                    {{
+                    item.pdtCode }}</td>
+                <td class="text-center text-nowrap">
+                    {{
+                    item.pdtName }}</td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-center">
+                <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)"
+                [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+            </div>
+        </ng-template>
+    </p-table>
+</p-sidebar>
+

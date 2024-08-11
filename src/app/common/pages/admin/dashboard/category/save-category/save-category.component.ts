@@ -18,10 +18,19 @@ import { ValidationUtil } from '../../../../../utils/validation.util';
 
 import { FilePondModule } from 'ngx-filepond';
 
-import { FilePond, FilePondFile, FilePondOptions } from 'filepond';
+import { FilePond, FilePondOptions } from 'filepond';
 import { environment } from '../../../../../../../environments/environment';
 import { CodeService } from '../../../../../services/code.service';
 import { Code } from '../../../../../model/code.model';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from "primeng/inputtextarea";
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+import { TableModule } from 'primeng/table';
+import { PanelModule } from 'primeng/panel';
 
 @Component({
     selector: 'app-save-category',
@@ -34,6 +43,15 @@ import { Code } from '../../../../../model/code.model';
         CommonModule,
         ConfirmDialogModule,
         FilePondModule,
+        InputTextModule,
+        InputTextareaModule,
+        InputNumberModule,
+        DropdownModule,
+        CheckboxModule,
+        ButtonModule,
+		RippleModule,
+        TableModule,
+        PanelModule
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-category.component.html',
@@ -56,6 +74,7 @@ export class SaveCategoryComponent implements OnInit {
 
     submitted: boolean = false;
     isChangeImage: boolean = false;
+    loading: boolean = true;
 
     typeSelected: string = '';
     parentIdSelected: number = 0;
@@ -85,7 +104,7 @@ export class SaveCategoryComponent implements OnInit {
         nameEng: ['', Validators.required],
         level: [0, Validators.required],
         sort: [0, Validators.required],
-        type: ['BOOKING'],
+        type: ['01C10'],
         url: ['', Validators.required],
         parentId: [0],
         image: [''],
@@ -167,7 +186,7 @@ export class SaveCategoryComponent implements OnInit {
             sort: item.sort,
             url: item.url,
             type: item.type,
-            parentId: item.parentId !== 0 ? item.parentId : 0,
+            parentId: item.parentId !== 0 ? Number(item.parentId) : 0,
             image: '',
             imageName: '',
             description: item.description,
@@ -179,6 +198,7 @@ export class SaveCategoryComponent implements OnInit {
         if (item.parentId !== 0) {
             this.parentIdSelected = item.parentId;
         }
+        console.log(item.parentId)
 
         this.isChangeImage = false;
         if (ValidationUtil.isNotNullAndNotUndefined(item.imageUrl)) {
@@ -305,6 +325,7 @@ export class SaveCategoryComponent implements OnInit {
     }
 
     private getCategory() {
+        this.loading = true;
         this._categoryService
             .getAllCategory(this.getParams())
             .subscribe((res) => {
@@ -318,6 +339,7 @@ export class SaveCategoryComponent implements OnInit {
             .subscribe((res) => {
                 if (res !== null && res !== undefined) {
                     this.categoryHierarchy = res.body?.result || [];
+                    this.loading = false;
                 }
             });
     }

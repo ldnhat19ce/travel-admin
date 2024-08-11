@@ -1,24 +1,20 @@
-import {
-    ApplicationConfig,
-    importProvidersFrom,
-    isDevMode,
-} from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideServiceWorker } from '@angular/service-worker';
 import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { jwtInterceptor } from './common/interceptor/jwt.interceptor';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { httpTranslateLoaderFactory } from './common/utils/translate-browser.loader';
-import { jwtInterceptor } from './common/interceptor/jwt.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { vi } from 'date-fns/locale';
 import { DateFnsConfigurationService } from 'ngx-date-fns';
 import { viCf } from './common/utils/date-fns.config';
 
 export const appConfig: ApplicationConfig = {
     providers: [
+        provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(
             routes,
             withInMemoryScrolling({

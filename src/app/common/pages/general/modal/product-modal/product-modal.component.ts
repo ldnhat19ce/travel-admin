@@ -6,6 +6,11 @@ import { Product } from '../../../../model/product.model';
 import { ValidationUtil } from '../../../../utils/validation.util';
 import { PaginatorModule } from 'primeng/paginator';
 import { PageEvent } from '../../../../model/page-event.model';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { RippleModule } from 'primeng/ripple';
+import { TableModule } from 'primeng/table';
 
 @Component({
     selector: 'app-product-modal',
@@ -13,7 +18,12 @@ import { PageEvent } from '../../../../model/page-event.model';
     imports: [
         CommonModule,
         DialogModule,
-        PaginatorModule
+        PaginatorModule,
+        InputGroupModule,
+        ButtonModule,
+        InputTextModule,
+        RippleModule,
+        TableModule
     ],
     templateUrl: './product-modal.component.html',
     styleUrl: './product-modal.component.scss',

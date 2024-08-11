@@ -5,4 +5,3 @@ export const routes: Routes = [
     { path: '', loadChildren: () => import("./common/pages/admin/admin.module").then(module => module.AdminModule) },
     { path: '**', component: NotFoundComponent }
 ];
-

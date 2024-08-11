@@ -10,11 +10,34 @@ import { Authentication } from '../../../model/authentication.model';
 import { Response } from '../../../model/response.model';
 import { Data } from '../../../model/data.model';
 import { Router } from '@angular/router';
+import { PasswordModule } from 'primeng/password';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [TranslateModule, FormsModule],
+    imports: [
+        TranslateModule,
+        FormsModule,
+        ButtonModule,
+        CheckboxModule,
+        InputTextModule,
+        PasswordModule,
+        ToastModule
+    ],
+    styles: [`
+        :host ::ng-deep .pi-eye,
+        :host ::ng-deep .pi-eye-slash {
+            transform:scale(1.6);
+            margin-right: 1rem;
+            color: var(--primary-color) !important;
+        }
+    `],
+    providers: [MessageService],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss',
 })
@@ -23,6 +46,7 @@ export class LoginComponent {
     private _translateService = inject(TranslateService);
     private _localStorageService = inject(LocalStorageService);
     private _router = inject(Router);
+    private _messageService = inject(MessageService);
 
     email: WritableSignal<string> = signal<string>('');
     password: WritableSignal<string> = signal<string>('');
@@ -31,6 +55,8 @@ export class LoginComponent {
     errorPassword: WritableSignal<string> = signal<string>('');
 
     resultError: Error = {} as Error;
+
+    loading: boolean = false;
 
     login() {
         let isValid = true;
@@ -46,6 +72,8 @@ export class LoginComponent {
         }
 
         if (isValid) {
+            this.loading = true;
+
             this._authenticationService
                 .adminAuthentication({ email: this.email().trim(), password: this.password().trim() })
                 .subscribe({
@@ -58,6 +86,8 @@ export class LoginComponent {
                     },
                     error: (err: HttpErrorResponse) => {
                         this.resultError = err.error;
+                        this._messageService.add({ severity: 'error', summary: 'Error', detail: this.resultError.message, key: 'br', life: 5000 });
+                        this.loading = false;
                     }
                 });
         }

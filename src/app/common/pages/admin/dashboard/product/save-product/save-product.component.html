@@ -1,1172 +1,1091 @@
-<div class="row g-3" style="margin-bottom: 70px;">
-    <div class="col-12 col-xl-8">
-        <div>
-            <span class="h3 col-12 py-3 text-primary">Sản phẩm</span>
-            <div class="input-group py-2">
-                <input class="form-control border border-primary" type="text" placeholder="Tìm kiếm sản phẩm" readonly (click)="onShowProductModal()" [(ngModel)]="query" >
-                <button class="btn bg-white border border-primary rounded-0 ms-n5 cursor-pointer" type="button" (click)="onShowProductModal()">
-                    <i class="ti ti-search"></i>
-                </button>
-            </div>
-        </div>
-        <form class="row g-3" [formGroup]="productForm">
-            <span class="col-12 h4 pt-3 text-primary">
-                Thông tin cơ bản (màu đỏ là trường bắt buộc)
-            </span>
-            <div class="col-12">
-                <div class="row border border-dark mx-auto">
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="pdtCode" class="col-form-label text-red">Mã sản phẩm</label>
-                            </div>
-                            <div class="col-xl-4">
-                                <input type="text" id="pdtCode" class="form-control" formControlName="pdtCode"
-                                    [ngClass]="{'is-invalid': submitted && f['pdtCode'].errors }"
-                                    aria-describedby="pdtCodeHelpBlock">
-                            </div>
-
-                            <div class="col-auto">
-                                <div id="pdtCodeHelpBlock" class="form-text text-red">
-                                    Nếu không nhập, mã sẽ tự động được tạo
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="pdtName" class="col-form-label text-red">Tên sản phẩm</label>
-                            </div>
-                            <div class="col-xl-9">
-                                <input type="text" id="pdtName" class="form-control" formControlName="pdtName"
-                                    [ngClass]="{'is-invalid': submitted && f['pdtName'].errors }">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="pdtNameEng" class="col-form-label">Tên sản phẩm (tiếng anh)</label>
-                            </div>
-                            <div class="col-xl-9">
-                                <input type="text" id="pdtNameEng" class="form-control" formControlName="pdtNameEng"
-                                    [ngClass]="{'is-invalid': submitted && f['pdtNameEng'].errors }">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="categoryId" class="col-form-label text-red">Tên danh mục</label>
-                            </div>
-                            <div class="col-auto">
-                                <select id="categoryId" class="form-select" #select
-                                    (change)="onChangeCategoryId(select.value)"
-                                    [ngClass]="{'is-invalid': submitted && f['categoryId'].errors }">
-                                    <option value="0" [selected]="categoryIdSelected === 0">Chọn danh mục</option>
-                                    @if (categories.length > 0) {
-                                    @for (item of categories; track item.id) {
-                                    <option [value]="item.id" [selected]="categoryIdSelected === item.id">{{ item |
-                                        transformCategory }}
-                                    </option>
-                                    }
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="option1" class="col-form-label">Thời gian</label>
-                            </div>
-                            <div class="col-xl-9">
-                                <input type="text" id="option1" class="form-control" formControlName="option1"
-                                    [ngClass]="{'is-invalid': submitted && f['option1'].errors }">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="option2" class="col-form-label">Lịch trình</label>
-                            </div>
-                            <div class="col-xl-9">
-                                <input type="text" id="option2" class="form-control" formControlName="option2"
-                                    [ngClass]="{'is-invalid': submitted && f['option2'].errors }">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="option3" class="col-form-label">Phương tiện</label>
-                            </div>
-                            <div class="col-xl-9">
-                                <input type="text" id="option3" class="form-control" formControlName="option3"
-                                    [ngClass]="{'is-invalid': submitted && f['option3'].errors }">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="option3" class="col-form-label">Sắp xếp</label>
-                            </div>
-                            <div class="col-auto">
-                                <input type="number" id="sort" value="0" class="form-control" formControlName="sort"
-                                    min="0">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="option3" class="col-form-label">Vùng sản phẩm</label>
-                            </div>
-                            <div class="col-auto">
-                                <p-autoComplete
-                                    formControlName="zones"
-                                    [suggestions]="codeAFiltered"
-                                    (completeMethod)="filterCode($event)"
-                                    field="codeName"
-                                    [multiple]="true">
-                                    <ng-template let-code pTemplate="item">
-                                        <div class="flex align-items-center p-2">
-                                            <span>({{ code.codeCd }}) {{ code.codeName }}</span>
-                                        </div>
-                                    </ng-template>
-                                </p-autoComplete>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <span class="col-12 h4 pt-3 text-primary">
-                Thông tin đặt hàng
-            </span>
-
-            <div class="col-12">
-                <div class="row border border-dark mx-auto">
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-12">
-                                <div class="row align-items-center py-1">
-                                    <div class="col-xl-3">
-                                        <label for="status" class="col-form-label text-red">Trạng thái</label>
-                                    </div>
-                                    <div class="col-auto">
-                                        <select id="status" class="form-select" #select2
-                                            (change)="onChangeStatus(select2.value)"
-                                            [ngClass]="{'is-invalid': submitted && f['status'].errors }">
-                                            <option value="0" [selected]="statusSelected === '0'">Chọn trạng thái
-                                            </option>
-                                            @if (code.length > 0) {
-                                            @for (item of code; track item.id) {
-                                            <option [value]="item.codeCd" [selected]="statusSelected === item.codeCd">{{
-                                                item.codeName }}
-                                            </option>
-                                            }
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="row align-items-center py-1">
-                                    <div class="col-xl-3">
-                                        <label for="status" class="col-form-label text-red">thời hạn bán</label>
-                                    </div>
-                                    <div class="col-xl-9">
-                                        <div class="d-flex justify-content-between align-items-center gap-2">
-                                            <p-calendar formControlName="saleStartDate" dataType="string"
-                                                variant="filled" [showIcon]="true" readonlyInput="true"
-                                                dateFormat="yy/mm/dd"
-                                                [ngClass]="{'ng-invalid ng-dirty': submitted && f['saleStartDate'].errors }" />
-                                            <span>~</span>
-                                            <p-calendar formControlName="saleEndDate" dataType="string" variant="filled"
-                                                [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd"
-                                                [ngClass]="{'ng-invalid ng-dirty': submitted && f['saleEndDate'].errors }" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="row align-items-center py-1">
-                                    <div class="col-xl-3">
-                                        <label for="supplyAmt" class="col-form-label">Giá cung cấp</label>
-                                    </div>
-                                    <div class="col-auto">
-                                        <input type="number" id="supplyAmt" class="form-control"
-                                            formControlName="supplyAmt"
-                                            [ngClass]="{'is-invalid': submitted && f['supplyAmt'].errors }">
-                                    </div>
-                                    <div class="col-auto">
-                                        <span>VNĐ</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="row align-items-center py-1">
-                                    <div class="col-xl-3">
-                                        <label for="retailAmt" class="col-form-label">Giá khách hàng</label>
-                                    </div>
-                                    <div class="col-auto">
-                                        <input type="number" id="retailAmt" class="form-control"
-                                            formControlName="retailAmt"
-                                            [ngClass]="{'is-invalid': submitted && f['retailAmt'].errors }">
-                                    </div>
-                                    <div class="col-auto">
-                                        <span>VNĐ</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="row align-items-center py-1">
-                                    <div class="col-xl-3">
-                                        <label for="tax" class="col-form-label">Thuế</label>
-                                    </div>
-                                    <div class="col-auto">
-                                        <input type="number" id="tax" class="form-control" formControlName="tax"
-                                            [ngClass]="{'is-invalid': submitted && f['tax'].errors }">
-                                    </div>
-                                    <div class="col-auto">
-                                        <span>%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <span class="col-12 h4 pt-3 text-primary">
-                Thông tin khuyến mãi và sự kiện
-            </span>
-
-            <div class="col-12">
-                <div class="row border border-dark mx-auto">
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-12">
-                                <div class="row align-items-center py-1">
-                                    <div class="col-xl-3">
-                                        <label for="status" class="col-form-label">Sản phẩm mới</label>
-                                    </div>
-                                    <div class="col-xl-9">
-                                        <div class="d-flex justify-content-between align-items-center gap-2">
-                                            <p-calendar formControlName="newStartDate" dataType="string"
-                                                variant="filled" [showIcon]="true" readonlyInput="true"
-                                                dateFormat="yy/mm/dd" />
-                                            <span>~</span>
-                                            <p-calendar formControlName="newEndDate" dataType="string" variant="filled"
-                                                [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="row align-items-center py-1">
-                                    <div class="col-xl-3">
-                                        <label for="status" class="col-form-label">Sản phẩm tốt nhất</label>
-                                    </div>
-                                    <div class="col-xl-9">
-                                        <div class="d-flex justify-content-between align-items-center gap-2">
-                                            <p-calendar formControlName="bestStartDate" dataType="string"
-                                                variant="filled" [showIcon]="true" readonlyInput="true"
-                                                dateFormat="yy/mm/dd" />
-                                            <span>~</span>
-                                            <p-calendar formControlName="bestEndDate" dataType="string" variant="filled"
-                                                [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="row align-items-center py-1">
-                                    <div class="col-xl-3">
-                                        <label for="status" class="col-form-label">Sản phẩm khuyến mãi</label>
-                                    </div>
-                                    <div class="col-xl-9">
-                                        <div class="d-flex justify-content-between align-items-center gap-2">
-                                            <p-calendar formControlName="promotionStartDate" dataType="string"
-                                                variant="filled" [showIcon]="true" readonlyInput="true"
-                                                dateFormat="yy/mm/dd" />
-                                            <span>~</span>
-                                            <p-calendar formControlName="promotionEndDate" dataType="string"
-                                                variant="filled" [showIcon]="true" readonlyInput="true"
-                                                dateFormat="yy/mm/dd" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- @if (f['id'].value > 0) {
-                                <div class="col-auto d-flex justify-content-center align-items-center">
-                                    <input class="form-check-input" type="checkbox" formControlName="used">
-                                    <label class="form-check-label ms-3 text-dark">Sử dụng</label>
-                                </div>
-                            } -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <span class="col-12 h4 pt-3 text-primary">
-                Thông tin giới thiệu
-            </span>
-
-            <div class="col-12">
-                <div class="row border border-dark mx-auto">
-                    <div class="col-12">
-                        <label for="intro" class="form-label mt-1">Giới thiệu</label>
-                        <p-editor #editor1 id="intro" (onInit)="editorOnInit($event, 'qlHTMLId1')"
-                            formControlName="intro" [style]="{ height: '500px' }">
-                            <ng-template pTemplate="header">
-                                <span class="ql-formats">
-                                    <button type="button" class="ql-bold" aria-label="Bold" title="Bold"></button>
-                                    <button type="button" class="ql-italic" aria-label="Italic" title="Italic"></button>
-                                    <button type="button" class="ql-underline" aria-label="Underline"
-                                        title="Underline"></button>
-                                    <button type="button" class="ql-strike" aria-label="Strike" title="Strike"></button>
-                                    <button type="button" class="ql-blockquote" aria-label="Blockquote"
-                                        title="Blockquote"></button>
-                                    <button type="button" class="ql-code-block" aria-label="Code-block"
-                                        title="Code-block"></button>
-                                    <button type="button" class="ql-link" aria-label="Link" title="Link"></button>
-                                    <button type="button" class="ql-image" aria-label="Image" title="Image"></button>
-                                    <button type="button" class="ql-video" aria-label="Video" title="Video"></button>
-                                    <button type="button" class="ql-formula" aria-label="Formula"
-                                        title="Formula"></button>
-                                    <button class="ql-script" value="sub" title="sub"></button>
-                                    <button class="ql-script" value="super" title="super"></button>
-                                    <button class="ql-list" value="ordered" type="button" title="ordered"></button>
-                                    <button class="ql-list" value="bullet" type="button" title="bullet"></button>
-                                    <button class="ql-list" value="check" type="button" title="check"></button>
-                                    <button class="ql-align" value=""></button>
-                                    <button class="ql-align" value="center" title="center"></button>
-                                    <button class="ql-align" value="right" title="right"></button>
-                                    <button class="ql-align" value="justify" title="justify"></button>
-                                    <button class="ql-header" value="1" type="button"></button>
-                                    <button class="ql-header" value="2" type="button"></button>
-                                    <button class="ql-indent" value="-1" type="button"></button>
-                                    <button class="ql-indent" value="+1" type="button"></button>
-                                    <button class="ql-direction" value="rtl" type="button"></button>
-                                    <select class="ql-size">
-                                        <option value="small"></option>
-                                        <option selected></option>
-                                        <option value="large"></option>
-                                        <option value="huge"></option>
-                                    </select>
-                                    <select class="ql-header">
-                                        <option value="1"></option>
-                                        <option value="2"></option>
-                                        <option value="3"></option>
-                                        <option value="4"></option>
-                                        <option value="5"></option>
-                                        <option value="6"></option>
-                                        <option selected>Header</option>
-                                    </select>
-                                    <select class="ql-color">
-                                        <option selected="selected"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option value="#ffffff"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                    <select class="ql-background">
-                                        <option value="#000000"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option selected="selected"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                </span>
-                                <span class="ql-formats">
-                                    <button class="ql-html" value="html" id="qlHTMLId1">HTML</button>
-                                </span>
-                            </ng-template>
-                        </p-editor>
-                    </div>
-
-                    <div class="col-12 py-3">
-                        <label for="introEng" class="form-label">Giới thiệu (tiếng anh)</label>
-                        <p-editor #editor2 (onInit)="editorOnInit($event, 'qlHTMLId2')" formControlName="introEng"
-                            [style]="{ height: '500px' }">
-                            <ng-template pTemplate="header">
-                                <span class="ql-formats">
-                                    <button type="button" class="ql-bold" aria-label="Bold"></button>
-                                    <button type="button" class="ql-italic" aria-label="Italic"></button>
-                                    <button type="button" class="ql-underline" aria-label="Underline"></button>
-                                    <button type="button" class="ql-strike" aria-label="Strike"></button>
-                                    <button type="button" class="ql-blockquote" aria-label="Blockquote"></button>
-                                    <button type="button" class="ql-code-block" aria-label="Code-block"></button>
-                                    <button type="button" class="ql-link" aria-label="Link"></button>
-                                    <button type="button" class="ql-image" aria-label="Image"></button>
-                                    <button type="button" class="ql-video" aria-label="Video"></button>
-                                    <button type="button" class="ql-formula" aria-label="Formula"></button>
-                                    <button class="ql-script" value="sub"></button>
-                                    <button class="ql-script" value="super"></button>
-                                    <button class="ql-list" value="ordered" type="button"></button>
-                                    <button class="ql-list" value="bullet" type="button"></button>
-                                    <button class="ql-list" value="check" type="button"></button>
-                                    <button class="ql-align" value=""></button>
-                                    <button class="ql-align" value="center"></button>
-                                    <button class="ql-align" value="right"></button>
-                                    <button class="ql-align" value="justify"></button>
-                                    <button class="ql-header" value="1" type="button"></button>
-                                    <button class="ql-header" value="2" type="button"></button>
-                                    <button class="ql-indent" value="-1" type="button"></button>
-                                    <button class="ql-indent" value="+1" type="button"></button>
-                                    <button class="ql-direction" value="rtl" type="button"></button>
-                                    <select class="ql-size">
-                                        <option value="small"></option>
-                                        <option selected></option>
-                                        <option value="large"></option>
-                                        <option value="huge"></option>
-                                    </select>
-                                    <select class="ql-header">
-                                        <option value="1"></option>
-                                        <option value="2"></option>
-                                        <option value="3"></option>
-                                        <option value="4"></option>
-                                        <option value="5"></option>
-                                        <option value="6"></option>
-                                        <option selected>Header</option>
-                                    </select>
-                                    <select class="ql-color">
-                                        <option selected="selected"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option value="#ffffff"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                    <select class="ql-background">
-                                        <option value="#000000"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option selected="selected"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                </span>
-                                <span class="ql-formats">
-                                    <button class="ql-html" value="html" id="qlHTMLId2">HTML</button>
-                                </span>
-                            </ng-template>
-                        </p-editor>
-                    </div>
-                </div>
-            </div>
-
-            <span class="col-12 h4 pt-3 text-primary">
-                Thông tin lịch trình
-            </span>
-
-            <div class="col-12">
-                <div class="row border border-dark mx-auto">
-                    <div class="col-12">
-                        <label for="intro" class="form-label mt-1">Lịch trình</label>
-                        <p-editor #editor3 id="schedule" (onInit)="editorOnInit($event, 'qlHTMLId3')"
-                            formControlName="schedule" [style]="{ height: '500px' }">
-                            <ng-template pTemplate="header">
-                                <span class="ql-formats">
-                                    <button type="button" class="ql-bold" aria-label="Bold" title="Bold"></button>
-                                    <button type="button" class="ql-italic" aria-label="Italic" title="Italic"></button>
-                                    <button type="button" class="ql-underline" aria-label="Underline"
-                                        title="Underline"></button>
-                                    <button type="button" class="ql-strike" aria-label="Strike" title="Strike"></button>
-                                    <button type="button" class="ql-blockquote" aria-label="Blockquote"
-                                        title="Blockquote"></button>
-                                    <button type="button" class="ql-code-block" aria-label="Code-block"
-                                        title="Code-block"></button>
-                                    <button type="button" class="ql-link" aria-label="Link" title="Link"></button>
-                                    <button type="button" class="ql-image" aria-label="Image" title="Image"></button>
-                                    <button type="button" class="ql-video" aria-label="Video" title="Video"></button>
-                                    <button type="button" class="ql-formula" aria-label="Formula"
-                                        title="Formula"></button>
-                                    <button class="ql-script" value="sub" title="sub"></button>
-                                    <button class="ql-script" value="super" title="super"></button>
-                                    <button class="ql-list" value="ordered" type="button" title="ordered"></button>
-                                    <button class="ql-list" value="bullet" type="button" title="bullet"></button>
-                                    <button class="ql-list" value="check" type="button" title="check"></button>
-                                    <button class="ql-align" value=""></button>
-                                    <button class="ql-align" value="center" title="center"></button>
-                                    <button class="ql-align" value="right" title="right"></button>
-                                    <button class="ql-align" value="justify" title="justify"></button>
-                                    <button class="ql-header" value="1" type="button"></button>
-                                    <button class="ql-header" value="2" type="button"></button>
-                                    <button class="ql-indent" value="-1" type="button"></button>
-                                    <button class="ql-indent" value="+1" type="button"></button>
-                                    <button class="ql-direction" value="rtl" type="button"></button>
-                                    <select class="ql-size">
-                                        <option value="small"></option>
-                                        <option selected></option>
-                                        <option value="large"></option>
-                                        <option value="huge"></option>
-                                    </select>
-                                    <select class="ql-header">
-                                        <option value="1"></option>
-                                        <option value="2"></option>
-                                        <option value="3"></option>
-                                        <option value="4"></option>
-                                        <option value="5"></option>
-                                        <option value="6"></option>
-                                        <option selected>Header</option>
-                                    </select>
-                                    <select class="ql-color">
-                                        <option selected="selected"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option value="#ffffff"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                    <select class="ql-background">
-                                        <option value="#000000"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option selected="selected"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                </span>
-                                <span class="ql-formats">
-                                    <button class="ql-html" value="html" id="qlHTMLId3">HTML</button>
-                                </span>
-                            </ng-template>
-                        </p-editor>
-                    </div>
-
-                    <div class="col-12 py-3">
-                        <label for="scheduleEng" class="form-label">Lịch trình (tiếng anh)</label>
-                        <p-editor #editor4 (onInit)="editorOnInit($event, 'qlHTMLId4')" formControlName="scheduleEng"
-                            [style]="{ height: '500px' }">
-                            <ng-template pTemplate="header">
-                                <span class="ql-formats">
-                                    <button type="button" class="ql-bold" aria-label="Bold"></button>
-                                    <button type="button" class="ql-italic" aria-label="Italic"></button>
-                                    <button type="button" class="ql-underline" aria-label="Underline"></button>
-                                    <button type="button" class="ql-strike" aria-label="Strike"></button>
-                                    <button type="button" class="ql-blockquote" aria-label="Blockquote"></button>
-                                    <button type="button" class="ql-code-block" aria-label="Code-block"></button>
-                                    <button type="button" class="ql-link" aria-label="Link"></button>
-                                    <button type="button" class="ql-image" aria-label="Image"></button>
-                                    <button type="button" class="ql-video" aria-label="Video"></button>
-                                    <button type="button" class="ql-formula" aria-label="Formula"></button>
-                                    <button class="ql-script" value="sub"></button>
-                                    <button class="ql-script" value="super"></button>
-                                    <button class="ql-list" value="ordered" type="button"></button>
-                                    <button class="ql-list" value="bullet" type="button"></button>
-                                    <button class="ql-list" value="check" type="button"></button>
-                                    <button class="ql-align" value=""></button>
-                                    <button class="ql-align" value="center"></button>
-                                    <button class="ql-align" value="right"></button>
-                                    <button class="ql-align" value="justify"></button>
-                                    <button class="ql-header" value="1" type="button"></button>
-                                    <button class="ql-header" value="2" type="button"></button>
-                                    <button class="ql-indent" value="-1" type="button"></button>
-                                    <button class="ql-indent" value="+1" type="button"></button>
-                                    <button class="ql-direction" value="rtl" type="button"></button>
-                                    <select class="ql-size">
-                                        <option value="small"></option>
-                                        <option selected></option>
-                                        <option value="large"></option>
-                                        <option value="huge"></option>
-                                    </select>
-                                    <select class="ql-header">
-                                        <option value="1"></option>
-                                        <option value="2"></option>
-                                        <option value="3"></option>
-                                        <option value="4"></option>
-                                        <option value="5"></option>
-                                        <option value="6"></option>
-                                        <option selected>Header</option>
-                                    </select>
-                                    <select class="ql-color">
-                                        <option selected="selected"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option value="#ffffff"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                    <select class="ql-background">
-                                        <option value="#000000"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option selected="selected"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                </span>
-                                <span class="ql-formats">
-                                    <button class="ql-html" value="html" id="qlHTMLId4">HTML</button>
-                                </span>
-                            </ng-template>
-                        </p-editor>
-                    </div>
-                </div>
-            </div>
-
-            <span class="col-12 h4 pt-3 text-primary">
-                Thông tin điều khoản
-            </span>
-
-            <div class="col-12">
-                <div class="row border border-dark mx-auto">
-                    <div class="col-12">
-                        <label for="policy" class="form-label mt-1">Điều khoản</label>
-                        <p-editor #editor5 id="policy" (onInit)="editorOnInit($event, 'qlHTMLId5')"
-                            formControlName="policy" [style]="{ height: '500px' }">
-                            <ng-template pTemplate="header">
-                                <span class="ql-formats">
-                                    <button type="button" class="ql-bold" aria-label="Bold" title="Bold"></button>
-                                    <button type="button" class="ql-italic" aria-label="Italic" title="Italic"></button>
-                                    <button type="button" class="ql-underline" aria-label="Underline"
-                                        title="Underline"></button>
-                                    <button type="button" class="ql-strike" aria-label="Strike" title="Strike"></button>
-                                    <button type="button" class="ql-blockquote" aria-label="Blockquote"
-                                        title="Blockquote"></button>
-                                    <button type="button" class="ql-code-block" aria-label="Code-block"
-                                        title="Code-block"></button>
-                                    <button type="button" class="ql-link" aria-label="Link" title="Link"></button>
-                                    <button type="button" class="ql-image" aria-label="Image" title="Image"></button>
-                                    <button type="button" class="ql-video" aria-label="Video" title="Video"></button>
-                                    <button type="button" class="ql-formula" aria-label="Formula"
-                                        title="Formula"></button>
-                                    <button class="ql-script" value="sub" title="sub"></button>
-                                    <button class="ql-script" value="super" title="super"></button>
-                                    <button class="ql-list" value="ordered" type="button" title="ordered"></button>
-                                    <button class="ql-list" value="bullet" type="button" title="bullet"></button>
-                                    <button class="ql-list" value="check" type="button" title="check"></button>
-                                    <button class="ql-align" value=""></button>
-                                    <button class="ql-align" value="center" title="center"></button>
-                                    <button class="ql-align" value="right" title="right"></button>
-                                    <button class="ql-align" value="justify" title="justify"></button>
-                                    <button class="ql-header" value="1" type="button"></button>
-                                    <button class="ql-header" value="2" type="button"></button>
-                                    <button class="ql-indent" value="-1" type="button"></button>
-                                    <button class="ql-indent" value="+1" type="button"></button>
-                                    <button class="ql-direction" value="rtl" type="button"></button>
-                                    <select class="ql-size">
-                                        <option value="small"></option>
-                                        <option selected></option>
-                                        <option value="large"></option>
-                                        <option value="huge"></option>
-                                    </select>
-                                    <select class="ql-header">
-                                        <option value="1"></option>
-                                        <option value="2"></option>
-                                        <option value="3"></option>
-                                        <option value="4"></option>
-                                        <option value="5"></option>
-                                        <option value="6"></option>
-                                        <option selected>Header</option>
-                                    </select>
-                                    <select class="ql-color">
-                                        <option selected="selected"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option value="#ffffff"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                    <select class="ql-background">
-                                        <option value="#000000"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option selected="selected"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                </span>
-                                <span class="ql-formats">
-                                    <button class="ql-html" value="html" id="qlHTMLId5">HTML</button>
-                                </span>
-                            </ng-template>
-                        </p-editor>
-                    </div>
-
-                    <div class="col-12 py-3">
-                        <label for="policyEng" class="form-label">Điều khoản (tiếng anh)</label>
-                        <p-editor #editor6 (onInit)="editorOnInit($event, 'qlHTMLId6')" formControlName="policyEng"
-                            [style]="{ height: '500px' }">
-                            <ng-template pTemplate="header">
-                                <span class="ql-formats">
-                                    <button type="button" class="ql-bold" aria-label="Bold"></button>
-                                    <button type="button" class="ql-italic" aria-label="Italic"></button>
-                                    <button type="button" class="ql-underline" aria-label="Underline"></button>
-                                    <button type="button" class="ql-strike" aria-label="Strike"></button>
-                                    <button type="button" class="ql-blockquote" aria-label="Blockquote"></button>
-                                    <button type="button" class="ql-code-block" aria-label="Code-block"></button>
-                                    <button type="button" class="ql-link" aria-label="Link"></button>
-                                    <button type="button" class="ql-image" aria-label="Image"></button>
-                                    <button type="button" class="ql-video" aria-label="Video"></button>
-                                    <button type="button" class="ql-formula" aria-label="Formula"></button>
-                                    <button class="ql-script" value="sub"></button>
-                                    <button class="ql-script" value="super"></button>
-                                    <button class="ql-list" value="ordered" type="button"></button>
-                                    <button class="ql-list" value="bullet" type="button"></button>
-                                    <button class="ql-list" value="check" type="button"></button>
-                                    <button class="ql-align" value=""></button>
-                                    <button class="ql-align" value="center"></button>
-                                    <button class="ql-align" value="right"></button>
-                                    <button class="ql-align" value="justify"></button>
-                                    <button class="ql-header" value="1" type="button"></button>
-                                    <button class="ql-header" value="2" type="button"></button>
-                                    <button class="ql-indent" value="-1" type="button"></button>
-                                    <button class="ql-indent" value="+1" type="button"></button>
-                                    <button class="ql-direction" value="rtl" type="button"></button>
-                                    <select class="ql-size">
-                                        <option value="small"></option>
-                                        <option selected></option>
-                                        <option value="large"></option>
-                                        <option value="huge"></option>
-                                    </select>
-                                    <select class="ql-header">
-                                        <option value="1"></option>
-                                        <option value="2"></option>
-                                        <option value="3"></option>
-                                        <option value="4"></option>
-                                        <option value="5"></option>
-                                        <option value="6"></option>
-                                        <option selected>Header</option>
-                                    </select>
-                                    <select class="ql-color">
-                                        <option selected="selected"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option value="#ffffff"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                    <select class="ql-background">
-                                        <option value="#000000"></option>
-                                        <option value="#e60000"></option>
-                                        <option value="#ff9900"></option>
-                                        <option value="#ffff00"></option>
-                                        <option value="#008a00"></option>
-                                        <option value="#0066cc"></option>
-                                        <option value="#9933ff"></option>
-                                        <option selected="selected"></option>
-                                        <option value="#facccc"></option>
-                                        <option value="#ffebcc"></option>
-                                        <option value="#ffffcc"></option>
-                                        <option value="#cce8cc"></option>
-                                        <option value="#cce0f5"></option>
-                                        <option value="#ebd6ff"></option>
-                                        <option value="#bbbbbb"></option>
-                                        <option value="#f06666"></option>
-                                        <option value="#ffc266"></option>
-                                        <option value="#ffff66"></option>
-                                        <option value="#66b966"></option>
-                                        <option value="#66a3e0"></option>
-                                        <option value="#c285ff"></option>
-                                        <option value="#888888"></option>
-                                        <option value="#a10000"></option>
-                                        <option value="#b26b00"></option>
-                                        <option value="#b2b200"></option>
-                                        <option value="#006100"></option>
-                                        <option value="#0047b2"></option>
-                                        <option value="#6b24b2"></option>
-                                        <option value="#444444"></option>
-                                        <option value="#5c0000"></option>
-                                        <option value="#663d00"></option>
-                                        <option value="#666600"></option>
-                                        <option value="#003700"></option>
-                                        <option value="#002966"></option>
-                                        <option value="#3d1466"></option>
-                                    </select>
-                                </span>
-                                <span class="ql-formats">
-                                    <button class="ql-html" value="html" id="qlHTMLId6">HTML</button>
-                                </span>
-                            </ng-template>
-                        </p-editor>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="col-12 col-xl-4">
-        <div class="row g-3 product-xl-fixed">
-            <span class="col-12 h4 d-flex justify-content-center align-items-center text-primary">
-                Danh sách sản phẩm
-            </span>
-            <div class="col-12">
-                <div class="row border border-dark">
-                    <div class="col-12 pt-1">
-                        <div class="table overflow-auto" style="height: 400px;" (scroll)="onScroll($event)">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center text-nowrap py-2">Mã sản phẩm</th>
-                                        <th class="text-center text-nowrap py-2">Tên</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for (item of products; track item.id) {
-                                    <tr role="button" (click)="onClickRow(item)">
-                                        <td class="text-center text-nowrap py-2"
-                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">
-                                            {{
-                                            item.pdtCode }}</td>
-                                        <td class="text-center text-nowrap py-2"
-                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">
-                                            {{
-                                            item.pdtName }}</td>
-                                    </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="card p-fluid">
+    <div class="field grid">
+        <label class="col-12 mb-2 md:col-2 md:mb-0 font-bold text-lg">Sản phẩm</label>
+        <div class="col-12 md:col-10">
+            <p-inputGroup>
+                <input type="text" pInputText placeholder="Tìm kiếm sản phẩm" readonly (click)="onShowProductModal()" [(ngModel)]="query"/>
+                <button type="button" pButton icon="pi pi-search" (click)="onShowProductModal()"></button>
+            </p-inputGroup>
         </div>
     </div>
 </div>
 
-<div class="d-flex justify-content-center gap-3 py-3 position-fixed ps-2" style="bottom: 50px;">
+<form [formGroup]="productForm">
+    <div class="card p-fluid">
+        <p-panel header="Thông tin cơ bản (màu đỏ là trường bắt buộc)" [toggleable]="true" [collapsed]="false">
+            <div class="field grid">
+                <label htmlFor="pdtCode" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Mã sản phẩm</label>
+                <div class="col-12 md:col-6">
+                    <input pInputText id="pdtCode" type="text"
+                        formControlName="pdtCode"
+                        aria-describedby="pdtCode-help"/>
+                </div>
+                <div class="col-12 md:col-4 flex align-items-center">
+                    <small class="text-red-600">
+                        Nếu không nhập, mã sẽ tự động được tạo
+                    </small>
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="pdtName" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Tên sản phẩm</label>
+                <div class="col-12 md:col-10">
+                    <input pInputText id="pdtName" type="text"
+                        formControlName="pdtName"
+                        aria-describedby="pdtName-help"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['pdtName'].errors }"/>
+                    @if (submitted && f['pdtName'].errors) {
+                        @if (f['pdtName'].errors['required']) {
+                            <small id="pdtName-help" class="text-red-600">
+                                Vui lòng nhập tên sản phẩm
+                            </small>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="pdtNameEng" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Tên sản phẩm (tiếng anh)</label>
+                <div class="col-12 md:col-10">
+                    <input pInputText id="pdtNameEng" type="text"
+                        formControlName="pdtNameEng"
+                        aria-describedby="pdtNameEng-help"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['pdtNameEng'].errors }"/>
+                    @if (submitted && f['pdtNameEng'].errors) {
+                        @if (f['pdtNameEng'].errors['required']) {
+                            <small id="pdtNameEng-help" class="text-red-600">
+                                Vui lòng nhập tên sản phẩm (tiếng anh)
+                            </small>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="categoryId" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Danh mục</label>
+                <div class="col-12 md:col-4">
+                    <p-dropdown
+                        [options]="categories"
+                        optionLabel="name"
+                        optionValue="id"
+                        id="categoryId"
+                        placeholder="Chọn danh mục"
+                        [showClear]="true"
+                        formControlName="categoryId"
+                        [checkmark]="true"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['categoryId'].errors }"
+                        >
+
+                    </p-dropdown>
+                </div>
+                <label htmlFor="sort" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Sắp xếp</label>
+                <div class="col-12 md:col-4">
+                    <p-inputNumber
+                        inputId="sort"
+                        formControlName="sort"
+                        min="0"
+                        [showButtons]="true"
+                        buttonLayout="horizontal"
+                        [step]="1"
+                        decrementButtonClass="p-button-danger"
+                        incrementButtonClass="p-button-success"
+                        incrementButtonIcon="pi pi-plus"
+                        decrementButtonIcon="pi pi-minus"
+                        inputStyleClass="text-center"
+                        decrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"
+                        incrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['sort'].errors }"></p-inputNumber>
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="option1" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Thời gian</label>
+                <div class="col-12 md:col-10">
+                    <input pInputText id="option1" type="text"
+                        formControlName="option1"
+                        aria-describedby="option1-help"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['option1'].errors }"/>
+                    @if (submitted && f['option1'].errors) {
+                        @if (f['option1'].errors['required']) {
+                            <small id="option1-help" class="text-red-600">
+                                Vui lòng nhập thời gian
+                            </small>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="option2" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Lịch trình</label>
+                <div class="col-12 md:col-10">
+                    <input pInputText id="option2" type="text"
+                        formControlName="option2"
+                        aria-describedby="option2-help"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['option2'].errors }"/>
+                    @if (submitted && f['option2'].errors) {
+                        @if (f['option2'].errors['required']) {
+                            <small id="option2-help" class="text-red-600">
+                                Vui lòng nhập lịch trình
+                            </small>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="option3" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Phương tiện</label>
+                <div class="col-12 md:col-10">
+                    <input pInputText id="option3" type="text"
+                        formControlName="option3"
+                        aria-describedby="option3-help"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['option3'].errors }"/>
+                    @if (submitted && f['option3'].errors) {
+                        @if (f['option3'].errors['required']) {
+                            <small id="option3-help" class="text-red-600">
+                                Vui lòng nhập phương tiện
+                            </small>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="zones" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Vùng sản phẩm</label>
+                <div class="col-12 md:col-10">
+                    <p-autoComplete
+                        formControlName="zones"
+                        [suggestions]="codeAFiltered"
+                        (completeMethod)="filterCode($event)"
+                        field="codeName"
+                        [multiple]="true">
+                        <ng-template let-code pTemplate="item">
+                            <div class="flex align-items-center p-2">
+                                <span>({{ code.codeCd }}) {{ code.codeName }}</span>
+                            </div>
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+            </div>
+        </p-panel>
+
+        <p-panel header="Thông tin đặt hàng" styleClass="mt-3" [toggleable]="true" [collapsed]="false">
+            <div class="field grid">
+                <label htmlFor="status" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Trạng thái</label>
+                <div class="col-12 md:col-4">
+                    <p-dropdown
+                        [options]="code"
+                        optionLabel="codeName"
+                        optionValue="codeCd"
+                        id="status"
+                        placeholder="Chọn trạng thái"
+                        [showClear]="true"
+                        formControlName="status"
+                        [checkmark]="true"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['status'].errors }"
+                        >
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="status" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Thời hạn bán</label>
+                <div class="col-12 md:col-10">
+                    <div class="flex align-items-center gap-2">
+                        <p-calendar formControlName="saleStartDate" dataType="string"
+                            variant="filled" [showIcon]="true" readonlyInput="true"
+                            dateFormat="yy/mm/dd"
+                            [ngClass]="{'ng-invalid ng-dirty': submitted && f['saleStartDate'].errors }" />
+                        <span>~</span>
+                        <p-calendar formControlName="saleEndDate" dataType="string" variant="filled"
+                            [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd"
+                            [ngClass]="{'ng-invalid ng-dirty': submitted && f['saleEndDate'].errors }" />
+                    </div>
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="supplyAmt" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Giá cung cấp</label>
+                <div class="col-12 md:col-4">
+                    <p-inputNumber
+                        formControlName="supplyAmt"
+                        mode="currency"
+                        inputId="supplyAmt"
+                        currency="VND"
+                        locale="vi-VN" />
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="retailAmt" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Giá khách hàng</label>
+                <div class="col-12 md:col-4">
+                    <p-inputNumber
+                        formControlName="retailAmt"
+                        mode="currency"
+                        inputId="retailAmt"
+                        currency="VND"
+                        locale="vi-VN"
+                        [ngClass]="{'ng-invalid ng-dirty': submitted && f['retailAmt'].errors }"/>
+                </div>
+            </div>
+            <div class="field grid">
+                <label htmlFor="tax" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Thuế</label>
+                <div class="col-12 md:col-4">
+                    <p-inputNumber
+                        formControlName="tax"
+                        inputId="tax"
+                        [min]="0"
+                        [max]="100"
+                        suffix="%" />
+                </div>
+            </div>
+        </p-panel>
+
+        <p-panel header="Thông tin khuyến mãi và sự kiện" styleClass="mt-3" [toggleable]="true" [collapsed]="false">
+            <div class="field grid">
+                <label class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Sản phẩm mới</label>
+                <div class="col-12 md:col-10">
+                    <div class="flex align-items-center gap-2">
+                        <p-calendar formControlName="newStartDate" dataType="string"
+                            variant="filled" [showIcon]="true" readonlyInput="true"
+                            dateFormat="yy/mm/dd" />
+                        <span>~</span>
+                        <p-calendar formControlName="newEndDate" dataType="string" variant="filled"
+                            [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd" />
+                    </div>
+                </div>
+            </div>
+            <div class="field grid">
+                <label class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Sản phẩm tốt nhất</label>
+                <div class="col-12 md:col-10">
+                    <div class="flex align-items-center gap-2">
+                        <p-calendar formControlName="bestStartDate" dataType="string"
+                            variant="filled" [showIcon]="true" readonlyInput="true"
+                            dateFormat="yy/mm/dd" />
+                        <span>~</span>
+                        <p-calendar formControlName="bestEndDate" dataType="string" variant="filled"
+                            [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd" />
+                    </div>
+                </div>
+            </div>
+            <div class="field grid">
+                <label class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Sản phẩm khuyến mãi</label>
+                <div class="col-12 md:col-10">
+                    <div class="flex align-items-center gap-2">
+                        <p-calendar formControlName="promotionStartDate" dataType="string"
+                            variant="filled" [showIcon]="true" readonlyInput="true"
+                            dateFormat="yy/mm/dd" />
+                        <span>~</span>
+                        <p-calendar formControlName="promotionEndDate" dataType="string"
+                            variant="filled" [showIcon]="true" readonlyInput="true"
+                            dateFormat="yy/mm/dd" />
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+
+        <p-panel header="Thông tin giới thiệu" styleClass="mt-3" [toggleable]="true" [collapsed]="false">
+            <div class="field grid">
+                <label class="col-12 mb-2 font-bold">Giới thiệu</label>
+                <div class="col-12">
+                    <p-editor #editor1 id="intro" (onInit)="editorOnInit($event, 'qlHTMLId1')"
+                        formControlName="intro" [style]="{ height: '500px' }">
+                        <ng-template pTemplate="header">
+                            <span class="ql-formats">
+                                <button type="button" class="ql-bold" aria-label="Bold" title="Bold"></button>
+                                <button type="button" class="ql-italic" aria-label="Italic" title="Italic"></button>
+                                <button type="button" class="ql-underline" aria-label="Underline"
+                                    title="Underline"></button>
+                                <button type="button" class="ql-strike" aria-label="Strike" title="Strike"></button>
+                                <button type="button" class="ql-blockquote" aria-label="Blockquote"
+                                    title="Blockquote"></button>
+                                <button type="button" class="ql-code-block" aria-label="Code-block"
+                                    title="Code-block"></button>
+                                <button type="button" class="ql-link" aria-label="Link" title="Link"></button>
+                                <button type="button" class="ql-image" aria-label="Image" title="Image"></button>
+                                <button type="button" class="ql-video" aria-label="Video" title="Video"></button>
+                                <button type="button" class="ql-formula" aria-label="Formula"
+                                    title="Formula"></button>
+                                <button class="ql-script" value="sub" title="sub"></button>
+                                <button class="ql-script" value="super" title="super"></button>
+                                <button class="ql-list" value="ordered" type="button" title="ordered"></button>
+                                <button class="ql-list" value="bullet" type="button" title="bullet"></button>
+                                <button class="ql-list" value="check" type="button" title="check"></button>
+                                <button class="ql-align" value=""></button>
+                                <button class="ql-align" value="center" title="center"></button>
+                                <button class="ql-align" value="right" title="right"></button>
+                                <button class="ql-align" value="justify" title="justify"></button>
+                                <button class="ql-header" value="1" type="button"></button>
+                                <button class="ql-header" value="2" type="button"></button>
+                                <button class="ql-indent" value="-1" type="button"></button>
+                                <button class="ql-indent" value="+1" type="button"></button>
+                                <button class="ql-direction" value="rtl" type="button"></button>
+                                <select class="ql-size">
+                                    <option value="small"></option>
+                                    <option selected></option>
+                                    <option value="large"></option>
+                                    <option value="huge"></option>
+                                </select>
+                                <select class="ql-header">
+                                    <option value="1"></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option value="4"></option>
+                                    <option value="5"></option>
+                                    <option value="6"></option>
+                                    <option selected>Header</option>
+                                </select>
+                                <select class="ql-color">
+                                    <option selected="selected"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option value="#ffffff"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                                <select class="ql-background">
+                                    <option value="#000000"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option selected="selected"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-html" value="html" id="qlHTMLId1">HTML</button>
+                            </span>
+                        </ng-template>
+                    </p-editor>
+                </div>
+            </div>
+            <div class="field grid">
+                <label class="col-12 mb-2 font-bold">Giới thiệu (tiếng anh)</label>
+                <div class="col-12">
+                    <p-editor #editor2 (onInit)="editorOnInit($event, 'qlHTMLId2')" formControlName="introEng"
+                        [style]="{ height: '500px' }">
+                        <ng-template pTemplate="header">
+                            <span class="ql-formats">
+                                <button type="button" class="ql-bold" aria-label="Bold"></button>
+                                <button type="button" class="ql-italic" aria-label="Italic"></button>
+                                <button type="button" class="ql-underline" aria-label="Underline"></button>
+                                <button type="button" class="ql-strike" aria-label="Strike"></button>
+                                <button type="button" class="ql-blockquote" aria-label="Blockquote"></button>
+                                <button type="button" class="ql-code-block" aria-label="Code-block"></button>
+                                <button type="button" class="ql-link" aria-label="Link"></button>
+                                <button type="button" class="ql-image" aria-label="Image"></button>
+                                <button type="button" class="ql-video" aria-label="Video"></button>
+                                <button type="button" class="ql-formula" aria-label="Formula"></button>
+                                <button class="ql-script" value="sub"></button>
+                                <button class="ql-script" value="super"></button>
+                                <button class="ql-list" value="ordered" type="button"></button>
+                                <button class="ql-list" value="bullet" type="button"></button>
+                                <button class="ql-list" value="check" type="button"></button>
+                                <button class="ql-align" value=""></button>
+                                <button class="ql-align" value="center"></button>
+                                <button class="ql-align" value="right"></button>
+                                <button class="ql-align" value="justify"></button>
+                                <button class="ql-header" value="1" type="button"></button>
+                                <button class="ql-header" value="2" type="button"></button>
+                                <button class="ql-indent" value="-1" type="button"></button>
+                                <button class="ql-indent" value="+1" type="button"></button>
+                                <button class="ql-direction" value="rtl" type="button"></button>
+                                <select class="ql-size">
+                                    <option value="small"></option>
+                                    <option selected></option>
+                                    <option value="large"></option>
+                                    <option value="huge"></option>
+                                </select>
+                                <select class="ql-header">
+                                    <option value="1"></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option value="4"></option>
+                                    <option value="5"></option>
+                                    <option value="6"></option>
+                                    <option selected>Header</option>
+                                </select>
+                                <select class="ql-color">
+                                    <option selected="selected"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option value="#ffffff"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                                <select class="ql-background">
+                                    <option value="#000000"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option selected="selected"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-html" value="html" id="qlHTMLId2">HTML</button>
+                            </span>
+                        </ng-template>
+                    </p-editor>
+                </div>
+            </div>
+        </p-panel>
+        <p-panel header="Thông tin lịch trình" styleClass="mt-3" [toggleable]="true" [collapsed]="false">
+            <div class="field grid">
+                <label class="col-12 mb-2 font-bold">Lịch trình</label>
+                <div class="col-12">
+                    <p-editor #editor3 id="schedule" (onInit)="editorOnInit($event, 'qlHTMLId3')"
+                        formControlName="schedule" [style]="{ height: '500px' }">
+                        <ng-template pTemplate="header">
+                            <span class="ql-formats">
+                                <button type="button" class="ql-bold" aria-label="Bold" title="Bold"></button>
+                                <button type="button" class="ql-italic" aria-label="Italic" title="Italic"></button>
+                                <button type="button" class="ql-underline" aria-label="Underline"
+                                    title="Underline"></button>
+                                <button type="button" class="ql-strike" aria-label="Strike" title="Strike"></button>
+                                <button type="button" class="ql-blockquote" aria-label="Blockquote"
+                                    title="Blockquote"></button>
+                                <button type="button" class="ql-code-block" aria-label="Code-block"
+                                    title="Code-block"></button>
+                                <button type="button" class="ql-link" aria-label="Link" title="Link"></button>
+                                <button type="button" class="ql-image" aria-label="Image" title="Image"></button>
+                                <button type="button" class="ql-video" aria-label="Video" title="Video"></button>
+                                <button type="button" class="ql-formula" aria-label="Formula"
+                                    title="Formula"></button>
+                                <button class="ql-script" value="sub" title="sub"></button>
+                                <button class="ql-script" value="super" title="super"></button>
+                                <button class="ql-list" value="ordered" type="button" title="ordered"></button>
+                                <button class="ql-list" value="bullet" type="button" title="bullet"></button>
+                                <button class="ql-list" value="check" type="button" title="check"></button>
+                                <button class="ql-align" value=""></button>
+                                <button class="ql-align" value="center" title="center"></button>
+                                <button class="ql-align" value="right" title="right"></button>
+                                <button class="ql-align" value="justify" title="justify"></button>
+                                <button class="ql-header" value="1" type="button"></button>
+                                <button class="ql-header" value="2" type="button"></button>
+                                <button class="ql-indent" value="-1" type="button"></button>
+                                <button class="ql-indent" value="+1" type="button"></button>
+                                <button class="ql-direction" value="rtl" type="button"></button>
+                                <select class="ql-size">
+                                    <option value="small"></option>
+                                    <option selected></option>
+                                    <option value="large"></option>
+                                    <option value="huge"></option>
+                                </select>
+                                <select class="ql-header">
+                                    <option value="1"></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option value="4"></option>
+                                    <option value="5"></option>
+                                    <option value="6"></option>
+                                    <option selected>Header</option>
+                                </select>
+                                <select class="ql-color">
+                                    <option selected="selected"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option value="#ffffff"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                                <select class="ql-background">
+                                    <option value="#000000"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option selected="selected"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-html" value="html" id="qlHTMLId3">HTML</button>
+                            </span>
+                        </ng-template>
+                    </p-editor>
+                </div>
+            </div>
+            <div class="field grid">
+                <label class="col-12 mb-2 font-bold">Lịch trình (tiếng anh)</label>
+                <div class="col-12">
+                    <p-editor #editor4 (onInit)="editorOnInit($event, 'qlHTMLId4')" formControlName="scheduleEng"
+                        [style]="{ height: '500px' }">
+                        <ng-template pTemplate="header">
+                            <span class="ql-formats">
+                                <button type="button" class="ql-bold" aria-label="Bold"></button>
+                                <button type="button" class="ql-italic" aria-label="Italic"></button>
+                                <button type="button" class="ql-underline" aria-label="Underline"></button>
+                                <button type="button" class="ql-strike" aria-label="Strike"></button>
+                                <button type="button" class="ql-blockquote" aria-label="Blockquote"></button>
+                                <button type="button" class="ql-code-block" aria-label="Code-block"></button>
+                                <button type="button" class="ql-link" aria-label="Link"></button>
+                                <button type="button" class="ql-image" aria-label="Image"></button>
+                                <button type="button" class="ql-video" aria-label="Video"></button>
+                                <button type="button" class="ql-formula" aria-label="Formula"></button>
+                                <button class="ql-script" value="sub"></button>
+                                <button class="ql-script" value="super"></button>
+                                <button class="ql-list" value="ordered" type="button"></button>
+                                <button class="ql-list" value="bullet" type="button"></button>
+                                <button class="ql-list" value="check" type="button"></button>
+                                <button class="ql-align" value=""></button>
+                                <button class="ql-align" value="center"></button>
+                                <button class="ql-align" value="right"></button>
+                                <button class="ql-align" value="justify"></button>
+                                <button class="ql-header" value="1" type="button"></button>
+                                <button class="ql-header" value="2" type="button"></button>
+                                <button class="ql-indent" value="-1" type="button"></button>
+                                <button class="ql-indent" value="+1" type="button"></button>
+                                <button class="ql-direction" value="rtl" type="button"></button>
+                                <select class="ql-size">
+                                    <option value="small"></option>
+                                    <option selected></option>
+                                    <option value="large"></option>
+                                    <option value="huge"></option>
+                                </select>
+                                <select class="ql-header">
+                                    <option value="1"></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option value="4"></option>
+                                    <option value="5"></option>
+                                    <option value="6"></option>
+                                    <option selected>Header</option>
+                                </select>
+                                <select class="ql-color">
+                                    <option selected="selected"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option value="#ffffff"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                                <select class="ql-background">
+                                    <option value="#000000"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option selected="selected"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-html" value="html" id="qlHTMLId4">HTML</button>
+                            </span>
+                        </ng-template>
+                    </p-editor>
+                </div>
+            </div>
+        </p-panel>
+        <p-panel header="Thông tin điều khoản" styleClass="mt-3" [toggleable]="true" [collapsed]="false">
+            <div class="field grid">
+                <label class="col-12 mb-2 font-bold">Điều khoản</label>
+                <div class="col-12">
+                    <p-editor #editor5 id="policy" (onInit)="editorOnInit($event, 'qlHTMLId5')"
+                        formControlName="policy" [style]="{ height: '500px' }">
+                        <ng-template pTemplate="header">
+                            <span class="ql-formats">
+                                <button type="button" class="ql-bold" aria-label="Bold" title="Bold"></button>
+                                <button type="button" class="ql-italic" aria-label="Italic" title="Italic"></button>
+                                <button type="button" class="ql-underline" aria-label="Underline"
+                                    title="Underline"></button>
+                                <button type="button" class="ql-strike" aria-label="Strike" title="Strike"></button>
+                                <button type="button" class="ql-blockquote" aria-label="Blockquote"
+                                    title="Blockquote"></button>
+                                <button type="button" class="ql-code-block" aria-label="Code-block"
+                                    title="Code-block"></button>
+                                <button type="button" class="ql-link" aria-label="Link" title="Link"></button>
+                                <button type="button" class="ql-image" aria-label="Image" title="Image"></button>
+                                <button type="button" class="ql-video" aria-label="Video" title="Video"></button>
+                                <button type="button" class="ql-formula" aria-label="Formula"
+                                    title="Formula"></button>
+                                <button class="ql-script" value="sub" title="sub"></button>
+                                <button class="ql-script" value="super" title="super"></button>
+                                <button class="ql-list" value="ordered" type="button" title="ordered"></button>
+                                <button class="ql-list" value="bullet" type="button" title="bullet"></button>
+                                <button class="ql-list" value="check" type="button" title="check"></button>
+                                <button class="ql-align" value=""></button>
+                                <button class="ql-align" value="center" title="center"></button>
+                                <button class="ql-align" value="right" title="right"></button>
+                                <button class="ql-align" value="justify" title="justify"></button>
+                                <button class="ql-header" value="1" type="button"></button>
+                                <button class="ql-header" value="2" type="button"></button>
+                                <button class="ql-indent" value="-1" type="button"></button>
+                                <button class="ql-indent" value="+1" type="button"></button>
+                                <button class="ql-direction" value="rtl" type="button"></button>
+                                <select class="ql-size">
+                                    <option value="small"></option>
+                                    <option selected></option>
+                                    <option value="large"></option>
+                                    <option value="huge"></option>
+                                </select>
+                                <select class="ql-header">
+                                    <option value="1"></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option value="4"></option>
+                                    <option value="5"></option>
+                                    <option value="6"></option>
+                                    <option selected>Header</option>
+                                </select>
+                                <select class="ql-color">
+                                    <option selected="selected"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option value="#ffffff"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                                <select class="ql-background">
+                                    <option value="#000000"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option selected="selected"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-html" value="html" id="qlHTMLId5">HTML</button>
+                            </span>
+                        </ng-template>
+                    </p-editor>
+                </div>
+            </div>
+            <div class="field grid">
+                <label class="col-12 mb-2 font-bold">Điều khoản (tiếng anh)</label>
+                <div class="col-12">
+                    <p-editor #editor6 (onInit)="editorOnInit($event, 'qlHTMLId6')" formControlName="policyEng"
+                        [style]="{ height: '500px' }">
+                        <ng-template pTemplate="header">
+                            <span class="ql-formats">
+                                <button type="button" class="ql-bold" aria-label="Bold"></button>
+                                <button type="button" class="ql-italic" aria-label="Italic"></button>
+                                <button type="button" class="ql-underline" aria-label="Underline"></button>
+                                <button type="button" class="ql-strike" aria-label="Strike"></button>
+                                <button type="button" class="ql-blockquote" aria-label="Blockquote"></button>
+                                <button type="button" class="ql-code-block" aria-label="Code-block"></button>
+                                <button type="button" class="ql-link" aria-label="Link"></button>
+                                <button type="button" class="ql-image" aria-label="Image"></button>
+                                <button type="button" class="ql-video" aria-label="Video"></button>
+                                <button type="button" class="ql-formula" aria-label="Formula"></button>
+                                <button class="ql-script" value="sub"></button>
+                                <button class="ql-script" value="super"></button>
+                                <button class="ql-list" value="ordered" type="button"></button>
+                                <button class="ql-list" value="bullet" type="button"></button>
+                                <button class="ql-list" value="check" type="button"></button>
+                                <button class="ql-align" value=""></button>
+                                <button class="ql-align" value="center"></button>
+                                <button class="ql-align" value="right"></button>
+                                <button class="ql-align" value="justify"></button>
+                                <button class="ql-header" value="1" type="button"></button>
+                                <button class="ql-header" value="2" type="button"></button>
+                                <button class="ql-indent" value="-1" type="button"></button>
+                                <button class="ql-indent" value="+1" type="button"></button>
+                                <button class="ql-direction" value="rtl" type="button"></button>
+                                <select class="ql-size">
+                                    <option value="small"></option>
+                                    <option selected></option>
+                                    <option value="large"></option>
+                                    <option value="huge"></option>
+                                </select>
+                                <select class="ql-header">
+                                    <option value="1"></option>
+                                    <option value="2"></option>
+                                    <option value="3"></option>
+                                    <option value="4"></option>
+                                    <option value="5"></option>
+                                    <option value="6"></option>
+                                    <option selected>Header</option>
+                                </select>
+                                <select class="ql-color">
+                                    <option selected="selected"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option value="#ffffff"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                                <select class="ql-background">
+                                    <option value="#000000"></option>
+                                    <option value="#e60000"></option>
+                                    <option value="#ff9900"></option>
+                                    <option value="#ffff00"></option>
+                                    <option value="#008a00"></option>
+                                    <option value="#0066cc"></option>
+                                    <option value="#9933ff"></option>
+                                    <option selected="selected"></option>
+                                    <option value="#facccc"></option>
+                                    <option value="#ffebcc"></option>
+                                    <option value="#ffffcc"></option>
+                                    <option value="#cce8cc"></option>
+                                    <option value="#cce0f5"></option>
+                                    <option value="#ebd6ff"></option>
+                                    <option value="#bbbbbb"></option>
+                                    <option value="#f06666"></option>
+                                    <option value="#ffc266"></option>
+                                    <option value="#ffff66"></option>
+                                    <option value="#66b966"></option>
+                                    <option value="#66a3e0"></option>
+                                    <option value="#c285ff"></option>
+                                    <option value="#888888"></option>
+                                    <option value="#a10000"></option>
+                                    <option value="#b26b00"></option>
+                                    <option value="#b2b200"></option>
+                                    <option value="#006100"></option>
+                                    <option value="#0047b2"></option>
+                                    <option value="#6b24b2"></option>
+                                    <option value="#444444"></option>
+                                    <option value="#5c0000"></option>
+                                    <option value="#663d00"></option>
+                                    <option value="#666600"></option>
+                                    <option value="#003700"></option>
+                                    <option value="#002966"></option>
+                                    <option value="#3d1466"></option>
+                                </select>
+                            </span>
+                            <span class="ql-formats">
+                                <button class="ql-html" value="html" id="qlHTMLId6">HTML</button>
+                            </span>
+                        </ng-template>
+                    </p-editor>
+                </div>
+            </div>
+        </p-panel>
+    </div>
+</form>
+
+<!-- <div class="d-flex justify-content-center gap-3 py-3 position-fixed ps-2" style="bottom: 50px;">
     <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
     <button class="btn btn-gray border border-secondary bg-oil-lavender text-dark" (click)="onReset()">Reset</button>
     @if (productCode.length > 0) {
         <button class="btn btn-gray border border-secondary bg-red text-white" (click)="onDelete($event)">Delete</button>
     }
-</div>
+</div> -->
 <p-toast position="bottom-right" key="br" />
 <p-confirmDialog />
+
+<button class="layout-config-button p-link" type="button" style="top: 57%;" (click)="onSubmit()">
+    <i class="pi pi-save"></i>
+</button>
+
+<button class="layout-config-button p-link" type="button" style="top: 64%;" (click)="onReset()">
+    <i class="pi pi-refresh"></i>
+</button>
+
+@if (productCode.length > 0) {
+    <button class="layout-config-button p-link" type="button" style="top: 72%;" (click)="onDelete($event)">
+        <i class="pi pi-trash"></i>
+    </button>
+}
+
 
 <app-product-modal [visible]="visible"
                 (invisible)="onCloseProductModal($event)"
