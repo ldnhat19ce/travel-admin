@@ -1,16 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
-import { ProductService } from '../../../../../services/product.service';
 import { ProductAmtService } from '../../../../../services/product-amt.service';
 import { Product } from '../../../../../model/product.model';
 import { ProductAmt } from '../../../../../model/product-amt.model';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProductModalComponent } from '../../../../general/modal/product-modal/product-modal.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { PanelModule } from 'primeng/panel';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { ButtonModule } from 'primeng/button';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { TableModule } from 'primeng/table';
+import { productSignal } from '../../../../../store/product-sidebar.store';
 
 @Component({
     selector: 'app-product-amt',
@@ -22,7 +28,13 @@ import { ProductModalComponent } from '../../../../general/modal/product-modal/p
         FormsModule,
         CalendarModule,
         ConfirmDialogModule,
-        ProductModalComponent
+        ProductModalComponent,
+        InputTextModule,
+        PanelModule,
+        InputGroupModule,
+        ButtonModule,
+        InputNumberModule,
+        TableModule
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './product-amt.component.html',
@@ -30,23 +42,16 @@ import { ProductModalComponent } from '../../../../general/modal/product-modal/p
 })
 export class ProductAmtComponent implements OnInit {
     private _formBuilder = inject(FormBuilder);
-    private _productService = inject(ProductService);
     private _productAmtService = inject(ProductAmtService);
     private _messageService = inject(MessageService);
     private _confirmationService = inject(ConfirmationService);
-
-    first: number = 0;
-    rows: number = 20;
-    totalRecords: number = 0;
 
     productCode: string = "";
     query: string = "";
 
     submitted: boolean = false;
-    isLoading: boolean = false;
+    loading: boolean = false;
     visible: boolean = false;
-
-    products: Product[] = [] as Product[];
 
     productAmt: ProductAmt[] = [] as ProductAmt[];
 
@@ -64,22 +69,21 @@ export class ProductAmtComponent implements OnInit {
         supplyAmt: [0],
     });
 
+    constructor() {
+        effect(() => {
+            let product: Product = productSignal();
+            if(product.pdtCode !== null && product.pdtCode !== undefined) {
+                this.onClickRow(product);
+                productSignal.set({} as Product);
+            }
+        }, { allowSignalWrites: true });
+    }
+
     ngOnInit(): void {
-        this.getListProduct();
     }
 
     get f(): { [key: string]: AbstractControl } {
         return this.productAmtForm.controls;
-    }
-
-    onScroll(event: any) {
-        const bottom =
-            Math.round(event.target.scrollHeight - event.target.scrollTop) ===
-            event.target.clientHeight;
-        if (bottom && !this.isLoading) {
-            this.first += 1;
-            this.getListProduct();
-        }
     }
 
     onClickRow(item: Product) {
@@ -241,36 +245,13 @@ export class ProductAmtComponent implements OnInit {
         });
     }
 
-    private getListProduct() {
-        this.isLoading = true;
-        this._productService
-            .getPageProduct(this.getParamSearchProduct())
-            .subscribe((res) => {
-                if (res !== null && res !== undefined) {
-                    let productResult = res.body?.result || [];
-                    if (productResult.length <= 0) {
-                        this.isLoading = true;
-                    } else {
-                        this.products.push(...productResult);
-                        this.totalRecords = res.body?.total || 0;
-                        this.isLoading = false;
-                    }
-                }
-            });
-    }
-
     private getListProductAmt(productCode: string) {
+        this.loading = true;
         this._productAmtService.getListProductAmt(productCode).subscribe(res => {
             if(res !== null && res !== undefined) {
                 this.productAmt = res.body || [];
+                this.loading = false;
             }
         });
-    }
-
-    private getParamSearchProduct() {
-        return {
-            page: this.first + 1,
-            limit: this.rows,
-        };
     }
 }

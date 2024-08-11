@@ -18,6 +18,11 @@ import { DialogModule } from 'primeng/dialog';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProductModalComponent } from '../../../../general/modal/product-modal/product-modal.component';
+import { ButtonModule } from 'primeng/button';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputTextModule } from 'primeng/inputtext';
+import { PanelModule } from 'primeng/panel';
+import { TableModule } from 'primeng/table';
 
 @Component({
     selector: 'app-product-related',
@@ -30,7 +35,12 @@ import { ProductModalComponent } from '../../../../general/modal/product-modal/p
         DragDropModule,
         DialogModule,
         ConfirmDialogModule,
-        ProductModalComponent
+        ProductModalComponent,
+        InputTextModule,
+        PanelModule,
+        InputGroupModule,
+        ButtonModule,
+        TableModule
     ],
     providers: [MessageService, ConfirmationService],
     styles: [
@@ -39,6 +49,10 @@ import { ProductModalComponent } from '../../../../general/modal/product-modal/p
                 [pDraggable] {
                     cursor: move;
                 }
+            }
+
+            ::ng-deep .p-datatable-wrapper {
+                min-height: calc(100vh - 90px) !important;
             }
         `,
     ],
@@ -254,7 +268,7 @@ export class ProductRelatedComponent implements OnInit {
         this.getAvailableProduct();
         this.getRelationProduct();
 
-        this.visible = false;
+        this.productModalVisible = false;
         this.query = item.pdtName;
     }
 
