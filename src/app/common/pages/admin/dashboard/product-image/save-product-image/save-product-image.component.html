@@ -1,115 +1,86 @@
-<div class="row g-3">
-    <div class="col-12 col-xl-8">
-        <div class="row border mx-1">
-            <div class="col-12">
-                <span class="h3 col-12 p-3">Sản phẩm</span>
-                <div class="input-group py-2">
-                    <input class="form-control border border-primary" type="text" placeholder="Tìm kiếm sản phẩm" readonly (click)="onShowProductModal()" [(ngModel)]="query" >
-                    <button class="btn bg-white border border-primary rounded-0 ms-n5 cursor-pointer" type="button" (click)="onShowProductModal()">
-                        <i class="ti ti-search"></i>
-                    </button>
-                </div>
-            </div>
-            <span class="h3 col-12 p-3">Hình ảnh chính</span>
-            <div class="col-12">
-                <file-pond #larger
-                    [options]="pondOptions"
-                    (onaddfile)="onAddFile($event, 'LARGE', 'L-1')"
-                    (onremovefile)="onRemoveFile($event, 'LARGE', 'L-1')"
-                    >
-                </file-pond>
-            </div>
-            <span class="h3 col-12 p-3">Hình ảnh thu nhỏ</span>
-            <div class="col-12">
-                <div class="row row-cols-2 row-cols-xl-3 thumb-image">
-                    <file-pond #thumb1
-                        class="col"
-                        [options]="pondOptions"
-                        (onaddfile)="onAddFile($event, 'THUMB', 'T-1')"
-                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-1')"
-                        >
-                    </file-pond>
-                    <file-pond #thumb2
-                        class="col"
-                        [options]="pondOptions"
-                        (onaddfile)="onAddFile($event, 'THUMB', 'T-2')"
-                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-2')"
-                        >
-                    </file-pond>
-                    <file-pond #thumb3
-                        class="col"
-                        [options]="pondOptions"
-                        (onaddfile)="onAddFile($event, 'THUMB', 'T-3')"
-                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-3')"
-                        >
-                    </file-pond>
-                    <file-pond #thumb4
-                        class="col"
-                        [options]="pondOptions"
-                        (onaddfile)="onAddFile($event, 'THUMB', 'T-4')"
-                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-4')"
-                        >
-                    </file-pond>
-                    <file-pond #thumb5
-                        class="col"
-                        [options]="pondOptions"
-                        (onaddfile)="onAddFile($event, 'THUMB', 'T-5')"
-                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-5')"
-                        >
-                    </file-pond>
-                    <file-pond #thumb6
-                        class="col"
-                        [options]="pondOptions"
-                        (onaddfile)="onAddFile($event, 'THUMB', 'T-6')"
-                        (onremovefile)="onRemoveFile($event, 'THUMB', 'T-6')"
-                        >
-                    </file-pond>
-                </div>
-            </div>
-            <div class="col-12 d-flex justify-content-center gap-3 py-3">
-                <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
-                <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-xl-4">
-        <div class="row g-3 product-xl-fixed">
-            <span class="col-12 h4 d-flex justify-content-center align-items-center text-primary">
-                Danh sách sản phẩm
-            </span>
-            <div class="col-12">
-                <div class="row border border-dark">
-                    <div class="col-12 pt-1">
-                        <div class="table overflow-auto" style="height: 500px;" (scroll)="onScroll($event)">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center text-nowrap py-2">Mã sản phẩm</th>
-                                        <th class="text-center text-nowrap py-2">Tên</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for (item of products; track item.id) {
-                                    <tr role="button" (click)="onClickRow(item)">
-                                        <td class="text-center text-nowrap py-2"
-                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">
-                                            {{
-                                            item.pdtCode }}</td>
-                                        <td class="text-center text-nowrap py-2"
-                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">
-                                            {{
-                                            item.pdtName }}</td>
-                                    </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="card p-fluid">
+    <div class="field grid">
+        <label class="col-12 mb-2 md:col-2 md:mb-0 font-bold text-lg">Sản phẩm</label>
+        <div class="col-12 md:col-10">
+            <p-inputGroup>
+                <input type="text" pInputText placeholder="Tìm kiếm sản phẩm" readonly (click)="onShowProductModal()" [(ngModel)]="query"/>
+                <button type="button" pButton icon="pi pi-search" (click)="onShowProductModal()"></button>
+            </p-inputGroup>
         </div>
     </div>
 </div>
+
+<div class="card p-fluid">
+    <p-panel header="Hình ảnh chính">
+        <file-pond #larger
+            [options]="pondOptions"
+            (onaddfile)="onAddFile($event, 'LARGE', 'L-1')"
+            (onremovefile)="onRemoveFile($event, 'LARGE', 'L-1')"
+            >
+        </file-pond>
+    </p-panel>
+
+    <p-panel header="Hình ảnh thu nhỏ">
+        <div class="grid">
+            <div class="col-6 md:col-4 thumb-image">
+                <file-pond #thumb1
+                    [options]="pondOptions"
+                    (onaddfile)="onAddFile($event, 'THUMB', 'T-1')"
+                    (onremovefile)="onRemoveFile($event, 'THUMB', 'T-1')"
+                    >
+                </file-pond>
+            </div>
+            <div class="col-6 md:col-4 thumb-image">
+                <file-pond #thumb2
+                    [options]="pondOptions"
+                    (onaddfile)="onAddFile($event, 'THUMB', 'T-2')"
+                    (onremovefile)="onRemoveFile($event, 'THUMB', 'T-2')"
+                    >
+                </file-pond>
+            </div>
+            <div class="col-6 md:col-4 thumb-image">
+                <file-pond #thumb3
+                    [options]="pondOptions"
+                    (onaddfile)="onAddFile($event, 'THUMB', 'T-3')"
+                    (onremovefile)="onRemoveFile($event, 'THUMB', 'T-3')"
+                    >
+                </file-pond>
+            </div>
+            <div class="col-6 md:col-4 thumb-image">
+                <file-pond #thumb4
+                    [options]="pondOptions"
+                    (onaddfile)="onAddFile($event, 'THUMB', 'T-4')"
+                    (onremovefile)="onRemoveFile($event, 'THUMB', 'T-4')"
+                    >
+                </file-pond>
+            </div>
+            <div class="col-6 md:col-4 thumb-image">
+                <file-pond #thumb5
+                    [options]="pondOptions"
+                    (onaddfile)="onAddFile($event, 'THUMB', 'T-5')"
+                    (onremovefile)="onRemoveFile($event, 'THUMB', 'T-5')"
+                    >
+                </file-pond>
+            </div>
+            <div class="col-6 md:col-4 thumb-image">
+                <file-pond #thumb6
+                    [options]="pondOptions"
+                    (onaddfile)="onAddFile($event, 'THUMB', 'T-6')"
+                    (onremovefile)="onRemoveFile($event, 'THUMB', 'T-6')"
+                    >
+                </file-pond>
+            </div>
+        </div>
+    </p-panel>
+</div>
+
+<button class="layout-config-button p-link" type="button" style="top: 57%;" (click)="onSubmit()">
+    <i class="pi pi-save"></i>
+</button>
+
+<button class="layout-config-button p-link" type="button" style="top: 64%;" (click)="onReset()">
+    <i class="pi pi-refresh"></i>
+</button>
 
 <p-toast position="bottom-right" key="br" />
 

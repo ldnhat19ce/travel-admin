@@ -1,15 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { LanguageUtil } from './common/utils/language.util';
 import { LocalStorageService } from './common/services/local-storage.service';
+import { LanguageUtil } from './common/utils/language.util';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [
-        RouterOutlet
-    ],
+    imports: [RouterOutlet],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
 })

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { ProductService } from '../../../../../services/product.service';
 import { Product } from '../../../../../model/product.model';
 import { ToastModule } from 'primeng/toast';
@@ -21,6 +21,14 @@ import { ProductZone } from '../../../../../model/product-zone.model';
 import { ProductZoneService } from '../../../../../services/product-zone.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProductModalComponent } from '../../../../general/modal/product-modal/product-modal.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { PanelModule } from 'primeng/panel';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { SidebarModule } from '../../../../../../layout/sidebar/sidebar.module';
+import { productSignal } from '../../../../../store/product-sidebar.store';
 
 interface AutoCompleteCompleteEvent {
     originalEvent: Event;
@@ -40,7 +48,14 @@ interface AutoCompleteCompleteEvent {
         EditorModule,
         AutoCompleteModule,
         ConfirmDialogModule,
-        ProductModalComponent
+        ProductModalComponent,
+        InputTextModule,
+        PanelModule,
+        InputGroupModule,
+        ButtonModule,
+        DropdownModule,
+        InputNumberModule,
+        SidebarModule
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-product.component.html',
@@ -56,8 +71,6 @@ export class SaveProductComponent implements OnInit {
     private _productZoneService = inject(ProductZoneService);
     private _confirmationService = inject(ConfirmationService);
 
-    products: Product[] = [] as Product[];
-
     categories: Category[] = [] as Category[];
 
     productZones: ProductZone[] = [] as ProductZone[];
@@ -67,9 +80,6 @@ export class SaveProductComponent implements OnInit {
     codeA: Code[] = [] as Code[];
     codeAFiltered: Code[] = [] as Code[];
 
-    first: number = 0;
-    rows: number = 20;
-    totalRecords: number = 0;
     categoryIdSelected: number = 0;
 
     statusSelected: string = "";
@@ -87,7 +97,7 @@ export class SaveProductComponent implements OnInit {
         pdtCode: [''],
         sort: [0, Validators.required],
         used: [false],
-        categoryId: ['', Validators.required],
+        categoryId: [0, Validators.required],
         status: ['', Validators.required],
         option1: [''],
         option2: [''],
@@ -113,13 +123,22 @@ export class SaveProductComponent implements OnInit {
         zones: [[]]
     });
 
+    constructor() {
+        effect(() => {
+            let product: Product = productSignal();
+            if(product.pdtCode !== null && product.pdtCode !== undefined) {
+                this.onClickRow(product);
+                productSignal.set({} as Product);
+            }
+        }, { allowSignalWrites: true });
+    }
+
     get f(): { [key: string]: AbstractControl } {
         return this.productForm.controls;
     }
 
     ngOnInit(): void {
         this.getCategory();
-        this.getProduct();
         this.getListCode();
         this.getCodeA();
     }
@@ -138,15 +157,15 @@ export class SaveProductComponent implements OnInit {
         this.codeAFiltered = filtered;
     }
 
-    onScroll(event: any) {
-        const bottom =
-            Math.round(event.target.scrollHeight - event.target.scrollTop) ===
-            event.target.clientHeight;
-        if (bottom && !this.isLoading) {
-            this.first += 1;
-            this.getProduct();
-        }
-    }
+    // onScroll(event: any) {
+    //     const bottom =
+    //         Math.round(event.target.scrollHeight - event.target.scrollTop) ===
+    //         event.target.clientHeight;
+    //     if (bottom && !this.isLoading) {
+    //         this.first += 1;
+    //         this.getProduct();
+    //     }
+    // }
 
     onShowProductModal() {
         this.visible = true;
@@ -174,10 +193,6 @@ export class SaveProductComponent implements OnInit {
                             life: 3000,
                         });
                         this.onReset();
-
-                        this.products = [];
-                        this.first = 0;
-                        this.getProduct();
                     }
                 },
                 error: (err: HttpErrorResponse) => {
@@ -204,10 +219,6 @@ export class SaveProductComponent implements OnInit {
                             life: 3000,
                         });
                         this.onReset();
-
-                        this.products = [];
-                        this.first = 0;
-                        this.getProduct();
                     }
                 },
                 error: (err: HttpErrorResponse) => {
@@ -292,9 +303,6 @@ export class SaveProductComponent implements OnInit {
                                 life: 3000,
                             });
                             this.onReset();
-                            this.products = [];
-                            this.first = 0;
-                            this.getProduct();
                         } else {
                             this._messageService.add({
                                 severity: 'danger',
@@ -429,31 +437,6 @@ export class SaveProductComponent implements OnInit {
                 }
             });
         }
-    }
-
-    private getProduct() {
-        this.isLoading = true;
-        this._productService
-            .getPageProduct(this.getParamSearchProduct())
-            .subscribe((res) => {
-                if (res !== null && res !== undefined) {
-                    let productResult = res.body?.result || [];
-                    if (productResult.length <= 0) {
-                        this.isLoading = true;
-                    } else {
-                        this.products.push(...productResult);
-                        this.totalRecords = res.body?.total || 0;
-                        this.isLoading = false;
-                    }
-                }
-            });
-    }
-
-    private getParamSearchProduct() {
-        return {
-            page: this.first + 1,
-            limit: this.rows,
-        };
     }
 
     private getCategory() {

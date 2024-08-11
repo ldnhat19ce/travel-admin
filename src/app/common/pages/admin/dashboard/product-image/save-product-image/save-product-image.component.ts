@@ -1,7 +1,5 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, effect, inject, OnInit, ViewChild } from '@angular/core';
 import { Post } from '../../../../../model/post.model';
-import { PageEvent } from '../../../../../model/page-event.model';
-import { ValidationUtil } from '../../../../../utils/validation.util';
 import { CommonModule } from '@angular/common';
 import { FilePondModule } from 'ngx-filepond';
 import { FilePond, FilePondOptions } from 'filepond';
@@ -11,9 +9,13 @@ import { environment } from '../../../../../../../environments/environment';
 import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { ProductService } from '../../../../../services/product.service';
 import { Product } from '../../../../../model/product.model';
 import { ProductModalComponent } from '../../../../general/modal/product-modal/product-modal.component';
+import { ButtonModule } from 'primeng/button';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputTextModule } from 'primeng/inputtext';
+import { PanelModule } from 'primeng/panel';
+import { productSignal } from '../../../../../store/product-sidebar.store';
 
 @Component({
     selector: 'app-save-product-image',
@@ -23,7 +25,11 @@ import { ProductModalComponent } from '../../../../general/modal/product-modal/p
         FilePondModule,
         ToastModule,
         ProductModalComponent,
-        FormsModule
+        FormsModule,
+        InputGroupModule,
+        ButtonModule,
+        InputTextModule,
+        PanelModule
     ],
     providers: [MessageService],
     templateUrl: './save-product-image.component.html',
@@ -31,17 +37,11 @@ import { ProductModalComponent } from '../../../../general/modal/product-modal/p
 })
 export class SaveProductImageComponent implements OnInit {
     private _formBuilder = inject(FormBuilder);
-    private _productService = inject(ProductService);
     private _productImageService = inject(ProductImageService);
     private _messageService = inject(MessageService);
 
     post: Post[] = [] as Post[];
-    products: Product[] = [] as Product[];
     productImage: ProductImage[] = [] as ProductImage[];
-
-    first: number = 0;
-    rows: number = 20;
-    totalRecords: number = 0;
 
     productCode: string = "";
     query: string = "";
@@ -91,23 +91,21 @@ export class SaveProductImageComponent implements OnInit {
         fileList: this._formBuilder.array([]),
     });
 
+    constructor() {
+        effect(() => {
+            let product: Product = productSignal();
+            if(product.pdtCode !== null && product.pdtCode !== undefined) {
+                this.onClickRow(product);
+                productSignal.set({} as Product);
+            }
+        }, { allowSignalWrites: true });
+    }
+
     get fileList(): FormArray {
         return this.postImageForm.get('fileList') as FormArray;
     }
 
     ngOnInit(): void {
-        this.getProduct();
-    }
-
-    onPageChange(event: PageEvent) {
-        if (
-            ValidationUtil.isNotNullAndNotUndefined(event.first) &&
-            ValidationUtil.isNotNullAndNotUndefined(event.rows)
-        ) {
-            this.first = event.first || 0;
-            this.rows = event.rows || 1;
-            this.getProduct();
-        }
     }
 
     onAddFile(event: any, type: string, kindNo: string) {
@@ -153,16 +151,6 @@ export class SaveProductImageComponent implements OnInit {
         }
     }
 
-    onScroll(event: any) {
-        const bottom =
-            Math.round(event.target.scrollHeight - event.target.scrollTop) ===
-            event.target.clientHeight;
-        if (bottom && !this.isLoading) {
-            this.first += 1;
-            this.getProduct();
-        }
-    }
-
     onClickRow(item: Product) {
         this.productCode = item.pdtCode;
         this.getProductImage();
@@ -202,7 +190,6 @@ export class SaveProductImageComponent implements OnInit {
                     life: 3000,
                 });
 
-                this.first = 0;
                 this.onReset();
             }
         });
@@ -228,31 +215,6 @@ export class SaveProductImageComponent implements OnInit {
         this.thumb4.removeFile();
         this.thumb5.removeFile();
         this.thumb6.removeFile();
-    }
-
-    private getProduct() {
-        this.isLoading = true;
-        this._productService
-            .getPageProduct(this.getParamSearchProduct())
-            .subscribe((res) => {
-                if (res !== null && res !== undefined) {
-                    let productResult = res.body?.result || [];
-                    if (productResult.length <= 0) {
-                        this.isLoading = true;
-                    } else {
-                        this.products.push(...productResult);
-                        this.totalRecords = res.body?.total || 0;
-                        this.isLoading = false;
-                    }
-                }
-            });
-    }
-
-    private getParamSearchProduct() {
-        return {
-            page: this.first + 1,
-            limit: this.rows,
-        };
     }
 
     private getProductImage() {

@@ -1,16 +1,14 @@
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
-    <app-sidebar></app-sidebar>
-
-    <div class="body-wrapper vh-100">
-        <app-header></app-header>
-        <div class="container-fluid pb-5">
+<div class="layout-wrapper"  [ngClass]="containerClass">
+    <app-header></app-header>
+    <div class="layout-sidebar">
+        <app-sidebar></app-sidebar>
+    </div>
+    <div class="layout-main-container">
+        <div class="layout-main">
             <router-outlet></router-outlet>
         </div>
         <app-footer></app-footer>
     </div>
-
-    <button type="button" class="btn btn-danger rounded-circle btn-lg" id="btn-back-to-top">
-        <i class="ti ti-arrow-up"></i>
-    </button>
+    <app-product-sidebar></app-product-sidebar>
+    <div class="layout-mask"></div>
 </div>
