@@ -1,190 +1,131 @@
-<div class="row g-3">
-    <div class="col-12 col-xl-8">
-        <div>
-            <span class="h3 col-12 py-3 text-primary">Sản phẩm</span>
-            <div class="input-group py-2">
-                <input class="form-control border border-primary" type="text" placeholder="Tìm kiếm sản phẩm" readonly (click)="onShowProductModal()" [(ngModel)]="query" >
-                <button class="btn bg-white border border-primary rounded-0 ms-n5 cursor-pointer" type="button" (click)="onShowProductModal()">
-                    <i class="ti ti-search"></i>
-                </button>
-            </div>
-        </div>
-        <form class="row g-3" [formGroup]="productAmtForm">
-            <span class="col-12 h4 pt-3">
-                Nhập dữ liệu (màu đỏ là trường bắt buộc)
-            </span>
-            <div class="col-12">
-                <div class="row border border-dark mx-auto">
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="productCode" class="col-form-label text-red">Mã sản phẩm</label>
-                            </div>
-                            <div class="col-auto">
-                                <input type="text" id="productCode" class="form-control" formControlName="productCode"
-                                [ngClass]="{'is-invalid': submitted && f['productCode'].errors }" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="productName" class="col-form-label">Tên sản phẩm</label>
-                            </div>
-                            <div class="col-xl-9">
-                                <input type="text" id="productName" class="form-control" formControlName="productName"
-                                [ngClass]="{'is-invalid': submitted && f['productName'].errors }" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="status" class="col-form-label text-red">Ngày áp dụng</label>
-                            </div>
-                            <div class="col-xl-9">
-                                <div class="d-flex justify-content-between align-items-center gap-2">
-                                    <p-calendar formControlName="registerDate" dataType="string" variant="filled" [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd" [ngClass]="{'ng-invalid ng-dirty': submitted && f['registerDate'].errors }"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="supplyAmt" class="col-form-label text-red">Giá cung cấp</label>
-                            </div>
-                            <div class="col-auto">
-                                <input type="number" id="supplyAmt" class="form-control" formControlName="supplyAmt"
-                                [ngClass]="{'is-invalid': submitted && f['supplyAmt'].errors }">
-                            </div>
-                            <div class="col-auto">
-                                <span>VNĐ</span>
-                            </div>
-                            <div class="col-auto">
-                                Đơn giá: {{ f['supplyPrice'].value }} / VAT: {{ f['supplyVat'].value }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="retailAmt" class="col-form-label text-red">Giá khách hàng</label>
-                            </div>
-                            <div class="col-auto">
-                                <input type="number" id="retailAmt" class="form-control" formControlName="retailAmt"
-                                [ngClass]="{'is-invalid': submitted && f['retailAmt'].errors }">
-                            </div>
-                            <div class="col-auto">
-                                <span>VNĐ</span>
-                            </div>
-                            <div class="col-auto">
-                                Đơn giá: {{ f['retailPrice'].value }} / VAT: {{ f['retailVat'].value }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row align-items-center py-1">
-                            <div class="col-xl-3">
-                                <label for="tax" class="col-form-label">Thuế</label>
-                            </div>
-                            <div class="col-auto">
-                                <input type="number" id="tax" class="form-control" formControlName="tax"
-                                [ngClass]="{'is-invalid': submitted && f['tax'].errors }">
-                            </div>
-                            <div class="col-auto">
-                                <span>%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 d-flex justify-content-center gap-3 py-3">
-                <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
-                <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
-            </div>
-        </form>
-
-        <div class="row g-3 py-3">
-            <span class="col-12 h4 pt-3">
-                Kết quả tìm
-            </span>
-            <div class="col-12">
-                <div class="table overflow-x-auto">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="text-center text-nowrap py-2"></th>
-                                <th class="text-center text-nowrap py-2">Id</th>
-                                <th class="text-center text-nowrap py-2">Mã sản phẩm</th>
-                                <th class="text-center text-nowrap py-2">Tên</th>
-                                <th class="text-center text-nowrap py-2">Giá cung cấp</th>
-                                <th class="text-center text-nowrap py-2">Giá KH</th>
-                                <th class="text-center text-nowrap py-2">Ngày áp dụng</th>
-                                <th class="text-center text-nowrap py-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (item of productAmt; track item.id) {
-                            <tr>
-                                <td class="text-center text-nowrap py-2" role="button" (click)="onEdit(item)"><i
-                                        class="ti ti-edit"></i></td>
-                                <td class="text-center text-nowrap py-2">{{ item.id }}</td>
-                                <td class="text-center text-nowrap py-2">{{ item.productCode }}</td>
-                                <td class="text-start py-2 text-nowrap">{{ item.productName }}</td>
-                                <td class="text-end text-nowrap py-2">{{ item.supplyAmt }}</td>
-                                <td class="text-end text-nowrap py-2">{{ item.retailAmt }}</td>
-                                <td class="text-end text-nowrap py-2">{{ item.registerDate }}</td>
-                                <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)">
-                                    <i class="ti ti-trash"></i></td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-12 col-xl-4">
-        <div class="row g-3 product-xl-fixed">
-            <span class="col-12 h4 d-flex justify-content-center align-items-center text-primary">
-                Danh sách sản phẩm
-            </span>
-            <div class="col-12">
-                <div class="row border border-dark">
-                    <div class="col-12 pt-1">
-                        <div class="table overflow-auto" style="height: 400px;" (scroll)="onScroll($event)">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center text-nowrap py-2">Mã sản phẩm</th>
-                                        <th class="text-center text-nowrap py-2">Tên</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for (item of products; track item.id) {
-                                    <tr role="button" (click)="onClickRow(item)">
-                                        <td class="text-center text-nowrap py-2"
-                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">
-                                            {{
-                                            item.pdtCode }}</td>
-                                        <td class="text-center text-nowrap py-2"
-                                            [ngClass]="{'bg-primary text-white': productCode === item.pdtCode}">
-                                            {{
-                                            item.pdtName }}</td>
-                                    </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="card p-fluid">
+    <div class="field grid">
+        <label class="col-12 mb-2 md:col-2 md:mb-0 font-bold text-lg">Sản phẩm</label>
+        <div class="col-12 md:col-10">
+            <p-inputGroup>
+                <input type="text" pInputText placeholder="Tìm kiếm sản phẩm" readonly (click)="onShowProductModal()" [(ngModel)]="query"/>
+                <button type="button" pButton icon="pi pi-search" (click)="onShowProductModal()"></button>
+            </p-inputGroup>
         </div>
     </div>
 </div>
+
+<div class="card p-fluid">
+    <p-panel header="Nhập dữ liệu (màu đỏ là trường bắt buộc)" [toggleable]="true" [collapsed]="false" [formGroup]="productAmtForm">
+        <div class="field grid">
+            <label htmlFor="productCode" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Mã sản phẩm</label>
+            <div class="col-12 md:col-6">
+                <input pInputText id="productCode" type="text"
+                    formControlName="productCode"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['productCode'].errors }"
+                    />
+            </div>
+        </div>
+        <div class="field grid">
+            <label htmlFor="productName" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Tên sản phẩm</label>
+            <div class="col-12 md:col-10">
+                <input pInputText id="productName" type="text"
+                    formControlName="productName"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['productName'].errors }"
+                    />
+            </div>
+        </div>
+        <div class="field grid">
+            <label htmlFor="status" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Ngày áp dụng</label>
+            <div class="col-12 md:col-6">
+                <p-calendar formControlName="registerDate" dataType="string" variant="filled" [showIcon]="true" readonlyInput="true" dateFormat="yy/mm/dd" [ngClass]="{'ng-invalid ng-dirty': submitted && f['registerDate'].errors }"/>
+            </div>
+        </div>
+        <div class="field grid">
+            <label htmlFor="supplyAmt" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Giá cung cấp</label>
+            <div class="col-12 md:col-4">
+                <p-inputNumber
+                    formControlName="supplyAmt"
+                    mode="currency"
+                    inputId="supplyAmt"
+                    currency="VND"
+                    locale="vi-VN"
+                    [ngClass]="{'is-invalid': submitted && f['supplyAmt'].errors }" />
+            </div>
+            <div class="col-12 md:col-4 flex align-items-center">
+                Đơn giá: {{ f['supplyPrice'].value }} / VAT: {{ f['supplyVat'].value }}
+            </div>
+        </div>
+        <div class="field grid">
+            <label htmlFor="retailAmt" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Giá khách hàng</label>
+            <div class="col-12 md:col-4">
+                <p-inputNumber
+                    formControlName="retailAmt"
+                    mode="currency"
+                    inputId="retailAmt"
+                    currency="VND"
+                    locale="vi-VN"
+                    [ngClass]="{'is-invalid': submitted && f['retailAmt'].errors }" />
+            </div>
+            <div class="col-12 md:col-4 flex align-items-center">
+                Đơn giá: {{ f['retailAmt'].value }} / VAT: {{ f['retailVat'].value }}
+            </div>
+        </div>
+        <div class="field grid">
+            <label htmlFor="tax" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Thuế</label>
+            <div class="col-12 md:col-4">
+                <p-inputNumber
+                    formControlName="tax"
+                    inputId="tax"
+                    [min]="0"
+                    [max]="100"
+                    suffix="%" />
+            </div>
+        </div>
+    </p-panel>
+    <p-panel header="Kết quả tìm kiếm" styleClass="mt-3" [toggleable]="true" [collapsed]="false">
+        <p-table
+            [value]="productAmt"
+            #dt1
+            scrollDirection="both"
+            [scrollable]="true"
+            [rowHover]="true"
+            styleClass="p-datatable-gridlines"
+            responsiveLayout="scroll"
+            [loading]="loading"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="text-center text-nowrap"></th>
+                    <th class="text-center text-nowrap">Id</th>
+                    <th class="text-center text-nowrap">Mã sản phẩm</th>
+                    <th class="text-center text-nowrap">Tên</th>
+                    <th class="text-center text-nowrap">Giá cung cấp</th>
+                    <th class="text-center text-nowrap">Giá KH</th>
+                    <th class="text-center text-nowrap">Ngày áp dụng</th>
+                    <th class="text-center text-nowrap"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr>
+                    <td class="text-center text-nowrap cursor-pointer" role="button" (click)="onEdit(item)"><i
+                            class="pi pi-eye"></i></td>
+                    <td class="text-center text-nowrap">{{ item.id }}</td>
+                    <td class="text-center text-nowrap">{{ item.productCode }}</td>
+                    <td class="text-start text-nowrap">{{ item.productName }}</td>
+                    <td class="text-end text-nowrap">{{ item.supplyAmt }}</td>
+                    <td class="text-end text-nowrap">{{ item.retailAmt }}</td>
+                    <td class="text-end text-nowrap">{{ item.registerDate }}</td>
+                    <td class="text-center text-nowrap cursor-pointer" (click)="onDelete($event, item)">
+                        <i class="pi pi-trash"></i></td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-panel>
+</div>
+
+<button class="layout-config-button p-link" type="button" style="top: 57%;" (click)="onSubmit()">
+    <i class="pi pi-save"></i>
+</button>
+
+<button class="layout-config-button p-link" type="button" style="top: 64%;" (click)="onReset()">
+    <i class="pi pi-refresh"></i>
+</button>
 
 <p-toast position="bottom-right" key="br" />
 <p-confirmDialog />

@@ -146,3 +146,17 @@ $blueberry_whip: #d1d5db;
     text-wrap: nowrap;
 }
 
+.drop-column {
+    border: 1px solid transparent;
+    transition: border-color .2s;
+
+    &.p-draggable-enter {
+        border-color: var(--primary-color);
+    }
+}
+
+.w {
+    &-fit-content {
+        width: fit-content !important;
+    }
+}

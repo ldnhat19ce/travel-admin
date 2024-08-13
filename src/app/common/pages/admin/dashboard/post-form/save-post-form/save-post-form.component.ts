@@ -14,6 +14,13 @@ import { PageEvent } from '../../../../../model/page-event.model';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BlockUIModule } from 'primeng/blockui';
+import { PanelModule } from 'primeng/panel';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { TableModule } from 'primeng/table';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
     selector: 'app-save-post-form',
@@ -27,7 +34,14 @@ import { BlockUIModule } from 'primeng/blockui';
         PaginatorModule,
         ConfirmDialogModule,
         ProgressSpinnerModule,
-        BlockUIModule
+        BlockUIModule,
+        PanelModule,
+        InputTextModule,
+        InputTextareaModule,
+        ButtonModule,
+        DropdownModule,
+        TableModule,
+        CheckboxModule
     ],
     providers: [
         MessageService,

@@ -9,6 +9,8 @@ import { ValidationUtil } from '../../../../../utils/validation.util';
 import { PageEvent } from '../../../../../model/page-event.model';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-list-post',
@@ -18,7 +20,9 @@ import { ToastModule } from 'primeng/toast';
         PaginatorModule,
         RouterLink,
         ToastModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        TableModule,
+        ButtonModule
     ],
     providers:[
         MessageService,
@@ -38,7 +42,7 @@ export class ListPostComponent implements OnInit {
     rows: number = 10;
     totalRecords: number = 0;
 
-    loaded: boolean = false;
+    loading: boolean = false;
 
     ngOnInit(): void {
         this.getPost();
@@ -93,13 +97,14 @@ export class ListPostComponent implements OnInit {
     }
 
     private getPost() {
+        this.loading = true;
         this._postService
             .getAllPost(this.getParamSearchPost())
             .subscribe((res) => {
                 if (res !== null && res !== undefined) {
                     this.post = res.body?.result || [];
                     this.totalRecords = res.body?.total || 0;
-                    this.loaded = true;
+                    this.loading = false;
                 }
             });
     }

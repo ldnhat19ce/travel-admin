@@ -25,6 +25,12 @@ import { FilePondModule } from 'ngx-filepond';
 import { FilePond, FilePondOptions } from 'filepond';
 import { environment } from '../../../../../../../environments/environment';
 import { AuthenticationService } from '../../../../../services/auth/authentication.service';
+import { PanelModule } from 'primeng/panel';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { CheckboxModule } from 'primeng/checkbox';
+import { TableModule } from 'primeng/table';
 
 @Component({
     selector: 'app-save-post',
@@ -40,6 +46,12 @@ import { AuthenticationService } from '../../../../../services/auth/authenticati
         PaginatorModule,
         RouterLink,
         FilePondModule,
+        PanelModule,
+        ButtonModule,
+        InputTextModule,
+        DropdownModule,
+        CheckboxModule,
+        TableModule
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-post.component.html',

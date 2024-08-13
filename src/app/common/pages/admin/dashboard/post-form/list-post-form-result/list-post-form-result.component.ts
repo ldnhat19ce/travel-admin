@@ -8,13 +8,17 @@ import { CommonModule } from '@angular/common';
 import { FormResult } from '../../../../../model/form-result.model';
 import { PaginatorModule } from 'primeng/paginator';
 import { PageEvent } from '../../../../../model/page-event.model';
+import { TableModule } from 'primeng/table';
+import { PanelModule } from 'primeng/panel';
 
 @Component({
     selector: 'app-list-post-form-result',
     standalone: true,
     imports: [
         CommonModule,
-        PaginatorModule
+        PaginatorModule,
+        TableModule,
+        PanelModule
     ],
     templateUrl: './list-post-form-result.component.html',
     styleUrl: './list-post-form-result.component.scss',
@@ -27,13 +31,14 @@ export class ListPostFormResultComponent implements OnInit {
     postFormResult: PostFormResult[] = [] as PostFormResult[];
     formResults: FormResult[] = [] as FormResult[];
 
+    postSelected: Post = {} as Post;
+
     first: number = 0;
     rows: number = 10;
     totalRecords: number = 0;
     firstPostForm: number = 0;
     rowPostForm: number = 10;
     totalRecordPostForm: number = 0;
-    postId: number = 0;
     postFormId: number = 0;
 
     loaded: boolean = false;
@@ -42,14 +47,14 @@ export class ListPostFormResultComponent implements OnInit {
         this.getPost();
     }
 
-    onShowPostFormResult(postId: number) {
-        this.postId = postId;
+    onShowPostFormResult(event: any) {
+        this.postSelected = event.data;
         this.getPostFormResult();
     }
 
-    onTransformResult(postFormResult: PostFormResult) {
-        this.postFormId = postFormResult.id;
-        this.formResults = JSON.parse(postFormResult.result);
+    onTransformResult(event: any) {
+        this.postFormId = event.data.id;
+        this.formResults = JSON.parse(event.data.result);
     }
 
     onPageChange(event: PageEvent) {
@@ -90,7 +95,7 @@ export class ListPostFormResultComponent implements OnInit {
         this._postFormResultService
             .getPagePostFormResult(
                 this.getParamSearchPostFormResult(),
-                this.postId
+                this.postSelected.id
             )
             .subscribe((res) => {
                 if (ValidationUtil.isNotNullAndNotUndefined(res)) {
