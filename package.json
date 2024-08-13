@@ -36,6 +36,7 @@
         "primeng": "^17.18.7",
         "quill": "^1.3.7",
         "rxjs": "~7.8.0",
+        "travel-admin": "file:",
         "tslib": "^2.3.0",
         "zone.js": "~0.14.3"
     },

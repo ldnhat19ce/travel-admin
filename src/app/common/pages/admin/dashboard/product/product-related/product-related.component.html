@@ -13,8 +13,8 @@
 <div class="card p-fluid">
     <p-panel header="Kéo thả sản phẩm bên trái vào ô bên phải" [toggleable]="true" [collapsed]="false">
         @if (productSelected !== null) {
-            <div class="flex gap-3">
-                <span>
+            <div class="flex gap-3 my-3">
+                <span class="font-bold text-lg">
                     Sản phẩm chính:
                 </span>
                 <span class="font-bold text-red">
@@ -23,7 +23,7 @@
             </div>
         }
         <div class="field grid">
-            <div class="col-12 md:col-6">
+            <div class="col-12 md:col-6 md:border-right-2 border-primary">
                 <p-table
                     [value]="availableProduct"
                     #dt1
@@ -98,21 +98,63 @@
             formControlName="relatedProductCode"
             readonly />
     </div>
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="productName" class="font-semibold w-6rem">Tên sản phẩm</label>
+        <input
+            pInputText
+            id="productName"
+            class="flex-auto"
+            autocomplete="off"
+            formControlName="productName"
+            readonly />
+    </div>
 
-    <div class="d-flex align-items-center gap-3 mb-3">
-        <label for="pdtName" class="form-label text-nowrap">Tên sản phẩm</label>
-        <input id="pdtName" class="form-control" autocomplete="off" readonly formControlName="productName"/>
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="sort" class="font-semibold w-6rem">Sắp xếp</label>
+        <p-inputNumber
+            inputId="sort"
+            formControlName="sort"
+            min="0"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            [step]="1"
+            decrementButtonClass="p-button-danger"
+            incrementButtonClass="p-button-success"
+            incrementButtonIcon="pi pi-plus"
+            decrementButtonIcon="pi pi-minus"
+            inputStyleClass="text-center"
+            decrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"
+            incrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip">
+        </p-inputNumber>
     </div>
-    <div class="d-flex align-items-center gap-3 mb-3">
-        <label for="sort" class="form-label text-nowrap">Sắp xếp</label>
-        <input type="number" id="sort" class="form-control" autocomplete="off" formControlName="sort"/>
-        <label for="sort" class="form-label text-nowrap">Sử dụng</label>
-        <input type="checkbox" id="used" class="form-check-input" autocomplete="off" formControlName="used"/>
+
+    <div class="flex align-items-center gap-3 mb-3">
+        <label for="used" class="font-semibold w-6rem">Sử dụng</label>
+        <p-checkbox
+            formControlName="used"
+            [binary]="true"
+            inputId="used"></p-checkbox>
     </div>
+
     <input type="hidden" formControlName="productCode">
-    <div class="d-flex justify-content-end gap-2">
-        <button class="btn btn-gray border border-secondary" (click)="onCancel()">Đóng</button>
-        <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
+
+    <div class="flex justify-content-end gap-2">
+        <button
+            pButton
+            pRipple
+            label="Lưu thông tin"
+            class="p-button-primary"
+            (click)="onSubmit()"
+            >
+        </button>
+        <button
+            pButton
+            pRipple
+            label="Đóng"
+            class="p-button-secondary"
+            (click)="onCancel()"
+            >
+        </button>
     </div>
 </p-dialog>
 

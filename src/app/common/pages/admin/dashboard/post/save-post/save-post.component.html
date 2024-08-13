@@ -1,34 +1,42 @@
-<div class="row g-3">
-    <div class="col-12">
-        <form class="row g-3" [formGroup]="postForm">
-            <div class="col-12 col-xl-6">
-                <label for="name" class="form-label">Tên</label>
-                <input type="text" id="name" class="form-control" formControlName="name"
-                    [ngClass]="{'is-invalid': submitted && f['name'].errors }">
+<div class="card p-fluid">
+    <p-panel header="Thông tin bài viết" [toggleable]="true" [formGroup]="postForm">
+        <div class="field grid">
+            <label htmlFor="name" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Tên</label>
+            <div class="col-12 md:col-10">
+                <input pInputText id="name" type="text"
+                    formControlName="name"
+                    aria-describedby="name-help"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['name'].errors }"/>
                 @if (submitted && f['name'].errors) {
-                <div class="invalid-feedback">
                     @if (f['name'].errors['required']) {
-                    <div>Vui lòng nhập tên</div>
+                        <small id="name-help" class="text-red-600">
+                            Vui lòng nhập tên
+                        </small>
                     }
-                </div>
                 }
             </div>
-            <div class="col-12 col-xl-6">
-                <label for="nameEng" class="form-label">Tên Tiếng anh</label>
-                <input type="text" id="nameEng" class="form-control" formControlName="nameEng"
-                    [ngClass]="{'is-invalid': submitted && f['nameEng'].errors }">
+        </div>
+        <div class="field grid">
+            <label htmlFor="name" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Tên (Tiếng anh)</label>
+            <div class="col-12 md:col-10">
+                <input pInputText id="nameEng" type="text"
+                    formControlName="nameEng"
+                    aria-describedby="nameEng-help"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['nameEng'].errors }"/>
                 @if (submitted && f['nameEng'].errors) {
-                <div class="invalid-feedback">
                     @if (f['nameEng'].errors['required']) {
-                    <div>Vui lòng nhập tên tiếng anh</div>
+                        <small id="nameEng-help" class="text-red-600">
+                            Vui lòng nhập tên (tiếng anh)
+                        </small>
                     }
-                </div>
                 }
             </div>
-            <div class="col-12">
-                <label for="content" class="form-label">Nội dung</label>
+        </div>
+        <div class="field grid">
+            <label class="col-12 md:col-2 mb-2 font-bold">Nội dung</label>
+            <div class="col-12 md:col-10">
                 <p-editor #editor1 id="content" (onInit)="editorOnInit($event, 'qlHTMLId1')" formControlName="content" [style]="{ height: '500px' }"
-                    [ngClass]="{'is-invalid': submitted && f['content'].errors }">
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['content'].errors }">
                     <ng-template pTemplate="header">
                         <span class="ql-formats">
                             <button type="button" class="ql-bold" aria-label="Bold" title="Bold"></button>
@@ -79,17 +87,20 @@
                     </ng-template>
                 </p-editor>
                 @if (submitted && f['content'].errors) {
-                <div class="invalid-feedback">
+                <div class="text-red-600">
                     @if (f['content'].errors['required']) {
-                    <div>Vui lòng nhập nội dung</div>
+                    <small>Vui lòng nhập nội dung</small>
                     }
                 </div>
                 }
             </div>
-            <div class="col-12">
-                <label for="contentEng" class="form-label">Nội dung Tiếng anh</label>
+        </div>
+
+        <div class="field grid">
+            <label class="col-12 md:col-2 mb-2 font-bold">Nội dung (tiếng anh)</label>
+            <div class="col-12 md:col-10">
                 <p-editor #editor2 (onInit)="editorOnInit($event, 'qlHTMLId2')" formControlName="contentEng" [style]="{ height: '500px' }"
-                    [ngClass]="{'is-invalid': submitted && f['contentEng'].errors }">
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['contentEng'].errors }">
                     <ng-template pTemplate="header">
                         <span class="ql-formats">
                             <button type="button" class="ql-bold" aria-label="Bold"></button>
@@ -140,117 +151,155 @@
                     </ng-template>
                 </p-editor>
                 @if (submitted && f['contentEng'].errors) {
-                <div class="invalid-feedback">
+                <div class="text-red-600">
                     @if (f['contentEng'].errors['required']) {
-                    <div>Vui lòng nhập nội dung tiếng anh</div>
+                    <small>Vui lòng nhập nội dung tiếng anh</small>
                     }
                 </div>
                 }
             </div>
-            <div class="col-12">
-                <label class="form-label">Hình ảnh phía trên</label>
+        </div>
+
+        <div class="field grid">
+            <label class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Hình ảnh phía trên</label>
+            <div class="col-12 md:col-10">
                 <file-pond #topPond
                     [options]="pondOptions"
                     (onaddfile)="pondHandleAddFile($event, 'top')"
                     >
                 </file-pond>
             </div>
-            <div class="col-12">
-                <label class="form-label">Hình ảnh phía dưới</label>
+        </div>
+        <div class="field grid">
+            <label class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Hình ảnh phía dưới</label>
+            <div class="col-12 md:col-10">
                 <file-pond #bottomPond
                     [options]="pondOptions"
                     (onaddfile)="pondHandleAddFile($event, 'bottom')"
                     >
                 </file-pond>
             </div>
-            <div class="col-12 col-xl-3">
-                <label for="sort" class="form-label">Sắp xếp</label>
-                <input type="number" id="sort" value="0" class="form-control" formControlName="sort" min="0">
+        </div>
+        <div class="field grid">
+            <label htmlFor="sort" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Sắp xếp</label>
+            <div class="col-12 md:col-4">
+                <p-inputNumber
+                    inputId="sort"
+                    formControlName="sort"
+                    min="0"
+                    [showButtons]="true"
+                    buttonLayout="horizontal"
+                    [step]="1"
+                    decrementButtonClass="p-button-danger"
+                    incrementButtonClass="p-button-success"
+                    incrementButtonIcon="pi pi-plus"
+                    decrementButtonIcon="pi pi-minus"
+                    inputStyleClass="text-center"
+                    decrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"
+                    incrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['sort'].errors }"></p-inputNumber>
             </div>
-            <div class="col-12 col-xl-3">
-                <label for="categoryId" class="form-label">Thể loại</label>
-                <select id="categoryId" class="form-select" #select (change)="onChangeCategoryId(select.value)"
-                    [ngClass]="{'is-invalid': submitted && f['categoryId'].errors }">
-                    <option value="0" [selected]="categoryIdSelected === 0">Chọn thể loại</option>
-                    @if (categories.length > 0) {
-                    @for (item of categories; track item.id) {
-                    <option [value]="item.id" [selected]="categoryIdSelected === item.id">{{ item | transformCategory }}
-                    </option>
-                    }
-                    }
-                </select>
+            <label htmlFor="categoryId" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Danh mục</label>
+            <div class="col-12 md:col-4">
+                <p-dropdown
+                    [options]="categories"
+                    optionLabel="name"
+                    optionValue="id"
+                    id="categoryId"
+                    placeholder="Chọn danh mục"
+                    [showClear]="true"
+                    formControlName="categoryId"
+                    [checkmark]="true"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['categoryId'].errors }"
+                    >
+
+                </p-dropdown>
                 @if (submitted && f['categoryId'].errors) {
-                <div class="invalid-feedback">
-                    @if (f['categoryId'].errors['required']) {
-                    <div>Vui lòng chọn thể loại</div>
-                    }
-                </div>
+                    <div class="text-red-600">
+                        @if (f['categoryId'].errors['required']) {
+                            <small>Vui lòng chọn thể loại</small>
+                        }
+                    </div>
                 }
             </div>
-
+        </div>
+        <div class="field grid">
             @if (f['id'].value > 0) {
-            <div class="col-auto d-flex justify-content-center align-items-center">
-                <input class="form-check-input" type="checkbox" formControlName="used">
-                <label class="form-check-label ms-3 text-dark">Sử dụng</label>
-            </div>
+                <div class="col-12 md:col-4">
+                    <div class="field-checkbox">
+                        <p-checkbox
+                            formControlName="used"
+                            [binary]="true"
+                            inputId="used"></p-checkbox>
+                        <label for="used">Sử dụng</label>
+                    </div>
+                </div>
             }
 
-            <div class="col-auto d-flex justify-content-center align-items-center">
-                <input class="form-check-input" type="checkbox" formControlName="main">
-                <label class="form-check-label ms-3 text-dark">Bài viết chính của thể loại</label>
+            <div class="col-12 md:col-4">
+                <div class="field-checkbox">
+                    <p-checkbox
+                        formControlName="main"
+                        [binary]="true"
+                        inputId="main"></p-checkbox>
+                    <label for="main">Bài viết chính của thể loại</label>
+                </div>
             </div>
-
-            <div class="col-12 d-flex justify-content-center gap-3 py-3">
-                <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
-                <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="row g-3 mt-3">
-    <div class="col-12">
-        <div class="table overflow-x-auto">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center text-nowrap py-2"></th>
-                        <th class="text-center text-nowrap py-2">Id</th>
-                        <th class="text-center text-nowrap py-2">Thể loại</th>
-                        <th class="text-center text-nowrap py-2">Tên</th>
-                        <th class="text-center text-nowrap py-2">Tên tiếng anh</th>
-                        <th class="text-center text-nowrap py-2">Sắp xếp</th>
-                        <th class="text-center text-nowrap py-2">Sử dụng</th>
-                        <th class="text-center text-nowrap py-2"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (item of post; track item.id) {
-                    <tr>
-                        <td class="text-center text-nowrap py-2" role="button" (click)="onEdit(item)"><i
-                                class="ti ti-edit"></i></td>
-                        <td class="text-center text-nowrap py-2">{{ item.id }}</td>
-                        <td class="text-center text-nowrap py-2">{{ item.categoryName }}</td>
-                        <td class="py-2 text-nowrap">{{ item.name }}</td>
-                        <td class="text-center text-nowrap py-2">{{ item.nameEng }}</td>
-                        <td class="text-center text-nowrap py-2">{{ item.sort }}</td>
-                        <td class="text-center text-nowrap py-2">{{ item.used? 'Sử dụng' : 'Không sử dụng' }}</td>
-                        <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)"><i
-                                class="ti ti-trash"></i></td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
         </div>
-    </div>
+    </p-panel>
 </div>
 
-
-<div class="flex align-items-center justify-content-end">
+<div class="card p-fluid">
+    <p-table
+        [value]="post"
+        #dt1
+        dataKey="id"
+        [rows]="100"
+        scrollDirection="both"
+        [scrollable]="true"
+        [rowHover]="true"
+        styleClass="p-datatable-gridlines"
+        responsiveLayout="scroll"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center text-nowrap"></th>
+                <th class="text-center text-nowrap">Id</th>
+                <th class="text-center text-nowrap">Thể loại</th>
+                <th class="text-center text-nowrap">Tên</th>
+                <th class="text-center text-nowrap">Tên tiếng anh</th>
+                <th class="text-center text-nowrap">Sắp xếp</th>
+                <th class="text-center text-nowrap">Sử dụng</th>
+                <th class="text-center text-nowrap"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+            <tr>
+                <td class="text-center text-nowrap cursor-pointer" (click)="onEdit(item)"><i
+                    class="pi pi-eye"></i></td>
+                <td class="text-center text-nowrap">{{ item.id }}</td>
+                <td class="text-center text-nowrap">{{ item.categoryName }}</td>
+                <td class="text-start text-nowrap">{{ item.name }}</td>
+                <td class="text-center text-nowrap">{{ item.nameEng }}</td>
+                <td class="text-center text-nowrap">{{ item.sort }}</td>
+                <td class="text-center text-nowrap">{{ item.used? 'Sử dụng' : 'Không sử dụng' }}</td>
+                <td class="text-center text-nowrap cursor-pointer" (click)="onDelete($event, item)"><i
+                        class="pi pi-trash"></i></td>
+            </tr>
+        </ng-template>
+    </p-table>
     <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)"
         [showCurrentPageReport]="true" currentPageReportTemplate="{first} - {last} of {totalRecords}"
         [showPageLinks]="false" [showFirstLastIcon]="true"></p-paginator>
 </div>
+
+<button class="layout-config-button p-link" type="button" style="top: 57%;" (click)="onSubmit()">
+    <i class="pi pi-save"></i>
+</button>
+
+<button class="layout-config-button p-link" type="button" style="top: 64%;" (click)="onReset()">
+    <i class="pi pi-refresh"></i>
+</button>
 
 <p-toast position="bottom-right" key="br" />
 <p-confirmDialog />

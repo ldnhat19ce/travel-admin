@@ -22,6 +22,11 @@ import { RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BlockUIModule } from 'primeng/blockui';
+import { PanelModule } from 'primeng/panel';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
     selector: 'app-save-post-form-def',
@@ -35,7 +40,12 @@ import { BlockUIModule } from 'primeng/blockui';
         PaginatorModule,
         RouterLink,
         ProgressSpinnerModule,
-        BlockUIModule
+        BlockUIModule,
+        PanelModule,
+        InputTextModule,
+        ButtonModule,
+        TableModule,
+        DropdownModule
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './save-post-form-def.component.html',

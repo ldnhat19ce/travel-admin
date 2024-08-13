@@ -2,152 +2,173 @@
     <p-progressSpinner></p-progressSpinner>
 </p-blockUI>
 
-<div class="row g-3">
-    <div class="col-12">
-        <form class="row g-3" [formGroup]="postFormDefinition">
-            <div class="col-12 col-xl-6">
-                <label for="defTitle" class="form-label">Tiêu đề</label>
-                <input type="text" id="defTitle" class="form-control" formControlName="defTitle"
-                    [ngClass]="{'is-invalid': submitted && f['defTitle'].errors }">
+<div class="card p-fluid">
+    <p-panel header="Thông tin tiêu đề bài viết" [toggleable]="true" [formGroup]="postFormDefinition">
+        <div class="field grid">
+            <label htmlFor="defTitle" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Tiêu đề</label>
+            <div class="col-12 md:col-10">
+                <input pInputText id="defTitle" type="text"
+                    formControlName="defTitle"
+                    aria-describedby="defTitle-help"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['defTitle'].errors }"/>
                 @if (submitted && f['defTitle'].errors) {
-                <div class="invalid-feedback">
                     @if (f['defTitle'].errors['required']) {
-                    <div>Vui lòng nhập tiêu đề</div>
+                        <small id="defTitle-help" class="text-red-600">
+                            Vui lòng nhập tiêu đề
+                        </small>
                     }
-                </div>
                 }
             </div>
-            <div class="col-12 col-xl-6">
-                <label for="defName1" class="form-label">Tên phía trên</label>
-                <input type="text" id="defName1" class="form-control" formControlName="defName1"
-                    [ngClass]="{'is-invalid': submitted && f['defName1'].errors }">
-                @if (submitted && f['defName1'].errors) {
-                <div class="invalid-feedback">
-                    @if (f['defName1'].errors['required']) {
-                    <div>Vui lòng nhập tên phía trên</div>
-                    }
-                </div>
-                }
-            </div>
-            <div class="col-12 col-xl-6">
-                <label for="defName2" class="form-label">Tên phía dưới</label>
-                <input type="text" id="defName2" class="form-control" formControlName="defName2"
-                    [ngClass]="{'is-invalid': submitted && f['defName2'].errors }">
-                @if (submitted && f['defName2'].errors) {
-                <div class="invalid-feedback">
-                    @if (f['defName2'].errors['required']) {
-                    <div>Vui lòng nhập tên phía dưới</div>
-                    }
-                </div>
-                }
-            </div>
-            <div class="col-12 col-xl-6">
-                <label for="defContent1" class="form-label">Nội dung phía trên</label>
-                <input type="text" id="defContent1" class="form-control" formControlName="defContent1"
-                    [ngClass]="{'is-invalid': submitted && f['defContent1'].errors }">
-                @if (submitted && f['defContent1'].errors) {
-                <div class="invalid-feedback">
-                    @if (f['defContent1'].errors['required']) {
-                    <div>Vui lòng nhập nội dung phía trên</div>
-                    }
-                </div>
-                }
-            </div>
-            <div class="col-12 col-xl-6">
-                <label for="defContent2" class="form-label">Nội dung phía dưới</label>
-                <input type="text" id="defName2" class="form-control" formControlName="defContent2"
-                    [ngClass]="{'is-invalid': submitted && f['defContent2'].errors }">
-                @if (submitted && f['defContent2'].errors) {
-                <div class="invalid-feedback">
-                    @if (f['defContent2'].errors['required']) {
-                    <div>Vui lòng nhập nội dung phía dưới</div>
-                    }
-                </div>
-                }
-            </div>
-            <div class="col-12 col-xl-6">
-                <label for="categoryId" class="form-label">Bài đăng</label>
-                <select id="categoryId" class="form-select" #select (change)="onChangePost(select.value)"
-                    [ngClass]="{'is-invalid': submitted && f['postId'].errors }">
-                    <option value="0" [selected]="postSelected === 0">Chọn bài đăng</option>
-                    @if (post.length > 0) {
-                    @for (item of post; track item.id) {
-                    <option [value]="item.id" [selected]="postSelected === item.id">{{ item.name }}
-                    </option>
-                    }
-                    }
-                </select>
-                @if (submitted && f['postId'].errors) {
-                <div class="invalid-feedback">
-                    @if (f['postId'].errors['required']) {
-                    <div>Vui lòng chọn bài đăng</div>
-                    }
-                </div>
-                }
-            </div>
-
-            <!-- @if (f['id'].value > 0) {
-            <div class="col-auto">
-                <input class="form-check-input" type="checkbox" formControlName="used">
-                <label class="form-check-label ms-3">Sử dụng</label>
-            </div>
-            } -->
-
-            <div class="col-12 d-flex justify-content-center gap-3">
-                <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
-                <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="d-flex justify-content-center align-items-center" [ngClass]="loaded ? 'd-none' : ''">
-    <div class="loader"></div>
-</div>
-
-<div class="row g-3 mt-3" [ngClass]="loaded ? '' : 'd-none'">
-    <div class="col-12">
-        <div class="table overflow-x-auto">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center text-nowrap py-2"></th>
-                        <th class="text-center text-nowrap py-2">Id</th>
-                        <th class="text-center text-nowrap py-2">Tiêu đề</th>
-                        <th class="text-center text-nowrap py-2">Tên phía trên</th>
-                        <th class="text-center text-nowrap py-2">Tên phía dưới</th>
-                        <th class="text-center text-nowrap py-2">Thêm form</th>
-                        <th class="text-center text-nowrap py-2"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (item of postFormDefinitions; track item.id) {
-                    <tr>
-                        <td class="text-center text-nowrap py-2" role="button" (click)="onEdit(item)"><i
-                                class="ti ti-edit"></i></td>
-                        <td class="text-center text-nowrap py-2">{{ item.id }}</td>
-                        <td class="text-center text-nowrap py-2">{{ item.defTitle }}</td>
-                        <td class="py-2 text-nowrap">{{ item.defName1 }}</td>
-                        <td class="text-center text-nowrap py-2">{{ item.defName2 }}</td>
-                        <td class="text-center text-nowrap py-2">
-                            <button class="btn btn-primary" routerLink="/post-form/save/{{ item.id }}">Thêm
-                                Form</button>
-                        </td>
-                        <td class="text-center text-nowrap py-2" role="button" (click)="onDelete($event, item)"><i
-                                class="ti ti-trash"></i></td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
         </div>
-    </div>
+
+        <div class="field grid">
+            <label htmlFor="defName1" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Tên phía trên</label>
+            <div class="col-12 md:col-10">
+                <input pInputText id="defName1" type="text"
+                    formControlName="defName1"
+                    aria-describedby="defName1-help"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['defName1'].errors }"/>
+                @if (submitted && f['defName1'].errors) {
+                    @if (f['defName1'].errors['required']) {
+                        <small id="defName1-help" class="text-red-600">
+                            Vui lòng nhập tên phía trên
+                        </small>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="field grid">
+            <label htmlFor="defName2" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Tên phía dưới</label>
+            <div class="col-12 md:col-10">
+                <input pInputText id="defName2" type="text"
+                    formControlName="defName2"
+                    aria-describedby="defName2-help"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['defName2'].errors }"/>
+                @if (submitted && f['defName2'].errors) {
+                    @if (f['defName2'].errors['required']) {
+                        <small id="defName2-help" class="text-red-600">
+                            Vui lòng nhập tên phía dưới
+                        </small>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="field grid">
+            <label htmlFor="defContent1" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Nội dung phía trên</label>
+            <div class="col-12 md:col-10">
+                <input pInputText id="defContent1" type="text"
+                    formControlName="defContent1"
+                    aria-describedby="defContent1-help"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['defContent1'].errors }"/>
+                @if (submitted && f['defContent1'].errors) {
+                    @if (f['defContent1'].errors['required']) {
+                        <small id="defContent1-help" class="text-red-600">
+                            Vui lòng nhập nội dung phía trên
+                        </small>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="field grid">
+            <label htmlFor="defContent2" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Nội dung phía dưới</label>
+            <div class="col-12 md:col-10">
+                <input pInputText id="defContent2" type="text"
+                    formControlName="defContent2"
+                    aria-describedby="defContent2-help"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['defContent2'].errors }"/>
+                @if (submitted && f['defContent2'].errors) {
+                    @if (f['defContent2'].errors['required']) {
+                        <small id="defContent2-help" class="text-red-600">
+                            Vui lòng nhập nội dung phía dưới
+                        </small>
+                    }
+                }
+            </div>
+        </div>
+
+        <div class="field grid">
+            <label htmlFor="postId" class="col-12 mb-2 md:col-2 md:mb-0 font-bold">Bài đăng</label>
+            <div class="col-12 md:col-4">
+                <p-dropdown
+                    [options]="post"
+                    optionLabel="name"
+                    optionValue="id"
+                    id="postId"
+                    placeholder="Chọn bài đăng"
+                    [showClear]="true"
+                    formControlName="postId"
+                    [checkmark]="true"
+                    [ngClass]="{'ng-invalid ng-dirty': submitted && f['postId'].errors }"
+                    >
+
+                </p-dropdown>
+                @if (submitted && f['postId'].errors) {
+                    <div class="text-red-600">
+                        @if (f['postId'].errors['required']) {
+                            <small>Vui lòng chọn bài đăng</small>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </p-panel>
 </div>
 
-<div class="flex align-items-center justify-content-end">
+<div class="card p-fluid">
+    <p-table
+        [value]="postFormDefinitions"
+        #dt1
+        dataKey="id"
+        [rows]="100"
+        scrollDirection="both"
+        [scrollable]="true"
+        [rowHover]="true"
+        styleClass="p-datatable-gridlines"
+        responsiveLayout="scroll"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="text-center text-nowrap"></th>
+                <th class="text-center text-nowrap">Id</th>
+                <th class="text-center text-nowrap">Tiêu đề</th>
+                <th class="text-center text-nowrap">Tên phía trên</th>
+                <th class="text-center text-nowrap">Tên phía dưới</th>
+                <th class="text-center text-nowrap">Thêm form</th>
+                <th class="text-center text-nowrap"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+            <tr>
+                <td class="text-center text-nowrap" (click)="onEdit(item)"><i
+                    class="pi pi-eye"></i></td>
+                <td class="text-center text-nowrap">{{ item.id }}</td>
+                <td class="text-center text-nowrap">{{ item.defTitle }}</td>
+                <td class="text-nowrap">{{ item.defName1 }}</td>
+                <td class="text-center text-nowrap">{{ item.defName2 }}</td>
+                <td class="text-center text-nowrap">
+                    <button pButton routerLink="/post-form/save/{{ item.id }}" label="Thêm
+                    Form"></button>
+                </td>
+                <td class="text-center text-nowrap" (click)="onDelete($event, item)"><i
+                        class="pi pi-trash"></i></td>
+            </tr>
+        </ng-template>
+    </p-table>
     <p-paginator [first]="first" [rows]="rows" [totalRecords]="totalRecords" (onPageChange)="onPageChange($event)"
         [showCurrentPageReport]="true" currentPageReportTemplate="{first} - {last} of {totalRecords}"
         [showPageLinks]="false" [showFirstLastIcon]="true"></p-paginator>
 </div>
+
+<button class="layout-config-button p-link" type="button" style="top: 57%;" (click)="onSubmit()">
+    <i class="pi pi-save"></i>
+</button>
+
+<button class="layout-config-button p-link" type="button" style="top: 64%;" (click)="onReset()">
+    <i class="pi pi-refresh"></i>
+</button>
 
 <p-toast position="bottom-right" key="br" />
 <p-confirmDialog />

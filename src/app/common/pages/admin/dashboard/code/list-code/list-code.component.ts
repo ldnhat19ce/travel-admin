@@ -9,6 +9,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Error } from '../../../../../model/error.model';
+import { PanelModule } from 'primeng/panel';
+import { TableModule } from 'primeng/table';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
     selector: 'app-list-code',
@@ -19,6 +25,12 @@ import { Error } from '../../../../../model/error.model';
         FormsModule,
         ToastModule,
         ConfirmDialogModule,
+        PanelModule,
+        TableModule,
+        InputTextModule,
+        InputGroupModule,
+        CheckboxModule,
+        InputNumberModule
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './list-code.component.html',
