@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import {
     ReactiveFormsModule,
     FormsModule,
@@ -18,6 +18,15 @@ import { DialogModule } from 'primeng/dialog';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProductModalComponent } from '../../../../general/modal/product-modal/product-modal.component';
+import { ButtonModule } from 'primeng/button';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputTextModule } from 'primeng/inputtext';
+import { PanelModule } from 'primeng/panel';
+import { TableModule } from 'primeng/table';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { CheckboxModule } from 'primeng/checkbox';
+import { RippleModule } from 'primeng/ripple';
+import { productSignal } from '../../../../../store/product-sidebar.store';
 
 @Component({
     selector: 'app-product-related',
@@ -30,7 +39,15 @@ import { ProductModalComponent } from '../../../../general/modal/product-modal/p
         DragDropModule,
         DialogModule,
         ConfirmDialogModule,
-        ProductModalComponent
+        ProductModalComponent,
+        InputTextModule,
+        PanelModule,
+        InputGroupModule,
+        ButtonModule,
+        TableModule,
+        InputNumberModule,
+        CheckboxModule,
+        RippleModule
     ],
     providers: [MessageService, ConfirmationService],
     styles: [
@@ -39,6 +56,10 @@ import { ProductModalComponent } from '../../../../general/modal/product-modal/p
                 [pDraggable] {
                     cursor: move;
                 }
+            }
+
+            ::ng-deep .p-datatable-wrapper {
+                min-height: calc(100vh - 90px) !important;
             }
         `,
     ],
@@ -62,7 +83,6 @@ export class ProductRelatedComponent implements OnInit {
 
     query: string = "";
 
-    isLoading: boolean = false;
     isLoadingAvailable: boolean = false;
     isLoadingSave: boolean = false;
     visible: boolean = false;
@@ -71,8 +91,6 @@ export class ProductRelatedComponent implements OnInit {
     productSelected: Product = {} as Product;
 
     draggedProduct: Product = {} as Product;
-
-    products: Product[] = [] as Product[];
 
     availableProduct: Product[] = [] as Product[];
 
@@ -87,8 +105,17 @@ export class ProductRelatedComponent implements OnInit {
         used: [true],
     });
 
+    constructor() {
+        effect(() => {
+            let product: Product = productSignal();
+            if(product.pdtCode !== null && product.pdtCode !== undefined) {
+                this.onClickRow(product);
+                productSignal.set({} as Product);
+            }
+        }, { allowSignalWrites: true });
+    }
+
     ngOnInit(): void {
-        this.getProduct();
     }
 
     onDragStart(item: Product) {
@@ -254,7 +281,7 @@ export class ProductRelatedComponent implements OnInit {
         this.getAvailableProduct();
         this.getRelationProduct();
 
-        this.visible = false;
+        this.productModalVisible = false;
         this.query = item.pdtName;
     }
 
@@ -263,32 +290,11 @@ export class ProductRelatedComponent implements OnInit {
             Math.round(event.target.scrollHeight - event.target.scrollTop) ===
             event.target.clientHeight;
         if (bottom) {
-            if (!this.isLoading && type === 'P') {
-                this.first += 1;
-                this.getProduct();
-            } else if (!this.isLoadingAvailable && type === 'A') {
+            if (!this.isLoadingAvailable && type === 'A') {
                 this.firstAvailable += 1;
                 this.getAvailableProduct();
             }
         }
-    }
-
-    private getProduct() {
-        this.isLoading = true;
-        this._productService
-            .getPageProduct(this.getParamSearchProduct())
-            .subscribe((res) => {
-                if (res !== null && res !== undefined) {
-                    let productResult = res.body?.result || [];
-                    if (productResult.length <= 0) {
-                        this.isLoading = true;
-                    } else {
-                        this.products.push(...productResult);
-                        this.totalRecords = res.body?.total || 0;
-                        this.isLoading = false;
-                    }
-                }
-            });
     }
 
     private getAvailableProduct() {
@@ -317,13 +323,6 @@ export class ProductRelatedComponent implements OnInit {
                     this.selectedProducts = res.body || [];
                 }
             });
-    }
-
-    private getParamSearchProduct() {
-        return {
-            page: this.first + 1,
-            limit: this.rows,
-        };
     }
 
     private getParamSearchAvailableProduct() {

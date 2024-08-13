@@ -104,9 +104,23 @@ function formOpen() {
         }
     }
 
-  	getDataLeave(userId);
+  	if (String(activityId) === "requester") {
+      getDataLeave(userId, false);
+    }
+
 	getNormalProcess();
   	getBrandName();
+
+  	let btn_reload = document.getElementById("btn_reload");
+	if(btn_reload !== null && btn_reload !== undefined) {
+      	let svgReload = '<svg height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 489.645 489.645" xml:space="preserve"><path d="M460.656 132.911c-58.7-122.1-212.2-166.5-331.8-104.1-9.4 5.2-13.5 16.6-8.3 27 5.2 9.4 16.6 13.5 27 8.3 99.9-52 227.4-14.9 276.7 86.3 65.4 134.3-19 236.7-87.4 274.6-93.1 51.7-211.2 17.4-267.6-70.7l69.3 14.5c10.4 2.1 21.8-4.2 23.9-15.6 2.1-10.4-4.2-21.8-15.6-23.9l-122.8-25c-20.6-2-25 16.6-23.9 22.9l15.6 123.8c1 10.4 9.4 17.7 19.8 17.7 12.8 0 20.8-12.5 19.8-23.9l-6-50.5c57.4 70.8 170.3 131.2 307.4 68.2 58.1-30 191.5-147.7 103.9-329.6"/></svg>';
+      	let encoded = window.btoa(svgReload);
+        btn_reload.style.background = "url(data:image/svg+xml;base64,"+encoded+")";
+		btn_reload.style.backgroundRepeat = "no-repeat";
+      	btn_reload.style.textAlign = "center";
+      	btn_reload.style.cursor = "pointer";
+      	btn_reload.style.border = "none";
+    }
 
     return true;
 }
@@ -126,9 +140,11 @@ function formDispatch() {
     //locale
     let tGrid001 = document.getElementById("grid001").value;
     if(tGrid001.length <= 2) {
-      alert("Vui lòng nhập dữ liệu vào bảng");
+      alert(translate("msg.uni_form_001.014"));
       return false;
     }
+
+  	clearData();
 
 	if (String(activityId) === "unitmanager") {
       document.getElementById("btn_send").click();
@@ -202,29 +218,31 @@ function btn_send_onClick() {
   }
 }
 
-function getDataLeave(uId) {
+function getDataLeave(uId, isEdit) {
     openLoading();
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
 
     xhr.addEventListener("readystatechange", function() {
-      if(this.readyState === 4) {
-        resultCode01 = JSON.parse(this.responseText)[0];
-        resultCode02 = JSON.parse(this.responseText)[1];
-        resultCode03 = JSON.parse(this.responseText)[2];
-        resultCode04 = JSON.parse(this.responseText)[3];
-        resultCode05 = JSON.parse(this.responseText)[4];
-        resultCode06 = JSON.parse(this.responseText)[5];
-        drp_001_onchange();
-      }
+        if(this.readyState === 4) {
+        if(this.responseText !== null && this.responseText !== undefined) {
+            resultCode01 = JSON.parse(this.responseText)[0];
+            resultCode02 = JSON.parse(this.responseText)[1];
+            resultCode03 = JSON.parse(this.responseText)[2];
+            resultCode04 = JSON.parse(this.responseText)[3];
+            resultCode05 = JSON.parse(this.responseText)[4];
+            resultCode06 = JSON.parse(this.responseText)[5];
+            drp_001_onchange();
+            if(isEdit) {
+                updateDate();
+            }
+        }
+        }
     });
 
     xhr.open("POST", "http://172.16.1.120:8087/api/v1/leave/info/" + uId);
 
     xhr.send();
-    setTimeout(() => {
-      	closeLoading();
-    }, 4000);
 }
 
 function btn_001_onclick() {
@@ -271,7 +289,7 @@ function clearData() {
     document.getElementById("lbl_date_001").innerHTML = "";
     document.getElementById("lbl_date_002").innerHTML = "";
     document.getElementById("lbl_date_003").innerHTML = "";
-    document.getElementById("lbl_024").innerHTML = "0 Giờ";
+    document.getElementById("lbl_024").innerHTML = translate("msg.uni_form_001.013", "0");
 
     document.getElementById("hn_date_001").value = "";
     document.getElementById("hn_date_002").value = "";
@@ -295,6 +313,7 @@ function clearData() {
 
 function drp_001_onchange() {
 	checkDateWhenChangeDrp();
+  	closeLoading();
 }
 
 function date_001_onchange() {
@@ -319,7 +338,7 @@ function tb_007_onclick() {
 
 function tb007GetApiLeave() {
     let tb_007 = document.getElementById("tb_007").value;
-  	getDataLeave(tb_007);
+  	getDataLeave(tb_007, false);
     /*getApiLeave("01", tb_007);
     getApiLeave("02", tb_007);
     getApiLeave("03", tb_007);
@@ -327,6 +346,15 @@ function tb007GetApiLeave() {
     getApiLeave("05", tb_007);
     getApiLeave("06", tb_007);
     getApiLeave("99", tb_007);*/
+}
+
+function btn_reload_onclick() {
+	let tb_007 = document.getElementById("tb_007").value;
+  	if(tb_007.length > 0) {
+      getDataLeave(tb_007, false);
+    } else {
+      alert(translate("msg.uni_form_001.002"));
+    }
 }
 
 function tb_008_onclick() {
@@ -516,9 +544,9 @@ function gridRowClick(pGridId) {
                         }
                     }
 
-                  	if (grid001ColumnIds[i] === "tb_007") {
+                  	/*if (grid001ColumnIds[i] === "tb_007") {
                         getDataLeave(tReplaceData);
-                    }
+                    }*/
 
                     var tElement = document.getElementById(grid001ColumnIds[i]);
                     tElement.value = tReplaceData;
@@ -526,10 +554,8 @@ function gridRowClick(pGridId) {
                     FormMgr.toPrettyValue(tElement);
                 }
             }
-            updateDate();
             let tb_007 = document.getElementById("tb_007").value;
-            getDataLeave(tb_007);
-            // drp_001_onchange();
+            getDataLeave(tb_007, true);
         }
     }
 }
@@ -542,19 +568,19 @@ function validate(btn) {
     let drp_001 = document.getElementById("drp_001");
 
     if (drp_001.value === "00") {
-        message += "Vui lòng chọn loại nghỉ phép\n";
+        message += translate("msg.uni_form_001.001") + "\n";
     }
 
     if (tb007.length <= 0) {
-        message += "Vui lòng nhập nhân viên nghỉ phép\n";
+        message += translate("msg.uni_form_001.002") + "\n";
     }
 
     if (hn_date_004.length <= 0) {
-        message += "Vui lòng nhập thời gian nghỉ phép\n";
+        message += translate("msg.uni_form_001.003") + "\n";
     }
 
     if (tarea_001.length <= 0) {
-        message += "Vui lòng nhập lý do\n";
+        message += translate("msg.uni_form_001.004") + "\n";
     }
 
     let tGrid001 = document.getElementById("grid001").value;
@@ -583,13 +609,13 @@ function validate(btn) {
                     }
                 });
                 if((currentLeaveCode === "05" || currentLeaveCode === "06") && haveCode) {
-                    message += "Bạn đã thêm loại phép này!\n";
+                    message += translate("msg.uni_form_001.005") + "\n";
                 }
             }
 
             if(currentLeaveCode !== "05" && currentLeaveCode !== "06") {
                 if (Number(document.getElementById("hn_date_005").value) - totalTimeByLeaveCode - currentLeaveTime < 0) {
-                    message += "Không đủ ngày phép\n";
+                    message += translate("msg.uni_form_001.006") + "\n";
                 }
             }
         }
@@ -660,7 +686,7 @@ function updateDate() {
             validated = true;
         } else {
             validated = false;
-            alert("Vui lòng chọn thời gian trong giờ hành chính!");
+            alert(translate("msg.uni_form_001.007"));
             document.getElementById("time_001_txt").value = "";
         }
     }
@@ -670,19 +696,19 @@ function updateDate() {
             validated = true;
         } else {
             validated = false;
-            alert("Vui lòng chọn thời gian trong giờ hành chính!");
+            alert(translate("msg.uni_form_001.007"));
             document.getElementById("time_002_txt").value = "";
         }
     }
 
     if(date_001 === date_002 && time_001 === time_002) {
-        alert("Thờ gian bắt đầu và kết thúc không thể giống nhau!");
+        alert(translate("msg.uni_form_001.008"));
         document.getElementById("time_002_txt").value = "";
         validated = false;
     }
 
     if(drp_001 == "00") {
-        alert("Vui lòng chọn loại nghỉ phép trước!");
+        alert(translate("msg.uni_form_001.009"));
         validated = false;
         document.getElementById("time_002_txt").value = "";
     }
@@ -921,28 +947,22 @@ function hm2dec(hoursMinutes) {
     return (hours + minutes / 60).toFixed(2);
 }
 
-function translate(key) {
-  let value = "";
-
-  return value;
-}
-
 function validateDate() {
     let valid = "";
 
     let drp_001 = document.getElementById("drp_001").value;
   	if(drp_001 === "01") {
         if(Number(resultDate[4]) < 240) {
-            valid += "Loại phép năm không thể nhỏ hơn 4 giờ\n";
+            valid += translate("msg.uni_form_001.010") + "\n";
             clearDate();
         }
 
         if(resultCode01.Result.Remain_hours === 0 || resultCode01.Result.Remain_hours === null || resultCode01.Result.Remain_hours === undefined) {
-            valid += "Phép năm của bạn không đủ\n";
+            valid += translate("msg.uni_form_001.012") + "\n";
             clearDate();
         } else {
             if(Number(resultCode01.Result.Remain_hours) < Number(time2dec((Number(resultDate[0]) * 8) + resultDate[1] + "h" + resultDate[2] + "m"))) {
-                valid += "Phép năm của bạn không đủ\n";
+                valid += translate("msg.uni_form_001.012") + "\n";
                 clearDate();
             }
         }
@@ -950,16 +970,16 @@ function validateDate() {
 
     if(drp_001 === "02") {
         if(Number(resultDate[4]) < 30) {
-            valid += "Loại phép không thể nhỏ hơn 30 phút\n";
+            valid += translate("msg.uni_form_001.011") + "\n";
             clearDate();
         }
 
         if(resultCode02.Result.Remain_hours === 0 || resultCode02.Result.Remain_hours === null || resultCode02.Result.Remain_hours === undefined) {
-            valid += "Phép của bạn không đủ\n";
+            valid += translate("msg.uni_form_001.012") + "\n";
             clearDate();
         } else {
             if(Number(resultCode02.Result.Remain_hours) < Number(time2dec((Number(resultDate[0]) * 8) + resultDate[1] + "h" + resultDate[2] + "m"))) {
-                valid += "Phép của bạn không đủ\n";
+                valid += translate("msg.uni_form_001.012") + "\n";
                 clearDate();
             }
         }
@@ -967,16 +987,16 @@ function validateDate() {
 
    if(drp_001 === "03") {
         if(Number(resultDate[4]) < 30) {
-            valid += "Loại phép không thể nhỏ hơn 30 phút\n";
+            valid += translate("msg.uni_form_001.011") + "\n";
             clearDate();
         }
 
         if(resultCode03.Result.Remain_hours === 0 || resultCode03.Result.Remain_hours === null || resultCode03.Result.Remain_hours === undefined) {
-            valid += "Phép của bạn không đủ\n";
+            valid += translate("msg.uni_form_001.012") + "\n";
             clearDate();
         } else {
             if(Number(resultCode03.Result.Remain_hours) < Number(time2dec((Number(resultDate[0]) * 8) + resultDate[1] + "h" + resultDate[2] + "m"))) {
-                valid += "Phép của bạn không đủ\n";
+                valid += translate("msg.uni_form_001.012") + "\n";
                 clearDate();
             }
         }
@@ -984,16 +1004,16 @@ function validateDate() {
 
    if(drp_001 === "04") {
         if(Number(resultDate[4]) < 30) {
-            valid += "Loại phép không thể nhỏ hơn 30 phút\n";
+            valid += translate("msg.uni_form_001.011") + "\n";
             clearDate();
         }
 
         if(resultCode04.Result.Remain_hours === 0 || resultCode04.Result.Remain_hours === null || resultCode04.Result.Remain_hours === undefined) {
-            valid += "Phép của bạn không đủ\n";
+            valid += translate("msg.uni_form_001.012") + "\n";
             clearDate();
         } else {
             if(Number(resultCode04.Result.Remain_hours) < Number(time2dec((Number(resultDate[0]) * 8) + resultDate[1] + "h" + resultDate[2] + "m"))) {
-                valid += "Phép của bạn không đủ\n";
+                valid += translate("msg.uni_form_001.012") + "\n";
                 clearDate();
             }
         }
@@ -1001,7 +1021,7 @@ function validateDate() {
 
    if (drp_001 === "05") {
         if (Number(resultDate[4]) < 30) {
-            valid += "Loại phép không thể nhỏ hơn 30 phút\n";
+            valid += translate("msg.uni_form_001.011") + "\n";
             clearDate();
         }
 
@@ -1010,7 +1030,7 @@ function validateDate() {
             resultCode05.Result.Start_date === null ||
             resultCode05.Result.Start_date === undefined
         ) {
-            valid += "Phép của bạn không đủ\n";
+            valid += translate("msg.uni_form_001.012") + "\n";
             clearDate();
         } else {
             let date1Converter = date1.replaceAll("/", "-");
@@ -1027,7 +1047,7 @@ function validateDate() {
 
     if (drp_001 === "06") {
         if (Number(resultDate[4]) < 30) {
-            valid += "Loại phép không thể nhỏ hơn 30 phút\n";
+            valid += translate("msg.uni_form_001.011") + "\n";
             clearDate();
         }
 
@@ -1215,7 +1235,7 @@ function getBrandName() {
   ajax_DatabaseAccessor.query(sqlId, params, types, (data) => {
     let hn_brandName = document.getElementById("hn_brandName");
 
-    if(data.recordValues[0] !== null && data.recordValues[0] !== undefined) {
+    if(data.recordValues[0] !== null && data.recordValues[0] !== undefined && hn_brandName !== null && hn_brandName !== undefined) {
       var recordValue = data.recordValues[0][0];
       if(recordValue !== null && recordValue !== undefined) {
         hn_brandName.value = recordValue;
@@ -1241,14 +1261,14 @@ function checkDateWhenChangeDrp() {
     switch(drp_001.value) {
         case "01":
             if(resultCode01 === null || resultCode01 === undefined) {
-            getDataLeave(tb_007);
+            getDataLeave(tb_007, false);
             } else {
             if(Number(resultCode01.Result.Remain_hours) === 0 || resultCode01.Result.Remain_hours === null || resultCode01.Result.Remain_hours === undefined) {
-                lbl_024.innerHTML = "0 Giờ";
+                lbl_024.innerHTML = translate("msg.uni_form_001.013", "0");
                 hn_date_005.value = 0;
                 changeVisibleDate(true);
             } else {
-                lbl_024.innerHTML = resultCode01.Result.Remain_hours + " Giờ";
+                lbl_024.innerHTML = translate("msg.uni_form_001.013", resultCode01.Result.Remain_hours);
                 hn_date_005.value = Number(resultCode01.Result.Remain_hours);
                 changeVisibleDate(false);
             }
@@ -1256,14 +1276,14 @@ function checkDateWhenChangeDrp() {
             break
         case "02":
             if(resultCode02 === null || resultCode02 === undefined) {
-            getDataLeave(tb_007);
+            getDataLeave(tb_007, false);
             } else {
             if(Number(resultCode02.Result.Remain_hours) === 0 || resultCode02.Result.Remain_hours === null || resultCode02.Result.Remain_hours === undefined) {
-                lbl_024.innerHTML = "0 Giờ";
+                lbl_024.innerHTML = translate("msg.uni_form_001.013", "0");
                 hn_date_005.value = 0;
                 changeVisibleDate(true);
             } else {
-                lbl_024.innerHTML = resultCode02.Result.Remain_hours + " Giờ";
+                lbl_024.innerHTML = translate("msg.uni_form_001.013", resultCode02.Result.Remain_hours);
                 hn_date_005.value = Number(resultCode02.Result.Remain_hours);
                 changeVisibleDate(false);
             }
@@ -1271,14 +1291,14 @@ function checkDateWhenChangeDrp() {
             break
         case "03":
             if(resultCode03 === null || resultCode03 === undefined) {
-                getDataLeave(tb_007);
+                getDataLeave(tb_007, false);
             } else {
                 if(Number(resultCode03.Result.Remain_hours) === 0 || resultCode03.Result.Remain_hours === null || resultCode03.Result.Remain_hours === undefined) {
-                    lbl_024.innerHTML = "0 Giờ";
+                    lbl_024.innerHTML = translate("msg.uni_form_001.013", "0");
                     hn_date_005.value = 0;
                     changeVisibleDate(true);
                 } else {
-                    lbl_024.innerHTML = resultCode03.Result.Remain_hours + " Giờ";
+                    lbl_024.innerHTML = translate("msg.uni_form_001.013", resultCode03.Result.Remain_hours);
                     hn_date_005.value = Number(resultCode03.Result.Remain_hours);
                     changeVisibleDate(false);
                 }
@@ -1286,14 +1306,14 @@ function checkDateWhenChangeDrp() {
             break
         case "04":
             if(resultCode04 === null || resultCode04 === undefined) {
-                getDataLeave(tb_007);
+                getDataLeave(tb_007, false);
             } else {
                 if(Number(resultCode04.Result.Remain_hours) === 0 || resultCode04.Result.Remain_hours === null || resultCode04.Result.Remain_hours === undefined) {
-                    lbl_024.innerHTML = "0 Giờ";
+                    lbl_024.innerHTML = translate("msg.uni_form_001.013", "0");
                     hn_date_005.value = 0;
                     changeVisibleDate(true);
                 } else {
-                    lbl_024.innerHTML = resultCode04.Result.Remain_hours + " Giờ";
+                    lbl_024.innerHTML = translate("msg.uni_form_001.013", resultCode04.Result.Remain_hours);
                     hn_date_005.value = Number(resultCode04.Result.Remain_hours);
                     changeVisibleDate(false);
                 }
@@ -1301,7 +1321,7 @@ function checkDateWhenChangeDrp() {
             break
         case "05":
             if(resultCode05 === null || resultCode05 === undefined) {
-                getDataLeave(tb_007);
+                getDataLeave(tb_007, false);
             } else {
                 if(resultCode05.Result.Start_date !== null && resultCode05.Result.Start_date !== undefined) {
                     lbl_024.innerHTML = resultCode05.Result.Start_date + " ~ " + resultCode05.Result.End_date;
@@ -1318,14 +1338,14 @@ function checkDateWhenChangeDrp() {
                     }
                     updateDate();
                 } else {
-                    lbl_024.innerHTML = "0 Giờ";
+                    lbl_024.innerHTML = translate("msg.uni_form_001.013", "0");
                 }
                 changeVisibleDate(true);
             }
             break
         case "06":
             if(resultCode06 === null || resultCode06 === undefined) {
-                getDataLeave(tb_007);
+                getDataLeave(tb_007, false);
             } else {
                 if(resultCode06.Result.Start_date !== null && resultCode06.Result.Start_date !== undefined) {
                     lbl_024.innerHTML = resultCode06.Result.Start_date + " ~ " + resultCode06.Result.End_date;
@@ -1342,21 +1362,21 @@ function checkDateWhenChangeDrp() {
                     }
                     updateDate();
                 } else {
-                    lbl_024.innerHTML = "0 Giờ";
+                    lbl_024.innerHTML = translate("msg.uni_form_001.013", "0");
                 }
                 changeVisibleDate(true);
             }
             break
         case "99":
             if(resultCode99 === null || resultCode99 === undefined) {
-                getDataLeave(tb_007);
+                getDataLeave(tb_007, false);
             } else {
                 if(Number(resultCode99.Result.Remain_hours === 0) || resultCode99.Result.Remain_hours === null || resultCode99.Result.Remain_hours === undefined) {
-                    lbl_024.innerHTML = "0 Giờ";
+                    lbl_024.innerHTML = translate("msg.uni_form_001.013", "0");
                     hn_date_005.value = 0;
                     changeVisibleDate(true);
                 } else {
-                    lbl_024.innerHTML = resultCode99.Result.Remain_hours + " Giờ";
+                    lbl_024.innerHTML = translate("msg.uni_form_001.013", resultCode99.Result.Remain_hours);
                     hn_date_005.value = Number(resultCode99.Result.Remain_hours);
                     changeVisibleDate(false);
                 }
@@ -1618,4 +1638,53 @@ function getApiLeave(offCode, empCode) {
   xhr.setRequestHeader("Authorization", "Bearer " + token);
 
   xhr.send(data);
+}
+
+function translate(key, ...params) {
+    let result = "";
+
+    const data = {
+        "zh_TW": {
+            "msg.uni_form_001.001": "請選擇假別",
+            "msg.uni_form_001.002": "請填寫請假員",
+            "msg.uni_form_001.003": "請填寫請假時間",
+            "msg.uni_form_001.004": "請填寫事由",
+            "msg.uni_form_001.005": "您已經增加了這種假",
+            "msg.uni_form_001.006": "假數不足",
+            "msg.uni_form_001.007": "請選擇在辦公時間內的時間！",
+            "msg.uni_form_001.008": "開始時間和結束時間不能相同！",
+            "msg.uni_form_001.009": "請先選擇假別",
+            "msg.uni_form_001.010": "年假別不能少於4小時",
+            "msg.uni_form_001.011": "假別不能少於30分鐘",
+            "msg.uni_form_001.012": "您的假數不足",
+            "msg.uni_form_001.013": "{{param_0}}小時",
+            "msg.uni_form_001.014": "請在表格中輸入資料"
+        },
+        "vi_VN": {
+            "msg.uni_form_001.001": "Vui lòng chọn loại nghỉ phép",
+            "msg.uni_form_001.002": "Vui lòng nhập nhân viên nghỉ phép",
+            "msg.uni_form_001.003": "Vui lòng nhập thời gian nghỉ phép",
+            "msg.uni_form_001.004": "Vui lòng nhập lý do",
+            "msg.uni_form_001.005": "Bạn đã thêm loại phép này!",
+            "msg.uni_form_001.006": "Không đủ ngày phép",
+            "msg.uni_form_001.007": "Vui lòng chọn thời gian trong giờ hành chính!",
+            "msg.uni_form_001.008": "Thờ gian bắt đầu và kết thúc không thể giống nhau!",
+            "msg.uni_form_001.009": "Vui lòng chọn loại nghỉ phép trước",
+            "msg.uni_form_001.010": "Loại phép năm không thể nhỏ hơn 4 giờ",
+            "msg.uni_form_001.011": "Loại phép không thể nhỏ hơn 30 phút",
+            "msg.uni_form_001.012": "Phép của bạn không đủ",
+            "msg.uni_form_001.013": "{{param_0}} Giờ",
+            "msg.uni_form_001.014": "Vui lòng nhập dữ liệu vào bảng"
+        }
+    }
+
+    result = data[locale]?.[key] || key;
+
+    if (params.length > 0) {
+        for (var i = 0; i < params.length; i++) {
+            result = result.replace("{{param_" + i + "}}", params[i]);
+        }
+    }
+
+    return result;
 }

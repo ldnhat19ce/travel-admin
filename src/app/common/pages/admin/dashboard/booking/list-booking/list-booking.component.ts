@@ -15,6 +15,11 @@ import { Table, TableModule } from 'primeng/table';
 import { SortEvent } from 'primeng/api';
 import { SkeletonModule } from 'primeng/skeleton';
 import { SidebarModule } from 'primeng/sidebar';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
     selector: 'app-list-booking',
@@ -29,7 +34,12 @@ import { SidebarModule } from 'primeng/sidebar';
         DateFnsModule,
         TableModule,
         SkeletonModule,
-        SidebarModule
+        SidebarModule,
+        InputTextModule,
+        InputGroupModule,
+        ButtonModule,
+        DropdownModule,
+        PaginatorModule
     ],
     templateUrl: './list-booking.component.html',
     styleUrl: './list-booking.component.scss',
@@ -70,6 +80,13 @@ export class ListBookingComponent implements OnInit {
         startDate: [format(new Date(), 'yyyyMMdd')],
         endDate: [format(new Date(), 'yyyyMMdd')],
     });
+
+    addOnItem = [
+        { value: 0, label: "Chọn dữ liệu bổ sung" },
+        { value: 1, label: "Email" },
+        { value: 2, label: "Tên" },
+        { value: 3, label: "Địa chỉ" }
+    ]
 
     ngOnInit(): void {
         this.bookings = Array.from({ length: 10 });

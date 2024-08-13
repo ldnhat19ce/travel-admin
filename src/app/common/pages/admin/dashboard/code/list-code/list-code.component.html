@@ -1,107 +1,191 @@
-<div class="row g-3">
-    <div class="col-12 col-xl-4">
-        <div class="row border position-xl-fixed">
-            <span class="col-12 h3 d-flex justify-content-center align-items-center p-3">
-                Loại mã
-            </span>
-            <div class="col-12">
-                <div class="table overflow-auto">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="text-center text-nowrap py-2">Mã</th>
-                                <th class="text-center text-nowrap py-2">Tên</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (item of codeKind; track item.kindCode) {
-                            <tr role="button" (click)="onClickRow(item)">
-                                <td class="text-center text-nowrap py-2"
-                                    [ngClass]="{'bg-primary text-white': kindCodeSelected.kindCode === item.kindCode}">{{
-                                    item.kindCode }}</td>
-                                <td class="text-center text-nowrap py-2"
-                                    [ngClass]="{'bg-primary text-white': kindCodeSelected.kindCode === item.kindCode}">{{
-                                    item.kindName }}</td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+<div class="card p-fluid">
+    <div class="grid">
+        <div class="md:col-4 col-12">
+            <p-panel header="Loại mã">
+                <p-table
+                    [value]="codeKind"
+                    #dt1
+                    dataKey="kindCode"
+                    [rows]="100"
+                    scrollDirection="both"
+                    [scrollable]="true"
+                    [rowHover]="true"
+                    styleClass="p-datatable-gridlines"
+                    responsiveLayout="scroll"
+                    [(selection)]="kindCodeSelected"
+                    (onRowSelect)="onClickRow($event.data)"
+                    selectionMode="single"
+                >
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="text-center text-nowrap">Mã</th>
+                            <th class="text-center text-nowrap">Tên</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item>
+                        <tr [pSelectableRow]="item">
+                            <td class="text-center text-nowrap">{{ item.kindCode }}</td>
+                            <td class="text-start text-nowrap">{{ item.kindName }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-panel>
         </div>
-    </div>
-    <div class="col-12 col-xl-8">
-        <div class="row border mx-2">
-            <span class="h3 col-12 p-3">Nhập dữ liệu</span>
-            <form class="col-12 mb-3" [formGroup]="codeForm">
-                <div class="row mx-auto">
-                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Phân loại mã</span>
-                    <span class="col-sm-9 col-form-label border-top border-end border-bottom border-primary"><span class="text-red">{{ kindCodeSelected.kindCode }}</span>&nbsp;({{ kindCodeSelected.kindName }})</span>
-                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Mã số</span>
-                    <input class="col-sm-1 border border-primary" type="text" [value]="'01' + kindCodeSelected.kindCode" readonly>
-                    <input class="col-sm-1 border border-primary text-center" type="text" formControlName="codeCd">
-                    <span class="col-sm-7 border border-primary text-red fs-2 d-flex justify-content-start align-items-center">Nhập số có 2 chữ số. Nếu bạn không nhập, sẽ được đăng ký tự động.</span>
-                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Tên mã</span>
-                    <input class="col-sm-9 border border-primary" type="text" formControlName="codeName" />
-                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Tên mã (tiếng anh)</span>
-                    <input class="col-sm-9 border border-primary" type="text" formControlName="codeNameEng" />
-                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Nội dung bổ dung #1</span>
-                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeS1" />
-                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeS2" />
-                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeS3" />
-                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Nội dung bổ dung #2</span>
-                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeN1" />
-                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeN2" />
-                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeN3" />
-                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Nội dung bổ dung #3</span>
-                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeD1" />
-                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeD2" />
-                    <input class="col-sm-3 border border-primary" type="text" formControlName="codeD3" />
-                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Sử dụng</span>
-                    <div class="col-sm-3 border border-primary d-flex justify-content-center align-items-center">
-                        <input class="form-check-input" type="checkbox" formControlName="used" />
+        <div class="md:col-8 col-12">
+            <div class="grid">
+                <span class="col-12 md:col-2 text-lg">Phân loại mã</span>
+                <span class="col-12 md:col-10 text-lg"><span class="text-red-600">{{ kindCodeSelected.kindCode }}</span>&nbsp;({{ kindCodeSelected.kindName }})</span>
+            </div>
+            <p-panel header="Nhập dữ liệu" [formGroup]="codeForm">
+                <div class="field grid">
+                    <div class="col-12">
+                        <div class="grid field">
+                            <label class="col-12 mb-2 md:col-3 md:mb-0 font-bold">Sản phẩm</label>
+                            <p-inputGroup class="col-2">
+                                <input pInputText type="text" [value]="'01' + kindCodeSelected.kindCode" readonly>
+                                <input pInputText class="text-center" type="text" formControlName="codeCd">
+                            </p-inputGroup>
+                            <span class="col-7 text-red-600 text-sm flex justify-content-start align-items-center">Nhập số có 2 chữ số. Nếu bạn không nhập, sẽ được đăng ký tự động.</span>
+                        </div>
                     </div>
-                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Sắp xếp</span>
-                    <input class="col-sm-3 border border-primary text-center" type="number" formControlName="sort" />
-                    <span class="col-sm-3 col-form-label text-dark bg-oil-lavender border border-primary">Ghi chú</span>
-                    <input class="col-sm-9 border border-primary" type="text" formControlName="remark" />
                 </div>
-            </form>
-            <div class="col-12">
-                <div class="table overflow-y-auto" style="height: 200px;">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="text-center text-nowrap py-2"></th>
-                                <th class="text-center text-nowrap py-2">Mã</th>
-                                <th class="text-center text-nowrap py-2">Tên</th>
-                                <th class="text-center text-nowrap py-2">Tên (tiếng anh)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (item of code; track item.codeCd) {
-                            <tr role="button">
-                                <td class="text-center text-nowrap py-2">
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <button class="btn btn-primary mx-1" (click)="onEditCode(item)"><i class="ti ti-edit"></i></button>
-                                        <button class="btn btn-primary mx-1" (click)="onDeleteCode($event, item)"><i class="ti ti-trash-x"></i></button>
-                                    </div>
-                                </td>
-                                <td class="text-center text-nowrap py-2">{{ item.codeCd }}</td>
-                                <td class="text-center text-nowrap py-2">{{ item.codeName }}</td>
-                                <td class="text-center text-nowrap py-2">{{ item.codeNameEng }}</td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="field grid">
+                    <label htmlFor="codeName" class="col-12 mb-2 md:col-3 md:mb-0 font-bold">Tên mã</label>
+                    <div class="col-12 md:col-9">
+                        <input pInputText id="codeName" type="text"
+                            formControlName="codeName"/>
+                    </div>
                 </div>
-            </div>
-            <div class="col-12 d-flex justify-content-center gap-3 py-3">
-                <button class="btn btn-primary" (click)="onSubmit()">Lưu thông tin</button>
-                <button class="btn btn-gray border border-secondary" (click)="onReset()">Reset</button>
-            </div>
+                <div class="field grid">
+                    <label htmlFor="codeNameEng" class="col-12 mb-2 md:col-3 md:mb-0 font-bold">Tên mã (tiếng anh)</label>
+                    <div class="col-12 md:col-9">
+                        <input pInputText id="codeNameEng" type="text"
+                            formControlName="codeNameEng"/>
+                    </div>
+                </div>
+
+                <div class="field grid">
+                    <label class="col-12 mb-2 md:col-3 md:mb-0 font-bold">Nội dung bổ dung #1</label>
+                    <div class="col-12 md:col-9">
+                        <div class="flex gap-3">
+                            <input pInputText id="codeS1" type="text" formControlName="codeS1"/>
+
+                            <input pInputText id="codeS2" type="text" formControlName="codeS2"/>
+
+                            <input pInputText id="codeS3" type="text" formControlName="codeS3"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field grid">
+                    <label class="col-12 mb-2 md:col-3 md:mb-0 font-bold">Nội dung bổ dung #2</label>
+                    <div class="col-12 md:col-9">
+                        <div class="flex gap-3">
+                            <input pInputText id="codeN1" type="text" formControlName="codeN1"/>
+
+                            <input pInputText id="codeN2" type="text" formControlName="codeN2"/>
+
+                            <input pInputText id="codeN3" type="text" formControlName="codeN3"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field grid">
+                    <label class="col-12 mb-2 md:col-3 md:mb-0 font-bold">Nội dung bổ dung #3</label>
+                    <div class="col-12 md:col-9">
+                        <div class="flex gap-3">
+                            <input pInputText id="codeD1" type="text" formControlName="codeD1"/>
+
+                            <input pInputText id="codeD2" type="text" formControlName="codeD2"/>
+
+                            <input pInputText id="codeD3" type="text" formControlName="codeD3"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field grid">
+                    <label htmlFor="sort" class="col-12 mb-2 md:col-3 md:mb-0 font-bold">Sắp xếp</label>
+                    <div class="col-12 md:col-4">
+                        <p-inputNumber
+                            inputId="sort"
+                            formControlName="sort"
+                            min="0"
+                            [showButtons]="true"
+                            buttonLayout="horizontal"
+                            [step]="1"
+                            decrementButtonClass="p-button-danger"
+                            incrementButtonClass="p-button-success"
+                            incrementButtonIcon="pi pi-plus"
+                            decrementButtonIcon="pi pi-minus"
+                            inputStyleClass="text-center"
+                            decrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"
+                            incrementButtonClass="text-rainmaker bg-relaxation-green border-blueberry-whip"></p-inputNumber>
+                    </div>
+                    <div class="col-12 md:col-4">
+                        <div class="field-checkbox mt-3">
+                            <p-checkbox
+                            [binary]="true"
+                            formControlName="used"
+                            inputId="used"></p-checkbox>
+                            <label for="used" class="mb-2 md:mb-0 font-bold">Sử dụng</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field grid">
+                    <label htmlFor="remark" class="col-12 mb-2 md:col-3 md:mb-0 font-bold">Ghi chú</label>
+                    <div class="col-12 md:col-9">
+                        <div class="flex gap-3">
+                            <input pInputText id="remark" type="text" formControlName="remark"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 flex justify-content-center gap-3 py-3">
+                    <button pButton class="btn-primary w-fit-content" (click)="onSubmit()" label="Lưu thông tin"></button>
+                    <button pButton class="btn-secondary w-fit-content" (click)="onReset()" label="Reset"></button>
+                </div>
+            </p-panel>
         </div>
     </div>
+</div>
+
+<div class="card p-fluid">
+    <p-panel header="Danh sách mã">
+        <p-table
+            [value]="code"
+            #dt1
+            dataKey="codeCd"
+            [rows]="100"
+            scrollDirection="both"
+            [scrollable]="true"
+            [rowHover]="true"
+            styleClass="p-datatable-gridlines"
+            responsiveLayout="scroll"
+        >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="text-center text-nowrap"></th>
+                    <th class="text-center text-nowrap">Mã</th>
+                    <th class="text-center text-nowrap">Tên</th>
+                    <th class="text-center text-nowrap">Tên (tiếng anh)</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr role="button">
+                    <td class="text-center text-nowrap">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <button pButton class="mx-1" (click)="onEditCode(item)" icon="pi pi-eye"></button>
+                            <button pButton class="mx-1" (click)="onDeleteCode($event, item)" icon="pi pi-trash"></button>
+                        </div>
+                    </td>
+                    <td class="text-center text-nowrap">{{ item.codeCd }}</td>
+                    <td class="text-center text-nowrap">{{ item.codeName }}</td>
+                    <td class="text-center text-nowrap">{{ item.codeNameEng }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-panel>
 </div>
 
 <p-toast position="bottom-right" key="br" />
