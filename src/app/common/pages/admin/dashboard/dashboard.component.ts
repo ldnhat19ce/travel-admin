@@ -1,143 +1,69 @@
-import { Component, Renderer2, ViewChild } from '@angular/core';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { HeaderModule } from '../../../../layout/header/header.module';
-import { FooterModule } from '../../../../layout/footer/footer.module';
-import { SidebarModule } from '../../../../layout/sidebar/sidebar.module';
-import { registerPlugin } from 'filepond';
+import { Component, OnInit } from '@angular/core';
 
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
-import { CommonModule } from '@angular/common';
-import { filter, Subscription } from 'rxjs';
-import { SidebarComponent } from '../../../../layout/sidebar/sidebar.component';
-import { HeaderComponent } from '../../../../layout/header/header.component';
-import { LayoutService } from '../../../services/layout/app.layout.service';
-import { ProductSidebarComponent } from '../../general/sidebar/product-sidebar/product-sidebar.component';
-
-registerPlugin(FilePondPluginImagePreview, FilePondPluginFileEncode);
+import { ChartModule } from 'primeng/chart';
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
     imports: [
-        RouterModule,
-        HeaderModule,
-        FooterModule,
-        SidebarModule,
-        CommonModule,
-        ProductSidebarComponent
+        ChartModule
     ],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',
 })
-export class DashboardComponent {
-    overlayMenuOpenSubscription: Subscription = {} as Subscription;
+export class DashboardComponent implements OnInit {
+    basicData: any;
 
-    menuOutsideClickListener: any;
+    basicOptions: any;
 
-    profileMenuOutsideClickListener: any;
+    ngOnInit() {
+        const documentStyle = getComputedStyle(document.documentElement);
+        const textColor = documentStyle.getPropertyValue('--text-color');
+        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
+        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
 
-    @ViewChild(SidebarComponent)
-    sidebar!: SidebarComponent;
+        this.basicData = {
+            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+            datasets: [
+                {
+                    label: 'Sales',
+                    data: [540, 325, 702, 620],
+                    backgroundColor: ['rgba(255, 159, 64, 0.2)', 'rgba(75, 192, 192, 0.2)', 'rgba(54, 162, 235, 0.2)', 'rgba(153, 102, 255, 0.2)'],
+                    borderColor: ['rgb(255, 159, 64)', 'rgb(75, 192, 192)', 'rgb(54, 162, 235)', 'rgb(153, 102, 255)'],
+                    borderWidth: 1
+                }
+            ]
+        };
 
-    @ViewChild(HeaderComponent)
-    header!: HeaderComponent;
-
-    constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
-        this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
-            if (!this.menuOutsideClickListener) {
-                this.menuOutsideClickListener = this.renderer.listen('document', 'click', event => {
-                    const isOutsideClicked = !(this.sidebar.el.nativeElement.isSameNode(event.target) || this.sidebar.el.nativeElement.contains(event.target)
-                        || this.header.menuButton.nativeElement.isSameNode(event.target) || this.header.menuButton.nativeElement.contains(event.target));
-
-                    if (isOutsideClicked) {
-                        this.hideMenu();
+        this.basicOptions = {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: textColor
                     }
-                });
-            }
-
-            if (!this.profileMenuOutsideClickListener) {
-                this.profileMenuOutsideClickListener = this.renderer.listen('document', 'click', event => {
-                    const isOutsideClicked = !(this.header.menu.nativeElement.isSameNode(event.target) || this.header.menu.nativeElement.contains(event.target)
-                        || this.header.topbarMenuButton.nativeElement.isSameNode(event.target) || this.header.topbarMenuButton.nativeElement.contains(event.target));
-
-                    if (isOutsideClicked) {
-                        this.hideProfileMenu();
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
                     }
-                });
+                },
+                x: {
+                    ticks: {
+                        color: textColorSecondary
+                    },
+                    grid: {
+                        color: surfaceBorder,
+                        drawBorder: false
+                    }
+                }
             }
-
-            if (this.layoutService.state.staticMenuMobileActive) {
-                this.blockBodyScroll();
-            }
-        });
-
-        this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-            .subscribe(() => {
-                this.hideMenu();
-                this.hideProfileMenu();
-            });
-    }
-
-    hideMenu() {
-        this.layoutService.state.overlayMenuActive = false;
-        this.layoutService.state.staticMenuMobileActive = false;
-        this.layoutService.state.menuHoverActive = false;
-        if (this.menuOutsideClickListener) {
-            this.menuOutsideClickListener();
-            this.menuOutsideClickListener = null;
-        }
-        this.unblockBodyScroll();
-    }
-
-    hideProfileMenu() {
-        this.layoutService.state.profileSidebarVisible = false;
-        if (this.profileMenuOutsideClickListener) {
-            this.profileMenuOutsideClickListener();
-            this.profileMenuOutsideClickListener = null;
-        }
-    }
-
-    blockBodyScroll(): void {
-        if (document.body.classList) {
-            document.body.classList.add('blocked-scroll');
-        }
-        else {
-            document.body.className += ' blocked-scroll';
-        }
-    }
-
-    unblockBodyScroll(): void {
-        if (document.body.classList) {
-            document.body.classList.remove('blocked-scroll');
-        }
-        else {
-            document.body.className = document.body.className.replace(new RegExp('(^|\\b)' +
-                'blocked-scroll'.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
-        }
-    }
-
-    get containerClass() {
-        return {
-            'layout-theme-light': this.layoutService.config().colorScheme === 'light',
-            'layout-theme-dark': this.layoutService.config().colorScheme === 'dark',
-            'layout-overlay': this.layoutService.config().menuMode === 'overlay',
-            'layout-static': this.layoutService.config().menuMode === 'static',
-            'layout-static-inactive': this.layoutService.state.staticMenuDesktopInactive && this.layoutService.config().menuMode === 'static',
-            'layout-overlay-active': this.layoutService.state.overlayMenuActive,
-            'layout-mobile-active': this.layoutService.state.staticMenuMobileActive,
-            'p-input-filled': this.layoutService.config().inputStyle === 'filled',
-            'p-ripple-disabled': !this.layoutService.config().ripple
-        }
-    }
-
-    ngOnDestroy() {
-        if (this.overlayMenuOpenSubscription) {
-            this.overlayMenuOpenSubscription.unsubscribe();
-        }
-
-        if (this.menuOutsideClickListener) {
-            this.menuOutsideClickListener();
-        }
+        };
     }
 }
